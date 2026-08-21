@@ -85,13 +85,13 @@ export function ExportsConnector(): React.JSX.Element {
             <input
               value={notionToken}
               onChange={(e) => setNotionToken(e.target.value)}
-              placeholder="Notion integration token (secret_…)"
+              placeholder={t('home.connections.notionTokenPlaceholder')}
               className="input-field text-[13px]"
             />
             <input
               value={notionPage}
               onChange={(e) => setNotionPage(e.target.value)}
-              placeholder="Parent page ID"
+              placeholder={t('home.connections.parentPageId')}
               className="input-field text-[13px]"
             />
             <PillButton tone="primary" onClick={() => runExport('notion')} disabled={exporting}>

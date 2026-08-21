@@ -458,7 +458,8 @@
         "close": "Close",
         "cancel": "Cancel",
         "delete": "Delete",
-        "rename": "Rename"
+        "rename": "Rename",
+        "dismiss": "Dismiss"
     },
     "home": {
         "greeting": "Hi, {{name}}",
@@ -587,7 +588,21 @@
             "exportedCountOne": "Exported {{count}} memory",
             "noStickyText": "No note text to import",
             "noNewStickyMemories": "No new memories found in your notes",
-            "browseMarketplaceDesc": "Discover chat personas, notification plugins, and more."
+            "browseMarketplaceDesc": "Discover chat personas, notification plugins, and more.",
+            "more": "More",
+            "parentPageId": "Parent page ID",
+            "notionTokenPlaceholder": "Notion integration token (secret_…)",
+            "googleConnected": "Google connected",
+            "googleConnectFailed": "Could not connect Google",
+            "googleDisconnected": "Google disconnected",
+            "googleDisconnectFailed": "Could not disconnect",
+            "syncErrors": "Sync finished with errors",
+            "googleSyncFailed": "Google sync failed",
+            "rebuildRunning": "Rebuild is still running",
+            "rebuildFailed": "Could not rebuild the brain map",
+            "stickyTitle": "Sticky Notes",
+            "emailTitle": "Email",
+            "comingSoon": "Connections are coming soon."
         }
     },
     "memories": {
@@ -1294,7 +1309,8 @@
             "nextMonth": "Next month"
         },
         "searchBar": {
-            "placeholder": "Search what was on screen…"
+            "placeholder": "Search what was on screen…",
+            "search": "Search"
         }
     },
     "knowledgeGraph": {
@@ -1596,5 +1612,12 @@
             "backToConversations": "Back to conversations",
             "rename": "Rename"
         }
+    },
+    "auth": {
+        "sessionExpired": "Your session expired — please sign in again"
+    },
+    "pasteImport": {
+        "noNewMemories": "No new memories found — they may already be saved",
+        "aiFallback": "AI extraction unavailable — used a basic line split"
     }
 }

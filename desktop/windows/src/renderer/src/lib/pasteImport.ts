@@ -5,6 +5,7 @@
 // the thin extract-with-heuristic-fallback + import glue that was previously
 // inlined in AdvancedTab.
 import { extractMemories, normalize, type MemorySource } from './memoryExtract'
+import { i18n } from '../i18n'
 import { postMemoriesBatched, type BatchImportTally } from './memoriesBulk'
 import { toast } from './toast'
 
@@ -68,11 +69,11 @@ export async function extractPasteMemories(
 /** The extract-phase toast (empty / heuristic-fallback), shared by both surfaces. */
 export function toastForExtractResult(r: PasteExtractResult): void {
   if (r.memories.length === 0) {
-    toast('No new memories found — they may already be saved', { tone: 'warn' })
+    toast(i18n.t('pasteImport.noNewMemories'), { tone: 'warn' })
     return
   }
   if (r.via === 'heuristic') {
-    toast('AI extraction unavailable — used a basic line split', {
+    toast(i18n.t('pasteImport.aiFallback'), {
       tone: 'warn',
       body: r.truncated
         ? `${r.fallbackReason} · showing first ${r.memories.length} of ${r.totalBeforeCap} lines`

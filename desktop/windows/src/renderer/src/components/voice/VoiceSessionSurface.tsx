@@ -159,16 +159,16 @@ export function VoiceSessionSurface(props: { onClose?: () => void }): React.JSX.
           {state.retryable && (
             <button
               onClick={() => void startVoiceSession()}
-              aria-label="Try again"
+              aria-label={t('voice.tryAgain')}
               className="inline-flex items-center gap-1.5 rounded-xl bg-white/[0.08] px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.14]"
             >
               <RefreshCw className="h-3.5 w-3.5" />
-              Try again
+              {t('voice.tryAgain')}
             </button>
           )}
           <button
             onClick={close}
-            aria-label="Dismiss voice session"
+            aria-label={t('voice.dismissSession')}
             className="rounded-xl p-2 text-white/60 transition-colors hover:bg-white/[0.08] hover:text-white"
           >
             <X className="h-4 w-4" />

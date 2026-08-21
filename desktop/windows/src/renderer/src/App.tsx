@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { HashRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { HOME_PATH } from './routes/manifest'
 import { useAuth } from './hooks/useAuth'
+import { useTranslation } from './i18n'
 import { Login } from './pages/Login'
 import { AppChrome } from './components/layout/AppChrome'
 import { MainViews } from './components/layout/MainViews'
@@ -199,6 +200,7 @@ function AppShell(): React.JSX.Element {
 }
 
 function App(): React.JSX.Element {
+  const { t } = useTranslation()
   const { user, loading } = useAuth()
   useMicaChrome()
   // Under the dev perf bench, treat the user as already onboarded so the authed
@@ -301,7 +303,7 @@ function App(): React.JSX.Element {
       <div className="app-canvas flex h-full items-center justify-center">
         {!IS_SECONDARY_WINDOW && <TitleBar variant="overlay" />}
         <SandboxBadge />
-        <Spinner label="Loading Omi…" />
+        <Spinner label={t('app.loadingOmi')} />
       </div>
     )
   }

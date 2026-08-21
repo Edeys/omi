@@ -458,7 +458,8 @@
         "close": "Đóng",
         "cancel": "Hủy",
         "delete": "Xóa",
-        "rename": "Đổi tên"
+        "rename": "Đổi tên",
+        "dismiss": "Bỏ qua"
     },
     "home": {
         "greeting": "Chào, {{name}}",
@@ -587,7 +588,21 @@
             "exportedCountOne": "Đã xuất {{count}} ký ức",
             "noStickyText": "Không có văn bản ghi chú để nhập",
             "noNewStickyMemories": "Không tìm thấy ký ức mới trong ghi chú",
-            "browseMarketplaceDesc": "Khám phá persona chat, plugin thông báo và nhiều hơn nữa."
+            "browseMarketplaceDesc": "Khám phá persona chat, plugin thông báo và nhiều hơn nữa.",
+            "more": "Thêm",
+            "parentPageId": "ID trang cha",
+            "notionTokenPlaceholder": "Token tích hợp Notion (secret_…)",
+            "googleConnected": "Đã kết nối Google",
+            "googleConnectFailed": "Không thể kết nối Google",
+            "googleDisconnected": "Đã ngắt Google",
+            "googleDisconnectFailed": "Không thể ngắt kết nối",
+            "syncErrors": "Đồng bộ xong với lỗi",
+            "googleSyncFailed": "Đồng bộ Google thất bại",
+            "rebuildRunning": "Đang xây dựng lại",
+            "rebuildFailed": "Không thể xây dựng lại bản đồ não",
+            "stickyTitle": "Ghi chú dán",
+            "emailTitle": "Thư điện tử",
+            "comingSoon": "Các kết nối sắp ra mắt."
         }
     },
     "memories": {
@@ -1294,7 +1309,8 @@
             "nextMonth": "Tháng sau"
         },
         "searchBar": {
-            "placeholder": "Tìm nội dung trên màn hình…"
+            "placeholder": "Tìm nội dung trên màn hình…",
+            "search": "Tìm kiếm"
         }
     },
     "knowledgeGraph": {
@@ -1596,5 +1612,12 @@
             "backToConversations": "Quay lại cuộc trò chuyện",
             "rename": "Đổi tên"
         }
+    },
+    "auth": {
+        "sessionExpired": "Phiên của bạn đã hết hạn — vui lòng đăng nhập lại"
+    },
+    "pasteImport": {
+        "noNewMemories": "Không tìm thấy ký ức mới — có thể đã lưu rồi",
+        "aiFallback": "Không có trích xuất AI — đã dùng tách dòng cơ bản"
     }
 }

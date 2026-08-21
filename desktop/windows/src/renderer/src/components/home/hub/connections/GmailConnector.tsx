@@ -19,7 +19,7 @@ export function GmailConnector(): React.JSX.Element {
     return (
       <ConnectorRow
         iconNode={<ConnectorBrandMark brand="gmail" />}
-        title="Email"
+        title={t('home.connections.emailTitle')}
         description="Import email history and follow-ups."
         action={
           <span className="text-[12px] text-home-faint">{t('home.connections.requiresSetup')}</span>
@@ -37,7 +37,7 @@ export function GmailConnector(): React.JSX.Element {
   return (
     <ConnectorRow
       iconNode={<ConnectorBrandMark brand="gmail" />}
-      title="Email"
+      title={t('home.connections.emailTitle')}
       description={description}
       action={
         status.connected ? (

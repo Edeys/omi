@@ -133,13 +133,13 @@ export function ConnectTray(props: ConnectTrayCallbacks): React.JSX.Element {
                   onClick={() => onOpenSource('gmail')}
                 />
                 <TrayTile
-                  title="Calendar"
+                  title={t('home.connections.calendarTitle')}
                   brand="calendar"
                   connected={calendar.connected}
                   onClick={() => onOpenSource('calendar')}
                 />
                 <TrayTile
-                  title="Sticky Notes"
+                  title={t('home.connections.stickyTitle')}
                   brand="sticky"
                   onClick={() => onOpenSource('sticky')}
                 />
@@ -151,7 +151,7 @@ export function ConnectTray(props: ConnectTrayCallbacks): React.JSX.Element {
                 />
                 <TrayTile title="Omi Device" brand="omi" onClick={onOpenDevice} />
                 <TrayTile
-                  title="More"
+                  title={t('home.connections.more')}
                   plus
                   testId="tray-tile-more-imports"
                   onClick={onOpenImports}
@@ -171,7 +171,7 @@ export function ConnectTray(props: ConnectTrayCallbacks): React.JSX.Element {
                 subtitle={t('home.connections.bringMemories')}
               />
               <div className="flex flex-col gap-2.5">
-                <TrayTile title="Ask Omi" brand="omi" onClick={onAskOmi} />
+                <TrayTile title={t('home.connections.askOmi')} brand="omi" onClick={onAskOmi} />
                 <TrayTile
                   title="Claude / Claude Code"
                   brand="claude"
@@ -189,7 +189,7 @@ export function ConnectTray(props: ConnectTrayCallbacks): React.JSX.Element {
                 />
                 <TrayTile title="Hermes" brand="hermes" onClick={() => onOpenExport('hermes')} />
                 <TrayTile
-                  title="More"
+                  title={t('home.connections.more')}
                   plus
                   testId="tray-tile-more-exports"
                   onClick={onOpenExports}

@@ -60,7 +60,7 @@ export function StickyNotesConnector(): React.JSX.Element {
   return (
     <ConnectorRow
       iconNode={<ConnectorBrandMark brand="sticky" />}
-      title="Sticky Notes"
+      title={t('home.connections.stickyTitle')}
       description="Turn your Sticky Notes into durable memories — they never leave your PC."
       action={
         count > 0 ? (

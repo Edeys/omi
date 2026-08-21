@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from '../../i18n'
 import { DatabaseBackup, X } from 'lucide-react'
 import type { DbRecoveryStatus } from '../../../../shared/types'
 
@@ -36,7 +37,7 @@ function describe(s: DbRecoveryStatus): { title: string; body: string } {
   return {
     title: `Omi repaired its local database`,
     body:
-      `A problem was found at startup and fixed automatically — ${n.toLocaleString()} ` +
+      `A problem was found at startup and fixed automatically — ${n.toLocaleString('en-US')} ` +
       `item${n === 1 ? '' : 's'} recovered. A copy of the old file was saved.`
   }
 }
@@ -58,6 +59,7 @@ function Notice({
   onDismiss: () => void
   actions?: NoticeAction[]
 }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div
       role="status"
@@ -86,7 +88,7 @@ function Notice({
       <button
         onClick={onDismiss}
         className="-mr-1 -mt-1 rounded-md p-1 text-white/45 hover:bg-white/10 hover:text-white"
-        aria-label="Dismiss"
+        aria-label={t('common.dismiss')}
       >
         <X className="h-3.5 w-3.5" />
       </button>
@@ -101,6 +103,7 @@ function Notice({
 type RebuildState = { phase: 'idle' } | { phase: 'running' } | { phase: 'done'; count: number }
 
 export function DbRecoveryNotice(): React.JSX.Element | null {
+  const { t } = useTranslation()
   const [status, setStatus] = useState<DbRecoveryStatus | null>(null)
   const [needsRestart, setNeedsRestart] = useState(false)
   const [dismissed, setDismissed] = useState(false)
@@ -133,7 +136,7 @@ export function DbRecoveryNotice(): React.JSX.Element | null {
   if (needsRestart && !dismissed) {
     return (
       <Notice
-        title="Omi hit a problem with its local database"
+        title={t('settings.dbRecovery.title')}
         // Honest: nothing is lost yet, and the restart is a repair, not a wipe.
         body="Restart Omi and it will repair the database automatically. Your data is still on disk."
         onDismiss={() => setDismissed(true)}
@@ -166,7 +169,7 @@ export function DbRecoveryNotice(): React.JSX.Element | null {
         ? 'Rebuilding Rewind index…'
         : rebuild.phase === 'done'
           ? rebuild.count > 0
-            ? `Rebuilt Rewind index (${rebuild.count.toLocaleString()} recovered)`
+            ? `Rebuilt Rewind index (${rebuild.count.toLocaleString('en-US')} recovered)`
             : 'Rewind index up to date'
           : 'Rebuild Rewind Index'
     actions.push({
