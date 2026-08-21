@@ -117,7 +117,8 @@
             "singleLanguageSubtitle": "Tốt nhất khi bạn nói một ngôn ngữ. Chọn ngôn ngữ bên dưới.",
             "languageLabel": "Ngôn ngữ",
             "vadTitle": "Bộ lọc VAD cục bộ",
-            "vadSubtitle": "Phát hiện giọng nói trên thiết bị bỏ qua khoảng lặng trước khi gửi phiên âm, giảm mức sử dụng và chi phí. Tắt để gửi toàn bộ âm thanh đã ghi."
+            "vadSubtitle": "Phát hiện giọng nói trên thiết bị bỏ qua khoảng lặng trước khi gửi phiên âm, giảm mức sử dụng và chi phí. Tắt để gửi toàn bộ âm thanh đã ghi.",
+            "languageSyncFailed": "Đồng bộ ngôn ngữ thất bại"
         },
         "rewind": {
             "continuousTitle": "Ghi liên tục",
@@ -238,7 +239,7 @@
             "overageNoOverage": "Chưa vượt hạn mức chu kỳ này",
             "overageTitle": "Vượt hạn mức theo sử dụng",
             "overageBodyNoOverage": "Vượt quá {{included}} câu hỏi bao gồm và chúng tôi sẽ tính chi phí thực tế của nhà cung cấp + {{percent}}%. Không giới hạn cứng.",
-            "overageBodyOverage": "Bạn đã vượt {{excess}} câu hỏi{{plural}} so với {{included}} câu hỏi bao gồm của gói. Chúng tôi sẽ tính phí vượt hạn mức vào cuối chu kỳ.",
+            "overageBodyOverage": "Bạn đã vượt {{excess}} câu hỏi so với {{included}} câu hỏi bao gồm của gói. Chúng tôi sẽ tính phí vượt hạn mức vào cuối chu kỳ.",
             "overageExplainer": "Cách tính phí vượt hạn mức",
             "overageQuestionsUsed": "Câu hỏi đã dùng",
             "overageIncluded": "Bao gồm trong gói",
@@ -261,7 +262,14 @@
             "promoPlaceholder": "Nhập mã khuyến mãi",
             "chooseBilling": "Chọn thanh toán",
             "selectPlan": "Chọn {{title}}",
-            "starting": "bắt đầu từ"
+            "starting": "bắt đầu từ",
+            "billingPortalOpenFailed": "Không thể mở cổng thanh toán",
+            "paymentReceived": "Đã nhận thanh toán",
+            "refreshLagging": "Thanh toán hoàn tất, nhưng làm mới gói vẫn đang đồng bộ. Vui lòng thử tải lại trang sau một lát.",
+            "planUpdated": "Đã cập nhật gói",
+            "subscriptionReactivated": "Đã kích hoạt lại đăng ký",
+            "allSet": "Bạn đã sẵn sàng",
+            "checkoutFailed": "Thanh toán thất bại"
         },
         "shortcuts": {
             "summonTitle": "Phím tắt gọi Omi",
@@ -398,7 +406,14 @@
             "gmailCouldNotDisconnect": "Không thể ngắt kết nối",
             "extractFailed": "Không thể trích xuất ký ức",
             "exportFailed": "Xuất thất bại",
-            "couldNotLoadMemories": "Không thể tải ký ức"
+            "couldNotLoadMemories": "Không thể tải ký ức",
+            "exportSuccess": "Đã xuất {{count}} ký ức",
+            "exportSuccessLocation": "{{location}}",
+            "deleteConfirm": "Xóa vĩnh viễn {{count}} ký ức ứng dụng/tệp? Không thể hoàn tác.",
+            "deleteResult": "Đã xóa {{deleted}} / {{count}} ký ức",
+            "deleteFailed": "Xóa thất bại",
+            "devKeysShow": "Hiện {{title}}",
+            "devKeysHide": "Ẩn {{title}}"
         },
         "about": {
             "title": "Omi cho Windows",

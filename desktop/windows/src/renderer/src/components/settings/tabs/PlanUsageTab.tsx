@@ -37,9 +37,6 @@ function apiError(e: unknown): string {
 
 const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
-const REFRESH_LAGGING_MSG =
-  'Payment completed, but plan refresh is still catching up. Please try reloading this page in a moment.'
-
 export function PlanUsageTab(): React.JSX.Element {
   // Register the tab for cross-tab Settings search (billing content is card-based,
   // not SettingRows, so this one hidden entry surfaces the panel on a match).
@@ -107,7 +104,7 @@ export function PlanUsageTab(): React.JSX.Element {
     try {
       await openCustomerPortal()
     } catch (e) {
-      toast('Could not open the billing portal', { tone: 'error', body: apiError(e) })
+      toast(t('settings.planUsage.billingPortalOpenFailed'), { tone: 'error', body: apiError(e) })
     } finally {
       setPortalBusy(false)
     }
@@ -136,21 +133,24 @@ export function PlanUsageTab(): React.JSX.Element {
           void load()
           return
         case 'refresh_lagging':
-          toast('Payment received', { tone: 'warn', body: REFRESH_LAGGING_MSG })
+          toast(t('settings.planUsage.paymentReceived'), {
+            tone: 'warn',
+            body: t('settings.planUsage.refreshLagging')
+          })
           break
         case 'upgraded':
-          toast('Plan updated', { tone: 'success' })
+          toast(t('settings.planUsage.planUpdated'), { tone: 'success' })
           break
         case 'reactivated':
-          toast('Subscription reactivated', { tone: 'success' })
+          toast(t('settings.planUsage.subscriptionReactivated'), { tone: 'success' })
           break
         default:
-          toast("You're all set", { tone: 'success' })
+          toast(t('settings.planUsage.allSet'), { tone: 'success' })
       }
       setSelectedPlanId(null)
       await load()
     } catch (e) {
-      toast('Checkout failed', { tone: 'error', body: apiError(e) })
+      toast(t('settings.planUsage.checkoutFailed'), { tone: 'error', body: apiError(e) })
     } finally {
       setActivePriceId(null)
     }

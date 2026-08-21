@@ -243,7 +243,10 @@ export function DeveloperKeysSection(): React.JSX.Element {
                 type="button"
                 onClick={() => setReveal((r) => ({ ...r, [id]: !r[id] }))}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-white/45 hover:text-white/75"
-                aria-label={reveal[id] ? `Hide ${t(titleKey)}` : `Show ${t(titleKey)}`}
+                aria-label={t(
+                  reveal[id] ? 'settings.advanced.devKeysHide' : 'settings.advanced.devKeysShow',
+                  { title: t(titleKey) }
+                )}
               >
                 {reveal[id] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>

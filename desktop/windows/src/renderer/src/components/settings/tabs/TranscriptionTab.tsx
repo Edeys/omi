@@ -52,7 +52,9 @@ export function TranscriptionTab(): React.JSX.Element {
     setPreferences({ language: code })
     // Best-effort account sync (the local pref already drives transcription; this
     // keeps the account's language in step, like the macOS client). Never blocks.
-    void syncLanguage(code).catch(() => toast('Language sync failed', { tone: 'warn' }))
+    void syncLanguage(code).catch(() =>
+      toast(t('settings.transcription.languageSyncFailed'), { tone: 'warn' })
+    )
   }
 
   const changeVadGate = (next: boolean): void => {

@@ -27,6 +27,7 @@ describe('locale parity', () => {
       'settings.agents.apiKeyPlaceholderEmpty',
       'settings.advanced.chatgpt',
       'settings.advanced.claude',
+      'settings.advanced.exportSuccessLocation',
       'settings.about.versionName',
       'settings.about.updateErrorMessage'
     ])

@@ -148,10 +148,16 @@ export function AdvancedTab(): React.JSX.Element {
           : undefined
       )
       if (!r.canceled) {
-        toast(`Exported ${r.count} memor${r.count === 1 ? 'y' : 'ies'}`, {
-          tone: 'success',
-          body: r.location
-        })
+        toast(
+          t('settings.advanced.exportSuccess', {
+            count: r.count,
+            plural: r.count === 1 ? 'y' : 'ies'
+          }),
+          {
+            tone: 'success',
+            body: t('settings.advanced.exportSuccessLocation', { location: r.location })
+          }
+        )
       }
     } catch (e) {
       toast(t('settings.advanced.exportFailed'), { tone: 'error', body: (e as Error).message })
@@ -189,7 +195,10 @@ export function AdvancedTab(): React.JSX.Element {
     if (ids.length === 0 || memDeleting) return
     if (
       !window.confirm(
-        `Permanently delete ${ids.length} app/file-index memories? This cannot be undone.`
+        t('settings.advanced.deleteConfirm', {
+          count: ids.length,
+          plural: ids.length === 1 ? 'y' : 'ies'
+        })
       )
     )
       return
@@ -234,14 +243,21 @@ export function AdvancedTab(): React.JSX.Element {
         if (i % 10 === 0 || i === ids.length - 1) setMemDeleteProgress(deleted)
         if (paceMs) await sleep(paceMs)
       }
-      toast(`Deleted ${deleted} of ${ids.length} memories`, {
-        tone: failed ? 'warn' : 'success',
-        body: failed
-          ? `${failed} failed${firstError ? ` — ${firstError}` : ''}. Analyze again to retry.`
-          : undefined
-      })
+      toast(
+        t('settings.advanced.deleteResult', {
+          deleted,
+          count: ids.length,
+          plural: ids.length === 1 ? 'y' : 'ies'
+        }),
+        {
+          tone: failed ? 'warn' : 'success',
+          body: failed
+            ? `${failed} failed${firstError ? ` — ${firstError}` : ''}. Analyze again to retry.`
+            : undefined
+        }
+      )
     } catch (e) {
-      toast('Delete failed', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.deleteFailed'), { tone: 'error', body: (e as Error).message })
     } finally {
       setMemDeleting(false)
     }

@@ -117,7 +117,8 @@
             "singleLanguageSubtitle": "Best when you speak one language. Pick it below.",
             "languageLabel": "Language",
             "vadTitle": "Local VAD gate",
-            "vadSubtitle": "On-device voice-activity detection skips silence before it reaches transcription, reducing usage and cost. Turn off to send all captured audio."
+            "vadSubtitle": "On-device voice-activity detection skips silence before it reaches transcription, reducing usage and cost. Turn off to send all captured audio.",
+            "languageSyncFailed": "Language sync failed"
         },
         "rewind": {
             "continuousTitle": "Continuous recording",
@@ -261,7 +262,14 @@
             "promoPlaceholder": "Enter promo code",
             "chooseBilling": "Choose billing",
             "selectPlan": "Select {{title}}",
-            "starting": "starting"
+            "starting": "starting",
+            "billingPortalOpenFailed": "Could not open the billing portal",
+            "paymentReceived": "Payment received",
+            "refreshLagging": "Payment completed, but plan refresh is still catching up. Please try reloading this page in a moment.",
+            "planUpdated": "Plan updated",
+            "subscriptionReactivated": "Subscription reactivated",
+            "allSet": "You're all set",
+            "checkoutFailed": "Checkout failed"
         },
         "shortcuts": {
             "summonTitle": "Summon hotkey",
@@ -398,7 +406,14 @@
             "gmailCouldNotDisconnect": "Could not disconnect",
             "extractFailed": "Could not extract memories",
             "exportFailed": "Export failed",
-            "couldNotLoadMemories": "Could not load memories"
+            "couldNotLoadMemories": "Could not load memories",
+            "exportSuccess": "Exported {{count}} memor{{plural}}",
+            "exportSuccessLocation": "{{location}}",
+            "deleteConfirm": "Permanently delete {{count}} app/file-index memor{{plural}}? This cannot be undone.",
+            "deleteResult": "Deleted {{deleted}} of {{count}} memor{{plural}}",
+            "deleteFailed": "Delete failed",
+            "devKeysShow": "Show {{title}}",
+            "devKeysHide": "Hide {{title}}"
         },
         "about": {
             "title": "Omi for Windows",
