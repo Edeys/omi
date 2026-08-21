@@ -114,7 +114,7 @@ export function ExportsConnector(): React.JSX.Element {
 
       <ConnectorRow
         icon={FileText}
-        title="Markdown file"
+        title={t('home.connections.markdownFile')}
         description="Save your memories as a single Markdown file."
         action={
           <PillButton tone="primary" onClick={() => runExport('file')} disabled={exporting}>

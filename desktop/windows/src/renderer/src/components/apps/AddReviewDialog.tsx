@@ -98,7 +98,7 @@ export function AddReviewDialog({
           >
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <Dialog.Title className="font-display font-semibold text-white/95">
-                {isEdit ? 'Edit your review' : 'Add a review'}
+                {isEdit ? t('apps.review.editTitle') : t('apps.review.addTitle')}
               </Dialog.Title>
               <Dialog.Close
                 className="rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/5 hover:text-white/80"
@@ -148,7 +148,7 @@ export function AddReviewDialog({
                 disabled={submitting}
                 className="btn-ghost px-3 py-1.5 text-sm"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 onClick={() => void submit()}
@@ -158,9 +158,9 @@ export function AddReviewDialog({
                 {submitting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : isEdit ? (
-                  'Update review'
+                  t('apps.review.updateReview')
                 ) : (
-                  'Submit review'
+                  t('apps.review.submitReview')
                 )}
               </button>
             </div>

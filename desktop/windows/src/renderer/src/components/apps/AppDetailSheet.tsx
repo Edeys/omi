@@ -479,7 +479,9 @@ export function AppDetailSheet({
                               {step.name || `Step ${i + 1}`}
                             </span>
                             <span className="block text-xs text-white/45">
-                              {enabled ? 'Completed' : 'Click to complete'}
+                              {enabled
+                                ? t('apps.detail.completed')
+                                : t('apps.detail.clickToComplete')}
                             </span>
                           </span>
                           <ArrowUpRight className="h-4 w-4 shrink-0 text-white/40" />
@@ -526,7 +528,7 @@ export function AppDetailSheet({
                       onClick={() => setShowAddReview(true)}
                       className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white"
                     >
-                      {userReview ? 'Edit your review' : 'Add review'}
+                      {userReview ? t('apps.detail.editReview') : t('apps.detail.addReview')}
                     </button>
                   </div>
 

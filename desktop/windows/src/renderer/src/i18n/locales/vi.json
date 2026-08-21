@@ -628,7 +628,8 @@
             "readNotes": "Đọc ghi chú",
             "importing": "Đang nhập…",
             "synced": "Đã đồng bộ — {{memories}} ký ức, {{tasks}} công việc",
-            "import": "Nhập"
+            "import": "Nhập",
+            "markdownFile": "Tệp Markdown"
         }
     },
     "memories": {
@@ -1513,7 +1514,11 @@
             "yourRating": "Đánh giá của bạn",
             "yourReview": "Nhận xét của bạn",
             "placeholder": "Chia sẻ cảm nhận của bạn về ứng dụng này…",
-            "close": "Đóng"
+            "close": "Đóng",
+            "editTitle": "Sửa đánh giá của bạn",
+            "addTitle": "Thêm đánh giá",
+            "updateReview": "Cập nhật đánh giá",
+            "submitReview": "Gửi đánh giá"
         },
         "detail": {
             "developerResponse": "Phản hồi của nhà phát triển",
@@ -1525,7 +1530,11 @@
             "disableApp": "Tắt ứng dụng",
             "close": "Đóng",
             "anonymous": "Ẩn danh",
-            "linkUnavailable": "Liên kết của ứng dụng này không khả dụng."
+            "linkUnavailable": "Liên kết của ứng dụng này không khả dụng.",
+            "completed": "Đã hoàn thành",
+            "clickToComplete": "Nhấp để hoàn tất",
+            "editReview": "Sửa đánh giá của bạn",
+            "addReview": "Thêm đánh giá"
         }
     },
     "bar": {

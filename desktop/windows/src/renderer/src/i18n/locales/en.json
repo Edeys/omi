@@ -628,7 +628,8 @@
             "readNotes": "Read notes",
             "importing": "Importing…",
             "synced": "Synced — {{memories}} memories, {{tasks}} tasks",
-            "import": "Import"
+            "import": "Import",
+            "markdownFile": "Markdown file"
         }
     },
     "memories": {
@@ -1513,7 +1514,11 @@
             "yourRating": "Your rating",
             "yourReview": "Your review",
             "placeholder": "Share what you think about this app…",
-            "close": "Close"
+            "close": "Close",
+            "editTitle": "Edit your review",
+            "addTitle": "Add a review",
+            "updateReview": "Update review",
+            "submitReview": "Submit review"
         },
         "detail": {
             "developerResponse": "Developer response",
@@ -1525,7 +1530,11 @@
             "disableApp": "Disable app",
             "close": "Close",
             "anonymous": "Anonymous",
-            "linkUnavailable": "This app's link is unavailable."
+            "linkUnavailable": "This app's link is unavailable.",
+            "completed": "Completed",
+            "clickToComplete": "Click to complete",
+            "editReview": "Edit your review",
+            "addReview": "Add review"
         }
     },
     "bar": {
