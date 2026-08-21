@@ -446,7 +446,16 @@
             "updateNoLongerStaged": "Bản cập nhật đó không còn sẵn sàng. Omi sẽ đề nghị khởi động lại khi tải lại."
         },
         "billing": {
-            "upgradeToPro": "Nâng cấp lên Omi Pro"
+            "upgradeToPro": "Nâng cấp lên Omi Pro",
+            "claudeAuthUnlock": "Mở khóa Omi Pro với $199/tháng",
+            "claudeAuthCheckoutInfo": "Trình duyệt sẽ mở trang thanh toán Omi Pro. Sau khi đăng ký, hãy quay lại omi.",
+            "claudeAuthPending": "Hoàn tất đăng nhập trong trình duyệt…",
+            "usageLimitHeadline": "Bạn đã đạt hạn mức tháng này",
+            "usageLimitBodyTranscription": "Bạn đã đạt hạn mức tháng này. Hãy nâng cấp để bản ghi mới không bị mất.",
+            "usageLimitBodyChat": "Bạn đã đạt hạn mức tháng này. Hãy nâng cấp để tiếp tục trò chuyện với Omi không giới hạn.",
+            "usageLimitBodyTrialExpired": "Bạn đã đạt hạn mức tháng này. Hãy nâng cấp để tiếp tục sử dụng Omi không giới hạn.",
+            "usageLimitUpgrade": "Nâng cấp",
+            "usageLimitBringYourOwnKeys": "Dùng khóa API riêng"
         },
         "dbRecovery": {
             "title": "Omi gặp sự cố với cơ sở dữ liệu cục bộ",

@@ -3,19 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, X } from 'lucide-react'
 import { onUsageLimit, dismissUsageLimit, type UsageLimitReason } from '../../../lib/usageLimit'
 import { requestSettingsTab } from '../../../lib/settingsNav'
+import { useTranslation } from '../../../i18n'
 
-// Fixed headline + per-reason body (UsageLimitPopupView parity). Mac's Upgrade
-// button is purple; Windows uses the app's neutral white primary (INV-UI-1: no
-// purple). Like Mac, a secondary "Bring your own keys" action deep-links into
-// Settings → Advanced (the Developer API Keys / BYOK subsection).
-const HEADLINE = "You've hit your monthly limit"
-
-const BODY: Record<UsageLimitReason, string> = {
-  transcription:
-    "You've hit your monthly limit. Upgrade to make sure your new recordings aren't lost.",
-  chat: "You've hit your monthly limit. Upgrade to keep chatting with Omi without restrictions.",
-  trial_expired: "You've hit your monthly limit. Upgrade to keep using Omi without restrictions."
-}
+// Fixed headline + per-reason body (UsageLimitPopupView parity) — now via
+// `settings.billing.*` i18n keys. Mac's Upgrade button is purple; Windows uses
+// the app's neutral white primary (INV-UI-1: no purple). Like Mac, a secondary
+// "Bring your own keys" action deep-links into Settings → Advanced.
 
 /**
  * Usage-limit modal. Renders nothing until a reason is raised via
@@ -24,12 +17,20 @@ const BODY: Record<UsageLimitReason, string> = {
  * the app root.
  */
 export function UsageLimitPopup(): React.JSX.Element | null {
+  const { t } = useTranslation()
   const [reason, setReason] = useState<UsageLimitReason | null>(null)
   const navigate = useNavigate()
 
   useEffect(() => onUsageLimit(setReason), [])
 
   if (!reason) return null
+
+  const headline = t('settings.billing.usageLimitHeadline')
+  const bodyMap: Record<UsageLimitReason, string> = {
+    transcription: t('settings.billing.usageLimitBodyTranscription'),
+    chat: t('settings.billing.usageLimitBodyChat'),
+    trial_expired: t('settings.billing.usageLimitBodyTrialExpired')
+  }
 
   const onUpgrade = (): void => {
     dismissUsageLimit()
@@ -55,26 +56,26 @@ export function UsageLimitPopup(): React.JSX.Element | null {
         <button
           onClick={dismissUsageLimit}
           className="absolute right-3 top-3 rounded-md p-1 text-white/40 hover:bg-white/10 hover:text-white"
-          aria-label="Dismiss"
+          aria-label={t('common.dismiss')}
         >
           <X className="h-4 w-4" />
         </button>
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/10">
           <AlertTriangle className="h-7 w-7 text-amber-400" strokeWidth={1.9} />
         </div>
-        <h2 className="text-lg font-semibold text-text-primary">{HEADLINE}</h2>
-        <p className="mt-2 text-sm leading-relaxed text-text-tertiary">{BODY[reason]}</p>
+        <h2 className="text-lg font-semibold text-text-primary">{headline}</h2>
+        <p className="mt-2 text-sm leading-relaxed text-text-tertiary">{bodyMap[reason]}</p>
         <button
           onClick={onUpgrade}
           className="mt-6 w-full rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-black transition hover:opacity-90"
         >
-          Upgrade
+          {t('settings.billing.usageLimitUpgrade')}
         </button>
         <button
           onClick={onBringYourOwnKeys}
           className="mt-2 w-full rounded-2xl px-4 py-2.5 text-sm font-medium text-text-tertiary transition hover:text-text-primary"
         >
-          Bring your own keys
+          {t('settings.billing.usageLimitBringYourOwnKeys')}
         </button>
       </div>
     </div>

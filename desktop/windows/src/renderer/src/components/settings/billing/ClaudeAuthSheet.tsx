@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Modal } from '../../ui/Modal'
 import { onClaudeSignIn, dismissClaudeSignIn, OMI_PRICING_URL } from '../../../lib/claudeSignIn'
+import { useTranslation } from '../../../i18n'
 
 // "Upgrade to Omi Pro" sheet — Windows port of macOS ClaudeAuthSheet. Shown
 // ONLY by the mid-turn `auth_required` event (Claude Code's token rejected
@@ -12,6 +13,7 @@ import { onClaudeSignIn, dismissClaudeSignIn, OMI_PRICING_URL } from '../../../l
 // verbatim; the primary CTA opens omi.me/pricing. Neutral white primary, no
 // purple (INV-UI-1). Mounted once at the app root.
 export function ClaudeAuthSheet(): React.JSX.Element {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   useEffect(() => onClaudeSignIn((s) => setOpen(s.open)), [])
@@ -27,7 +29,7 @@ export function ClaudeAuthSheet(): React.JSX.Element {
       onOpenChange={(next) => {
         if (!next) dismissClaudeSignIn()
       }}
-      title="Upgrade to Omi Pro"
+      title={t('settings.billing.upgradeToPro')}
       size="sm"
       footer={
         <>
@@ -35,22 +37,20 @@ export function ClaudeAuthSheet(): React.JSX.Element {
             onClick={dismissClaudeSignIn}
             className="rounded-2xl px-4 py-2 text-sm font-medium text-text-tertiary transition hover:text-text-secondary"
           >
-            Cancel
+            {t('common.cancel')}
           </button>
           <button
             onClick={onUpgrade}
             className="rounded-2xl bg-white px-4 py-2 text-sm font-semibold text-black transition hover:opacity-90"
           >
-            Upgrade to Omi Pro
+            {t('settings.billing.upgradeToPro')}
           </button>
         </>
       }
     >
-      <p className="text-text-secondary">Unlock Omi Pro for $199/month</p>
-      <p className="mt-2 text-text-tertiary">
-        Your browser will open to the Omi Pro checkout. After subscribing, return to omi.
-      </p>
-      <p className="mt-3 text-xs text-text-tertiary">Complete sign-in in your browser…</p>
+      <p className="text-text-secondary">{t('settings.billing.claudeAuthUnlock')}</p>
+      <p className="mt-2 text-text-tertiary">{t('settings.billing.claudeAuthCheckoutInfo')}</p>
+      <p className="mt-3 text-xs text-text-tertiary">{t('settings.billing.claudeAuthPending')}</p>
     </Modal>
   )
 }

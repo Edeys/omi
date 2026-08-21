@@ -38,7 +38,8 @@ import { AppCrashScreen } from './components/ui/AppCrashScreen'
 import { scrubEventPii } from '../../shared/sentryScrub'
 import { isSecondaryWindow } from './lib/windowRole'
 import { initFontScale } from './lib/fontScale'
-import './i18n'
+import { i18n } from './i18n'
+import { onPreferencesChange } from './lib/preferences'
 
 // Renderer-side crash reporting. Only initializes when a DSN is configured, so
 // dev builds (and any build without the env var) stay entirely offline. Emails
@@ -66,6 +67,16 @@ if (IS_PRIMARY_WINDOW) window.omi?.perfMark('renderer:eval')
 // Apply the persisted UI font scale and register the Ctrl+font shortcuts before
 // first render — main window only (secondary windows are visually exempt).
 if (IS_PRIMARY_WINDOW) initFontScale()
+
+// Secondary windows (bar, glow, capture, insight-toast) must switch language live
+// when the main window changes it. `changeUiLanguage` in the main window writes
+// to preferences (localStorage); the storage event propagates to other windows
+// of the same origin via `onPreferencesChange` (see lib/preferences.ts).
+if (!IS_PRIMARY_WINDOW) {
+  onPreferencesChange((next) => {
+    void i18n.changeLanguage(next.uiLanguage ?? 'en')
+  })
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

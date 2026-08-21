@@ -1,4 +1,10 @@
-import './i18n'
+import { i18n } from './i18n'
+import { onPreferencesChange } from './lib/preferences'
+
+onPreferencesChange((next) => {
+  void i18n.changeLanguage(next.uiLanguage ?? 'en')
+})
+
 // Slim renderer entry for the hidden capture window (#/capture). It mounts ONLY
 // the CaptureApp host tree (mic, VAD, PTT, screen, rewind) — not the full app UI
 // graph (MainViews, all pages, Hub) or the three.js orb. Every aux window used to

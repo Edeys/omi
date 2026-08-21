@@ -446,7 +446,16 @@
             "updateNoLongerStaged": "That update is no longer staged. Omi will offer to restart once it downloads again."
         },
         "billing": {
-            "upgradeToPro": "Upgrade to Omi Pro"
+            "upgradeToPro": "Upgrade to Omi Pro",
+            "claudeAuthUnlock": "Unlock Omi Pro for $199/month",
+            "claudeAuthCheckoutInfo": "Your browser will open to the Omi Pro checkout. After subscribing, return to omi.",
+            "claudeAuthPending": "Complete sign-in in your browser…",
+            "usageLimitHeadline": "You've hit your monthly limit",
+            "usageLimitBodyTranscription": "You've hit your monthly limit. Upgrade to make sure your new recordings aren't lost.",
+            "usageLimitBodyChat": "You've hit your monthly limit. Upgrade to keep chatting with Omi without restrictions.",
+            "usageLimitBodyTrialExpired": "You've hit your monthly limit. Upgrade to keep using Omi without restrictions.",
+            "usageLimitUpgrade": "Upgrade",
+            "usageLimitBringYourOwnKeys": "Bring your own keys"
         },
         "dbRecovery": {
             "title": "Omi hit a problem with its local database",

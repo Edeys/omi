@@ -38,6 +38,12 @@ describe('LanguageTab', () => {
   })
 
   it('shows the persisted language as the current selection', () => {
+    render(
+      <SettingsSearchProvider>
+        <LanguageTab />
+      </SettingsSearchProvider>
+    )
+    expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('en')
     expect(getPreferences().uiLanguage ?? 'en').toBe('en')
   })
 })

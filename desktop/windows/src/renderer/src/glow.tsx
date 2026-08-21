@@ -1,4 +1,10 @@
-import './i18n'
+import { i18n } from './i18n'
+import { onPreferencesChange } from './lib/preferences'
+
+onPreferencesChange((next) => {
+  void i18n.changeLanguage(next.uiLanguage ?? 'en')
+})
+
 // Slim renderer entry for the halo window (#/glow). It mounts ONLY the
 // GlowWindow component tree — not the full app (MainViews, three.js orb,
 // onnxruntime VAD, all pages). Every aux window used to load index.html's full

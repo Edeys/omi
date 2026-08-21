@@ -68,7 +68,7 @@ const HUB_ORB_IDLE: VoiceHubBarState = {
   hint: ''
 }
 
-import { useTranslation as useBarTranslation } from '../../i18n'
+import { i18n, useTranslation as useBarTranslation } from '../../i18n'
 
 function SignedOutContent(): React.JSX.Element {
   const { t } = useBarTranslation()
@@ -132,6 +132,7 @@ export function BarApp(): React.JSX.Element {
 
   useEffect(() => onPreferencesChange((p) => setContinuous(!!p.continuousRecording)), [])
   useEffect(() => onPreferencesChange((p) => setTypedVoice(!!p.floatingBarTypedVoiceEnabled)), [])
+  useEffect(() => onPreferencesChange((p) => void i18n.changeLanguage(p.uiLanguage ?? 'en')), [])
   useEffect(() => {
     let active = true
     void auth.authStateReady().then(() => {
