@@ -252,7 +252,10 @@ export function AdvancedTab(): React.JSX.Element {
         {
           tone: failed ? 'warn' : 'success',
           body: failed
-            ? `${failed} failed${firstError ? ` — ${firstError}` : ''}. Analyze again to retry.`
+            ? t('settings.advanced.deleteFailedBody', {
+                failed,
+                error: firstError ? ` — ${firstError}` : ''
+              })
             : undefined
         }
       )

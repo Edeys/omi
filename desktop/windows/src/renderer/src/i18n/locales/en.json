@@ -413,7 +413,8 @@
             "deleteResult": "Deleted {{deleted}} of {{count}} memor{{plural}}",
             "deleteFailed": "Delete failed",
             "devKeysShow": "Show {{title}}",
-            "devKeysHide": "Hide {{title}}"
+            "devKeysHide": "Hide {{title}}",
+            "deleteFailedBody": "{{failed}} failed{{error}}. Analyze again to retry."
         },
         "about": {
             "title": "Omi for Windows",

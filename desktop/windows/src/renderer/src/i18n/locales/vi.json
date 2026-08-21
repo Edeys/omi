@@ -413,7 +413,8 @@
             "deleteResult": "Đã xóa {{deleted}} / {{count}} ký ức",
             "deleteFailed": "Xóa thất bại",
             "devKeysShow": "Hiện {{title}}",
-            "devKeysHide": "Ẩn {{title}}"
+            "devKeysHide": "Ẩn {{title}}",
+            "deleteFailedBody": "Không xóa được {{failed}}{{error}}. Phân tích lại để thử lần nữa."
         },
         "about": {
             "title": "Omi cho Windows",
