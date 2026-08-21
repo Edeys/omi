@@ -109,7 +109,17 @@ def get_or_create_openai_compatible_llm(
         api_key = os.environ.get(provider_config.api_key_env)
         if api_key:
             kwargs['api_key'] = api_key
-        if provider_config.base_url:
+        # Self-host: allow overriding OpenAI base URL for 9Router/compatible gateways.
+        # Priority: provider-specific base_url (hardcoded for openrouter), else
+        # env OPENAI_BASE_URL (preferred) / OPENROUTER_BASE_URL fallback for the
+        # 'openai' provider so `OPENAI_API_KEY` alone can reach 9Router.
+        if provider == 'openai':
+            env_base = (os.getenv('OPENAI_BASE_URL') or os.getenv('OPENROUTER_BASE_URL') or '').strip()
+            if env_base:
+                kwargs['base_url'] = env_base.rstrip('/')
+            elif provider_config.base_url:
+                kwargs['base_url'] = provider_config.base_url
+        elif provider_config.base_url:
             kwargs['base_url'] = provider_config.base_url
         if provider_config.default_headers:
             kwargs['default_headers'] = provider_config.default_headers

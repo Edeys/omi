@@ -7,10 +7,10 @@ import { auth } from './firebase'
 // Host is intentionally fixed to the CSP connect-src allowlist in renderer HTML.
 // A VITE_POSTHOG_HOST override would silently fail under Chromium if it diverged.
 const POSTHOG_HOST = 'https://us.i.posthog.com'
-const POSTHOG_KEY =
-  (import.meta.env.VITE_POSTHOG_KEY as string) || 'phc_z3qUFhGUgYIOMYnfxVSrLmYISQvbgph8iREQv3sez3Y'
+const POSTHOG_KEY = (import.meta.env.VITE_POSTHOG_KEY as string)?.trim() || ''
 
 export function trackEvent(event: string, properties: Record<string, unknown> = {}): void {
+  if (!POSTHOG_KEY) return
   const distinctId = auth.currentUser?.uid ?? 'anonymous'
   void fetch(`${POSTHOG_HOST}/i/v0/e/`, {
     method: 'POST',

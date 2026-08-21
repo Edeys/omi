@@ -1,0 +1,44 @@
+services:
+  redis:
+    image: redis:7-alpine
+    restart: always
+    mem_limit: 200m
+    command: ["redis-server", "--save", "60", "1000"]
+    volumes: ["redis_data:/data"]
+    networks: [omi]
+  backend:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfile
+    restart: always
+    mem_limit: 1024m
+    env_file: /opt/omi/.env
+    volumes: ["/opt/omi/secrets:/secrets:ro"]
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on: [redis]
+    networks: [omi]
+  desktop-backend:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfile.desktop_backend
+    restart: always
+    mem_limit: 700m
+    env_file: /opt/omi/.env
+    volumes: ["/opt/omi/secrets:/secrets:ro"]
+    ports: ["127.0.0.1:8090:8080"]
+    depends_on: [redis]
+    networks: [omi]
+  pusher:
+    build:
+      context: ../backend
+      dockerfile: pusher/Dockerfile
+    restart: always
+    mem_limit: 800m
+    env_file: /opt/omi/.env
+    ports: ["127.0.0.1:8091:8080"]
+    depends_on: [redis]
+    networks: [omi]
+networks:
+  omi: {}
+volumes:
+  redis_data: {}
