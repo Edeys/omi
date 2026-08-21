@@ -102,7 +102,7 @@ export function AddReviewDialog({
               </Dialog.Title>
               <Dialog.Close
                 className="rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/5 hover:text-white/80"
-                aria-label="Close"
+                aria-label={t('apps.review.close')}
               >
                 <X className="h-4 w-4" />
               </Dialog.Close>

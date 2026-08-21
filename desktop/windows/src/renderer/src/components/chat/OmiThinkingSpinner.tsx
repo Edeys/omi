@@ -23,9 +23,16 @@ const DOTS = Array.from({ length: 8 }, (_, i) => {
   }
 })
 
+import { useTranslation } from '../../i18n'
+
 export function OmiThinkingSpinner(): React.JSX.Element {
+  const { t } = useTranslation()
   return (
-    <div className="mr-auto flex items-center pl-1" role="status" aria-label="Omi is thinking">
+    <div
+      className="mr-auto flex items-center pl-1"
+      role="status"
+      aria-label={t('chat.thinkingAria')}
+    >
       <svg
         viewBox="0 0 24 24"
         className="omi-thinking-spin h-5 w-5"

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { toast } from '../../../../lib/toast'
+import { useTranslation } from '../../../../i18n'
 import { toastImportTally } from '../../../../lib/importToast'
 import { useMemories } from '../../../../hooks/useMemories'
 import type { MemorySource } from '../../../../lib/memoryExtract'
@@ -23,6 +24,7 @@ const TITLE: Record<MemorySource, string> = {
 }
 
 export function PasteImportConnector({ source }: { source: MemorySource }): React.JSX.Element {
+  const { t } = useTranslation()
   const { memories, refresh } = useMemories()
   const [open, setOpen] = useState(false)
   const [dump, setDump] = useState('')
@@ -45,7 +47,7 @@ export function PasteImportConnector({ source }: { source: MemorySource }): Reac
       setProfile(r.profile)
       toastForExtractResult(r)
     } catch (e) {
-      toast('Could not extract memories', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.couldNotExtract'), { tone: 'error', body: (e as Error).message })
     } finally {
       setExtracting(false)
     }

@@ -1,6 +1,10 @@
 import { useState } from 'react'
 
-export function RewindSearchBar({ onSearch }: { onSearch: (q: string) => void }): React.JSX.Element {
+export function RewindSearchBar({
+  onSearch
+}: {
+  onSearch: (q: string) => void
+}): React.JSX.Element {
   const [q, setQ] = useState('')
   return (
     <form

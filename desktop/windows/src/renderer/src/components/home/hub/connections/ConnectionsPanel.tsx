@@ -68,6 +68,7 @@ function DetailShell({
   onDismiss: () => void
   children: React.ReactNode
 }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div className="relative flex h-full w-full flex-col" data-testid="connections-detail">
       <div className="flex shrink-0 items-center gap-2.5 px-5 pt-5">
@@ -86,7 +87,7 @@ function DetailShell({
         <button
           type="button"
           onClick={onDismiss}
-          aria-label="Close connect"
+          aria-label={t('home.connections.closeConnect')}
           className="focus-ring ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-home-muted transition-colors hover:bg-white/10 hover:text-home-ink"
         >
           <X className="h-4 w-4" strokeWidth={2} />
@@ -102,11 +103,12 @@ function DetailShell({
 // The App Marketplace link — rendered through ConnectorRow so it shares the exact row
 // layout; kept reachable from the list views (Mac's "More" opens the apps popup).
 function MarketplaceLink({ onOpen }: { onOpen: () => void }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <ConnectorRow
       icon={LayoutGrid}
-      title="Browse the App Marketplace"
-      description="Discover chat personas, notification plugins, and more."
+      title={t('home.connections.browseMarketplace')}
+      description={t('home.connections.browseMarketplaceDesc')}
       onClick={onOpen}
       action={<ArrowRight className="h-4 w-4 text-home-faint" strokeWidth={2} />}
     />

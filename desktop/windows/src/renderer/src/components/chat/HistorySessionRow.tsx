@@ -4,6 +4,7 @@ import type { ChatSession } from '../../../../shared/chatSessions'
 import { toEpochMs } from '../../lib/chatSessionsView'
 import { macPurple } from '../../lib/macPalette'
 import { cn } from '../../lib/utils'
+import { useTranslation } from '../../i18n'
 
 // One row in the chat-history popover: star, title (double-click to rename in
 // place), preview + relative-date subtitle, and hover actions (rename/star/
@@ -36,6 +37,7 @@ export function HistorySessionRow(props: {
   onToggleStar: () => void
   onDelete: () => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const { session, selected, onSelect, onRename, onToggleStar, onDelete } = props
   const [renaming, setRenaming] = useState(false)
   const [confirmingDelete, setConfirmingDelete] = useState(false)
@@ -59,7 +61,7 @@ export function HistorySessionRow(props: {
     setDraft(session.title ?? '')
   }
 
-  const title = session.title?.trim() || 'New Chat'
+  const title = session.title?.trim() || t('chat.history.newChatFallback')
   const relative = formatRelativeDate(session.updatedAt)
   const subtitleParts = [session.preview?.trim(), relative].filter(Boolean)
 
@@ -79,7 +81,7 @@ export function HistorySessionRow(props: {
           'focus-ring mt-0.5 shrink-0 rounded p-0.5 transition-colors',
           session.starred ? 'text-amber-300' : 'text-white/30 hover:text-white/60'
         )}
-        title={session.starred ? 'Unstar' : 'Star'}
+        title={session.starred ? t('chat.history.unstar') : t('chat.history.star')}
         onClick={(e) => {
           e.stopPropagation()
           onToggleStar()
@@ -128,11 +130,11 @@ export function HistorySessionRow(props: {
           Kept in-row (not a Modal) so it never fights the Popover's dismiss. */}
       {!renaming && confirmingDelete && (
         <div className="flex shrink-0 items-center gap-0.5">
-          <span className="mr-1 text-[11px] text-white/50">Delete?</span>
+          <span className="mr-1 text-[11px] text-white/50">{t('chat.history.deleteAsk')}</span>
           <button
             type="button"
             className="focus-ring rounded p-1 text-[var(--error)] hover:bg-[var(--error)]/20"
-            title="Confirm delete"
+            title={t('chat.history.confirmDelete')}
             onClick={(e) => {
               e.stopPropagation()
               setConfirmingDelete(false)
@@ -144,7 +146,7 @@ export function HistorySessionRow(props: {
           <button
             type="button"
             className="focus-ring rounded p-1 text-white/40 hover:bg-white/10 hover:text-white/80"
-            title="Cancel"
+            title={t('chat.history.cancel')}
             onClick={(e) => {
               e.stopPropagation()
               setConfirmingDelete(false)
@@ -161,7 +163,7 @@ export function HistorySessionRow(props: {
           <button
             type="button"
             className="focus-ring rounded p-1 text-white/40 hover:bg-white/10 hover:text-white/80"
-            title="Rename"
+            title={t('chat.history.rename')}
             onClick={(e) => {
               e.stopPropagation()
               beginRename()
@@ -172,7 +174,7 @@ export function HistorySessionRow(props: {
           <button
             type="button"
             className="focus-ring rounded p-1 text-white/40 hover:bg-[var(--error)]/20 hover:text-[var(--error)]"
-            title="Delete"
+            title={t('chat.history.delete')}
             onClick={(e) => {
               e.stopPropagation()
               setConfirmingDelete(true)

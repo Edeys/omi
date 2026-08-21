@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ChevronRight, X } from 'lucide-react'
 import { useGoogleConnection } from '../../../../hooks/useGoogleConnection'
+import { useTranslation } from '../../../../i18n'
 import { getCalendarStatus, type CalendarStatus } from '../../../../lib/calendarConnect'
 import { getXSession } from '../../../../lib/xSession'
 import type { XStatus } from '../../../../../../shared/types'
@@ -51,6 +52,7 @@ function ColumnCard({ children }: { children: React.ReactNode }): React.JSX.Elem
 }
 
 export function ConnectTray(props: ConnectTrayCallbacks): React.JSX.Element {
+  const { t } = useTranslation()
   const {
     onOpenSource,
     onOpenImports,
@@ -108,7 +110,7 @@ export function ConnectTray(props: ConnectTrayCallbacks): React.JSX.Element {
       <button
         type="button"
         onClick={onDismiss}
-        aria-label="Close connect"
+        aria-label={t('home.connections.closeConnect')}
         data-testid="connect-tray-close"
         className="focus-ring absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full text-home-muted transition-colors hover:bg-white/10 hover:text-home-ink"
       >
@@ -119,7 +121,10 @@ export function ConnectTray(props: ConnectTrayCallbacks): React.JSX.Element {
         <div className="flex min-h-full items-center justify-center px-5 py-6">
           <div className="flex w-full max-w-[920px] items-stretch gap-2.5">
             <ColumnCard>
-              <ColumnHeader title="Connect data" subtitle="Sources Omi learns from." />
+              <ColumnHeader
+                title={t('home.connections.connectData')}
+                subtitle={t('home.connections.sourcesSubtitle')}
+              />
               <div className="flex flex-col gap-2.5">
                 <TrayTile
                   title="Gmail"
@@ -162,8 +167,8 @@ export function ConnectTray(props: ConnectTrayCallbacks): React.JSX.Element {
 
             <ColumnCard>
               <ColumnHeader
-                title="Use omi memory anywhere"
-                subtitle="Bring your memories to the apps you use"
+                title={t('home.connections.useAnywhere')}
+                subtitle={t('home.connections.bringMemories')}
               />
               <div className="flex flex-col gap-2.5">
                 <TrayTile title="Ask Omi" brand="omi" onClick={onAskOmi} />
@@ -177,7 +182,11 @@ export function ConnectTray(props: ConnectTrayCallbacks): React.JSX.Element {
                   brand="chatgpt"
                   onClick={() => onOpenExport('chatgpt')}
                 />
-                <TrayTile title="OpenClaw" brand="openclaw" onClick={() => onOpenExport('openclaw')} />
+                <TrayTile
+                  title="OpenClaw"
+                  brand="openclaw"
+                  onClick={() => onOpenExport('openclaw')}
+                />
                 <TrayTile title="Hermes" brand="hermes" onClick={() => onOpenExport('hermes')} />
                 <TrayTile
                   title="More"

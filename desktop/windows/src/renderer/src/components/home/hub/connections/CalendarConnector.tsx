@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { toast } from '../../../../lib/toast'
+import { useTranslation } from '../../../../i18n'
 import {
   getCalendarStatus,
   getCalendarOAuthUrl,
@@ -21,6 +22,7 @@ const POLL_INTERVAL_MS = 2000
 const POLL_MAX_ATTEMPTS = 60
 
 export function CalendarConnector(): React.JSX.Element {
+  const { t } = useTranslation()
   const [status, setStatus] = useState<CalendarStatus>({ connected: false })
   const [connecting, setConnecting] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -50,16 +52,19 @@ export function CalendarConnector(): React.JSX.Element {
       if (canceled.current) return
       if (ok) {
         setStatus(await getCalendarStatus())
-        toast('Google Calendar connected', { tone: 'success' })
+        toast(t('home.connections.calendarConnected'), { tone: 'success' })
       } else {
-        toast('Still waiting for Google Calendar', {
+        toast(t('home.connections.calendarWaiting'), {
           tone: 'warn',
-          body: 'Finish the sign-in in your browser, then reopen this panel to check.'
+          body: t('home.connections.calendarWaitingBody')
         })
       }
     } catch (e) {
       if (!canceled.current)
-        toast('Could not start Calendar sign-in', { tone: 'error', body: (e as Error).message })
+        toast(t('home.connections.calendarStartFailed'), {
+          tone: 'error',
+          body: (e as Error).message
+        })
     } finally {
       if (!canceled.current) setConnecting(false)
     }
@@ -71,9 +76,12 @@ export function CalendarConnector(): React.JSX.Element {
     try {
       await disconnectCalendar()
       setStatus({ connected: false })
-      toast('Google Calendar disconnected', { tone: 'success' })
+      toast(t('home.connections.calendarDisconnected'), { tone: 'success' })
     } catch (e) {
-      toast('Could not disconnect', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.calendarDisconnectFailed'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setBusy(false)
     }
@@ -86,7 +94,7 @@ export function CalendarConnector(): React.JSX.Element {
   return (
     <ConnectorRow
       iconNode={<ConnectorBrandMark brand="calendar" />}
-      title="Calendar"
+      title={t('home.connections.calendarTitle')}
       description={description}
       action={
         status.connected ? (

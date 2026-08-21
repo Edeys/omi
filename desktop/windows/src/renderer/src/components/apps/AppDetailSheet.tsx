@@ -70,7 +70,9 @@ function ReviewCard({
       }`}
     >
       <div className="mb-1.5 flex items-center justify-between gap-2">
-        <span className="truncate text-xs text-white/55">{review.username || 'Anonymous'}</span>
+        <span className="truncate text-xs text-white/55">
+          {review.username || t('apps.detail.anonymous')}
+        </span>
         <StarRow score={review.score} />
       </div>
       {review.review && <p className="text-sm leading-relaxed text-white/80">{review.review}</p>}
@@ -298,7 +300,7 @@ export function AppDetailSheet({
       homeUrl || (currentUid && authSteps[0]?.url ? `${authSteps[0].url}?uid=${currentUid}` : null)
     if (!target) return
     void window.omi.openExternalUrl(target).then((ok) => {
-      if (!ok) toast("This app's link is unavailable.", { tone: 'warn' })
+      if (!ok) toast(t('apps.detail.linkUnavailable'), { tone: 'warn' })
     })
   }
 
@@ -324,7 +326,7 @@ export function AppDetailSheet({
               <div className="flex justify-end px-3 pt-3">
                 <Dialog.Close
                   className="rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/5 hover:text-white/80"
-                  aria-label="Close"
+                  aria-label={t('apps.detail.close')}
                 >
                   <X className="h-4 w-4" />
                 </Dialog.Close>

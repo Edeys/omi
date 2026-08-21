@@ -1,6 +1,7 @@
 {
     "app": {
-        "name": "Omi"
+        "name": "Omi",
+        "loadingOmi": "Loading Omi…"
     },
     "settings": {
         "title": "Settings",
@@ -443,11 +444,21 @@
             "updateError": "Couldn't check for updates{{message}}.",
             "updateErrorMessage": ": {{message}}",
             "updateNoLongerStaged": "That update is no longer staged. Omi will offer to restart once it downloads again."
+        },
+        "billing": {
+            "upgradeToPro": "Upgrade to Omi Pro"
+        },
+        "dbRecovery": {
+            "title": "Omi hit a problem with its local database"
         }
     },
     "common": {
         "english": "English",
-        "vietnamese": "Tiếng Việt"
+        "vietnamese": "Tiếng Việt",
+        "close": "Close",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "rename": "Rename"
     },
     "home": {
         "greeting": "Hi, {{name}}",
@@ -540,7 +551,43 @@
             "connected": "Connected",
             "connectData": "Connect data",
             "importSources": "Import sources",
-            "exportSources": "Export sources"
+            "exportSources": "Export sources",
+            "calendarTitle": "Calendar",
+            "closeConnect": "Close connect",
+            "browseMarketplace": "Browse the App Marketplace",
+            "sourcesSubtitle": "Sources Omi learns from.",
+            "askOmi": "Ask Omi",
+            "bringMemories": "Bring your memories to the apps you use",
+            "calendarConnected": "Google Calendar connected",
+            "calendarWaiting": "Still waiting for Google Calendar",
+            "calendarWaitingBody": "Finish the sign-in in your browser, then reopen this step to check.",
+            "calendarStartFailed": "Could not start Calendar sign-in",
+            "calendarDisconnected": "Google Calendar disconnected",
+            "calendarDisconnectFailed": "Could not disconnect",
+            "noMemoriesToExport": "No memories to export yet",
+            "notionMissing": "Enter your Notion token and parent page ID",
+            "exportFailed": "Export failed",
+            "couldNotConnect": "Could not connect",
+            "couldNotDisconnect": "Could not disconnect",
+            "rotatedKey": "Rotated your Omi memory key",
+            "couldNotRotate": "Could not rotate key",
+            "couldNotBuildPack": "Could not build the pack",
+            "copiedPack": "Copied — paste into {{title}}",
+            "couldNotExtract": "Could not extract memories",
+            "noStickyFound": "No Sticky Notes found on this PC",
+            "stickyCouldNotRead": "Could not read Sticky Notes",
+            "stickyReadFailed": "Could not read Sticky Notes",
+            "xSignIn": "Sign in to connect X",
+            "xSynced": "Synced X — {{count}} new posts",
+            "xSyncFailed": "X sync failed",
+            "xDisconnected": "X disconnected",
+            "xDisconnectFailed": "Could not disconnect",
+            "loadingConnections": "Loading connections",
+            "exportedCount": "Exported {{count}} memories",
+            "exportedCountOne": "Exported {{count}} memory",
+            "noStickyText": "No note text to import",
+            "noNewStickyMemories": "No new memories found in your notes",
+            "browseMarketplaceDesc": "Discover chat personas, notification plugins, and more."
         }
     },
     "memories": {
@@ -1240,7 +1287,15 @@
         "noResults": "No results found",
         "related": "Related",
         "screenshots": "{{count}} screenshots",
-        "screenshotsOne": "{{count}} screenshot"
+        "screenshotsOne": "{{count}} screenshot",
+        "datePicker": {
+            "pickDay": "Pick a day",
+            "prevMonth": "Previous month",
+            "nextMonth": "Next month"
+        },
+        "searchBar": {
+            "placeholder": "Search what was on screen…"
+        }
     },
     "knowledgeGraph": {
         "title": "Brain Map",
@@ -1344,6 +1399,12 @@
         "transcriptDrawer": {
             "empty": "No transcript yet.",
             "title": "Transcript"
+        },
+        "nameSpeaker": {
+            "close": "Close",
+            "personPlaceholder": "Person name",
+            "newPersonAria": "New person name",
+            "couldNotName": "Could not name speaker"
         }
     },
     "liveConversation": {
@@ -1409,7 +1470,8 @@
         "review": {
             "yourRating": "Your rating",
             "yourReview": "Your review",
-            "placeholder": "Share what you think about this app…"
+            "placeholder": "Share what you think about this app…",
+            "close": "Close"
         },
         "detail": {
             "developerResponse": "Developer response",
@@ -1418,7 +1480,10 @@
             "setup": "Setup",
             "capabilities": "Capabilities",
             "category": "Category",
-            "disableApp": "Disable app"
+            "disableApp": "Disable app",
+            "close": "Close",
+            "anonymous": "Anonymous",
+            "linkUnavailable": "This app's link is unavailable."
         }
     },
     "bar": {
@@ -1430,7 +1495,9 @@
             "listening": "Listening",
             "thinking": "Thinking",
             "speaking": "Speaking",
-            "omi": "Omi"
+            "omi": "Omi",
+            "backToList": "Back to list",
+            "close": "Close"
         },
         "openOmiAria": "Open Omi",
         "loading": "Loading…",
@@ -1507,6 +1574,27 @@
         "dismissSession": "Dismiss voice session"
     },
     "chat": {
-        "agentRunning": "Running"
+        "agentRunning": "Running",
+        "history": {
+            "confirmDelete": "Confirm delete",
+            "cancel": "Cancel",
+            "rename": "Rename",
+            "delete": "Delete",
+            "star": "Star",
+            "unstar": "Unstar",
+            "deleteConfirm": "Delete?",
+            "deleteAsk": "Delete?",
+            "newChatFallback": "New Chat"
+        },
+        "thinkingAria": "Omi is thinking"
+    },
+    "layout": {
+        "pageChrome": {
+            "home": "Home"
+        },
+        "pageHeader": {
+            "backToConversations": "Back to conversations",
+            "rename": "Rename"
+        }
     }
 }

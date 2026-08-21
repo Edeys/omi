@@ -1,6 +1,7 @@
 {
     "app": {
-        "name": "Omi"
+        "name": "Omi",
+        "loadingOmi": "Đang tải Omi…"
     },
     "settings": {
         "title": "Cài đặt",
@@ -443,11 +444,21 @@
             "updateError": "Không thể kiểm tra cập nhật{{message}}.",
             "updateErrorMessage": ": {{message}}",
             "updateNoLongerStaged": "Bản cập nhật đó không còn sẵn sàng. Omi sẽ đề nghị khởi động lại khi tải lại."
+        },
+        "billing": {
+            "upgradeToPro": "Nâng cấp lên Omi Pro"
+        },
+        "dbRecovery": {
+            "title": "Omi gặp sự cố với cơ sở dữ liệu cục bộ"
         }
     },
     "common": {
         "english": "English",
-        "vietnamese": "Tiếng Việt"
+        "vietnamese": "Tiếng Việt",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "delete": "Xóa",
+        "rename": "Đổi tên"
     },
     "home": {
         "greeting": "Chào, {{name}}",
@@ -540,7 +551,43 @@
             "connected": "Đã kết nối",
             "connectData": "Kết nối dữ liệu",
             "importSources": "Nguồn nhập",
-            "exportSources": "Nguồn xuất"
+            "exportSources": "Nguồn xuất",
+            "calendarTitle": "Lịch",
+            "closeConnect": "Đóng kết nối",
+            "browseMarketplace": "Duyệt Chợ ứng dụng",
+            "sourcesSubtitle": "Nguồn Omi học từ đó.",
+            "askOmi": "Hỏi Omi",
+            "bringMemories": "Mang ký ức của bạn tới ứng dụng bạn dùng",
+            "calendarConnected": "Đã kết nối Lịch Google",
+            "calendarWaiting": "Vẫn đang chờ Lịch Google",
+            "calendarWaitingBody": "Hoàn tất đăng nhập trong trình duyệt, rồi mở lại bước này để kiểm tra.",
+            "calendarStartFailed": "Không thể bắt đầu đăng nhập Lịch",
+            "calendarDisconnected": "Đã ngắt Lịch Google",
+            "calendarDisconnectFailed": "Không thể ngắt kết nối",
+            "noMemoriesToExport": "Chưa có ký ức nào để xuất",
+            "notionMissing": "Nhập token Notion và ID trang cha",
+            "exportFailed": "Xuất thất bại",
+            "couldNotConnect": "Không thể kết nối",
+            "couldNotDisconnect": "Không thể ngắt kết nối",
+            "rotatedKey": "Đã xoay khóa ký ức Omi",
+            "couldNotRotate": "Không thể xoay khóa",
+            "couldNotBuildPack": "Không thể tạo gói",
+            "copiedPack": "Đã sao chép — dán vào {{title}}",
+            "couldNotExtract": "Không thể trích xuất ký ức",
+            "noStickyFound": "Không tìm thấy Ghi chú dán trên PC này",
+            "stickyCouldNotRead": "Không thể đọc Ghi chú dán",
+            "stickyReadFailed": "Không thể đọc Ghi chú dán",
+            "xSignIn": "Đăng nhập để kết nối X",
+            "xSynced": "Đã đồng bộ X — {{count}} bài mới",
+            "xSyncFailed": "Đồng bộ X thất bại",
+            "xDisconnected": "Đã ngắt X",
+            "xDisconnectFailed": "Không thể ngắt kết nối",
+            "loadingConnections": "Đang tải kết nối",
+            "exportedCount": "Đã xuất {{count}} ký ức",
+            "exportedCountOne": "Đã xuất {{count}} ký ức",
+            "noStickyText": "Không có văn bản ghi chú để nhập",
+            "noNewStickyMemories": "Không tìm thấy ký ức mới trong ghi chú",
+            "browseMarketplaceDesc": "Khám phá persona chat, plugin thông báo và nhiều hơn nữa."
         }
     },
     "memories": {
@@ -1240,7 +1287,15 @@
         "noResults": "Không có kết quả",
         "related": "Liên quan",
         "screenshots": "{{count}} ảnh chụp",
-        "screenshotsOne": "{{count}} ảnh chụp"
+        "screenshotsOne": "{{count}} ảnh chụp",
+        "datePicker": {
+            "pickDay": "Chọn ngày",
+            "prevMonth": "Tháng trước",
+            "nextMonth": "Tháng sau"
+        },
+        "searchBar": {
+            "placeholder": "Tìm nội dung trên màn hình…"
+        }
     },
     "knowledgeGraph": {
         "title": "Bản đồ não",
@@ -1344,6 +1399,12 @@
         "transcriptDrawer": {
             "empty": "Chưa có bản ghi.",
             "title": "Bản ghi"
+        },
+        "nameSpeaker": {
+            "close": "Đóng",
+            "personPlaceholder": "Tên người",
+            "newPersonAria": "Tên người mới",
+            "couldNotName": "Không thể đặt tên người nói"
         }
     },
     "liveConversation": {
@@ -1409,7 +1470,8 @@
         "review": {
             "yourRating": "Đánh giá của bạn",
             "yourReview": "Nhận xét của bạn",
-            "placeholder": "Chia sẻ cảm nhận của bạn về ứng dụng này…"
+            "placeholder": "Chia sẻ cảm nhận của bạn về ứng dụng này…",
+            "close": "Đóng"
         },
         "detail": {
             "developerResponse": "Phản hồi của nhà phát triển",
@@ -1418,7 +1480,10 @@
             "setup": "Thiết lập",
             "capabilities": "Khả năng",
             "category": "Danh mục",
-            "disableApp": "Tắt ứng dụng"
+            "disableApp": "Tắt ứng dụng",
+            "close": "Đóng",
+            "anonymous": "Ẩn danh",
+            "linkUnavailable": "Liên kết của ứng dụng này không khả dụng."
         }
     },
     "bar": {
@@ -1430,7 +1495,9 @@
             "listening": "Đang nghe",
             "thinking": "Đang nghĩ",
             "speaking": "Đang nói",
-            "omi": "Omi"
+            "omi": "Omi",
+            "backToList": "Quay lại danh sách",
+            "close": "Đóng"
         },
         "openOmiAria": "Mở Omi",
         "loading": "Đang tải…",
@@ -1507,6 +1574,27 @@
         "dismissSession": "Đóng phiên thoại"
     },
     "chat": {
-        "agentRunning": "Đang chạy"
+        "agentRunning": "Đang chạy",
+        "history": {
+            "confirmDelete": "Xác nhận xóa",
+            "cancel": "Hủy",
+            "rename": "Đổi tên",
+            "delete": "Xóa",
+            "star": "Gắn dấu sao",
+            "unstar": "Bỏ gắn dấu sao",
+            "deleteConfirm": "Xóa?",
+            "deleteAsk": "Xóa?",
+            "newChatFallback": "Cuộc trò chuyện mới"
+        },
+        "thinkingAria": "Omi đang nghĩ"
+    },
+    "layout": {
+        "pageChrome": {
+            "home": "Trang chính"
+        },
+        "pageHeader": {
+            "backToConversations": "Quay lại cuộc trò chuyện",
+            "rename": "Đổi tên"
+        }
     }
 }

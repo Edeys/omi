@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FileText } from 'lucide-react'
 import { toast } from '../../../../lib/toast'
+import { useTranslation } from '../../../../i18n'
 import { useMemories } from '../../../../hooks/useMemories'
 import { runMemoryExport } from '../../../../lib/memoryExport'
 import type { ExportMemory } from '../../../../../../shared/types'
@@ -15,6 +16,7 @@ import { MemoryPackRow } from './MemoryPackRow'
 // destinations are a separate, later phase — out of scope here.)
 
 export function ExportsConnector(): React.JSX.Element {
+  const { t } = useTranslation()
   const { memories } = useMemories()
   const [exporting, setExporting] = useState(false)
   const [notionOpen, setNotionOpen] = useState(false)
@@ -31,11 +33,11 @@ export function ExportsConnector(): React.JSX.Element {
   const runExport = async (target: 'obsidian' | 'file' | 'notion'): Promise<void> => {
     if (exporting) return
     if (memories.length === 0) {
-      toast('No memories to export yet', { tone: 'warn' })
+      toast(t('home.connections.noMemoriesToExport'), { tone: 'warn' })
       return
     }
     if (target === 'notion' && (!notionToken.trim() || !notionPage.trim())) {
-      toast('Enter your Notion token and parent page ID', { tone: 'warn' })
+      toast(t('home.connections.notionMissing'), { tone: 'warn' })
       return
     }
     setExporting(true)
@@ -48,13 +50,13 @@ export function ExportsConnector(): React.JSX.Element {
           : undefined
       )
       if (!r.canceled) {
-        toast(`Exported ${r.count} memor${r.count === 1 ? 'y' : 'ies'}`, {
+        toast(t('home.connections.exportedCount', { count: r.count }), {
           tone: 'success',
           body: r.location
         })
       }
     } catch (e) {
-      toast('Export failed', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.exportFailed'), { tone: 'error', body: (e as Error).message })
     } finally {
       setExporting(false)
     }
