@@ -8,6 +8,7 @@ import { getConversationShareLink } from '../../lib/conversations/mutations'
 import { loadRowTranscript } from '../../lib/conversations/transcript'
 import { toast } from '../../lib/toast'
 import { FolderPickerList } from './FolderPickerList'
+import { useTranslation } from '../../i18n'
 
 const EDGE = 8 // px minimum distance from the viewport edge
 const GAP = 4 // px between the parent item and the folder submenu
@@ -44,6 +45,7 @@ export function ConversationRowContextMenu({
   onMoveToFolder: (folderId: string | null) => void
   onDelete: () => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const cloud = isCloudBacked(row)
   const panelRef = useRef<HTMLDivElement>(null)
   const moveItemRef = useRef<HTMLButtonElement>(null)
@@ -91,17 +93,28 @@ export function ConversationRowContextMenu({
   // Copy actions fire-and-forget: close the menu first (so it can't linger over
   // the async work), then copy and confirm via toast. Mac copies silently; a
   // toast is the Windows-idiomatic confirmation now that the menu is gone.
-  const copyToClipboard = (label: string, load: () => Promise<string>): void => {
+  const copyToClipboard = (
+    labelKey: string,
+    labelFallback: string,
+    load: () => Promise<string>
+  ): void => {
     onClose()
     void (async (): Promise<void> => {
       try {
         await navigator.clipboard.writeText(await load())
-        toast(`${label} copied`, { tone: 'success' })
-      } catch (e) {
-        toast(`Could not copy ${label.toLowerCase()}`, {
-          tone: 'error',
-          body: (e as Error).message
+        toast(t('conversations.contextMenu.copied', { label: t(labelKey) || labelFallback }), {
+          tone: 'success'
         })
+      } catch (e) {
+        toast(
+          t('conversations.contextMenu.copyFailed', {
+            label: t(labelKey).toLowerCase() || labelFallback.toLowerCase()
+          }),
+          {
+            tone: 'error',
+            body: (e as Error).message
+          }
+        )
       }
     })()
   }
@@ -138,7 +151,7 @@ export function ConversationRowContextMenu({
       <div
         ref={panelRef}
         role="menu"
-        aria-label="Conversation actions"
+        aria-label={t('conversations.contextMenu.conversationActions')}
         className="surface-panel fixed z-[200] w-56 p-1.5"
         style={{
           top: pos?.top ?? 0,
@@ -153,22 +166,30 @@ export function ConversationRowContextMenu({
         <button
           role="menuitem"
           onMouseEnter={closeSubmenu}
-          onClick={() => copyToClipboard('Transcript', () => loadRowTranscript(row))}
+          onClick={() =>
+            copyToClipboard('conversations.contextMenu.copyTranscript', 'Transcript', () =>
+              loadRowTranscript(row)
+            )
+          }
           className={itemClass()}
         >
           <Copy className="h-4 w-4 shrink-0 text-white/55" />
-          Copy Transcript
+          {t('conversations.contextMenu.copyTranscript')}
         </button>
 
         {cloud && (
           <button
             role="menuitem"
             onMouseEnter={closeSubmenu}
-            onClick={() => copyToClipboard('Link', () => getConversationShareLink(row.id))}
+            onClick={() =>
+              copyToClipboard('conversations.contextMenu.copyLink', 'Link', () =>
+                getConversationShareLink(row.id)
+              )
+            }
             className={itemClass()}
           >
             <Link2 className="h-4 w-4 shrink-0 text-white/55" />
-            Copy Link
+            {t('conversations.contextMenu.copyLink')}
           </button>
         )}
 
@@ -184,7 +205,7 @@ export function ConversationRowContextMenu({
           className={itemClass()}
         >
           <Pencil className="h-4 w-4 shrink-0 text-white/55" />
-          Edit Title
+          {t('conversations.contextMenu.editTitle')}
         </button>
 
         {cloud && (
@@ -198,7 +219,7 @@ export function ConversationRowContextMenu({
             className={itemClass()}
           >
             <FolderInput className="h-4 w-4 shrink-0 text-white/55" />
-            <span className="flex-1">Move to Folder</span>
+            <span className="flex-1">{t('conversations.contextMenu.moveToFolder')}</span>
             <ChevronRight className="h-4 w-4 shrink-0 text-white/45" />
           </button>
         )}
@@ -215,7 +236,7 @@ export function ConversationRowContextMenu({
           className={itemClass('danger')}
         >
           <Trash2 className="h-4 w-4 shrink-0 text-white/55" />
-          Delete
+          {t('conversations.contextMenu.delete')}
         </button>
       </div>
 
@@ -225,7 +246,7 @@ export function ConversationRowContextMenu({
       {cloud && submenuOpen && (
         <div
           role="menu"
-          aria-label="Move to folder"
+          aria-label={t('conversations.contextMenu.moveToFolderAria')}
           className="surface-panel fixed z-[200] max-h-72 w-52 overflow-y-auto p-1.5"
           style={{
             top: subPos?.top ?? 0,

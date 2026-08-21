@@ -1,4 +1,5 @@
 import type { Memory } from '../hooks/useMemories'
+import { i18n } from '../i18n'
 
 // Pure, framework-free filtering/derivation helpers for the Memories page, kept
 // out of the component so they're cheap to unit-test and reuse.
@@ -17,10 +18,18 @@ export const MEMORY_CATEGORIES: readonly MemoryCategory[] = [
 ]
 
 export const CATEGORY_LABEL: Record<MemoryCategory, string> = {
-  manual: 'Manual',
-  system: 'About You',
-  interesting: 'Insights',
-  workflow: 'Workflow'
+  get manual(): string {
+    return i18n.t('memories.filter.categoryManual')
+  },
+  get system(): string {
+    return i18n.t('memories.filter.categorySystem')
+  },
+  get interesting(): string {
+    return i18n.t('memories.filter.categoryInteresting')
+  },
+  get workflow(): string {
+    return i18n.t('memories.filter.categoryWorkflow')
+  }
 }
 
 // Normalize a memory's raw category to one of the four product categories.
@@ -46,17 +55,33 @@ export const LAYER_FILTERS: readonly MemoryLayerFilter[] = [
 ]
 
 export const LAYER_FILTER_LABEL: Record<MemoryLayerFilter, string> = {
-  default: 'Default',
-  short_term: 'Short-term',
-  long_term: 'Long-term',
-  archive: 'Archive'
+  get default(): string {
+    return i18n.t('memories.filter.layerDefault')
+  },
+  get short_term(): string {
+    return i18n.t('memories.filter.layerShortTerm')
+  },
+  get long_term(): string {
+    return i18n.t('memories.filter.layerLongTerm')
+  },
+  get archive(): string {
+    return i18n.t('memories.filter.layerArchive')
+  }
 }
 
 export const LAYER_FILTER_DESC: Record<MemoryLayerFilter, string> = {
-  default: 'Short-term + Long-term',
-  short_term: 'Fresh source-backed memories',
-  long_term: 'Stable memories',
-  archive: 'Explicit archive search'
+  get default(): string {
+    return i18n.t('memories.filter.layerDescDefault')
+  },
+  get short_term(): string {
+    return i18n.t('memories.filter.layerDescShortTerm')
+  },
+  get long_term(): string {
+    return i18n.t('memories.filter.layerDescLongTerm')
+  },
+  get archive(): string {
+    return i18n.t('memories.filter.layerDescArchive')
+  }
 }
 
 function matchesLayer(m: Memory, filter: MemoryLayerFilter): boolean {
@@ -70,11 +95,11 @@ function matchesLayer(m: Memory, filter: MemoryLayerFilter): boolean {
 export function layerLabel(m: Memory): string | null {
   switch (m.layer) {
     case 'short_term':
-      return 'Short-term'
+      return i18n.t('memories.filter.layerShortTerm')
     case 'long_term':
-      return 'Long-term'
+      return i18n.t('memories.filter.layerLongTerm')
     case 'archive':
-      return 'Archive'
+      return i18n.t('memories.filter.layerArchive')
     default:
       return null
   }
@@ -108,10 +133,13 @@ export function formatMemoryDate(created_at: string, now: number = Date.now()): 
   const hours = Math.floor(diff / 3_600_000)
   const days = Math.floor(diff / 86_400_000)
   let rel: string
-  if (mins < 1) rel = 'just now'
-  else if (mins < 60) rel = `${mins}m ago`
-  else if (hours < 24) rel = `${hours}h ago`
-  else if (days < 7) rel = `${days}d ago`
+  if (mins < 1) rel = i18n.t('memories.time.justNow')
+  else if (mins < 60)
+    rel = i18n.t('memories.time.minutesAgo', { count: mins } as unknown as Record<string, unknown>)
+  else if (hours < 24)
+    rel = i18n.t('memories.time.hoursAgo', { count: hours } as unknown as Record<string, unknown>)
+  else if (days < 7)
+    rel = i18n.t('memories.time.daysAgo', { count: days } as unknown as Record<string, unknown>)
   else rel = ''
   const sameYear = d.getFullYear() === new Date(now).getFullYear()
   const abs = d.toLocaleString(undefined, {

@@ -83,7 +83,7 @@ export function DateFilterButton({
               )}
             </div>
             <label className="mt-2.5 block text-xs font-medium text-white/50" htmlFor="date-from">
-              From
+              {t('conversations.dateFilter.from')}
             </label>
             <input
               id="date-from"
@@ -95,7 +95,7 @@ export function DateFilterButton({
               className="date-input mt-1.5 py-2"
             />
             <label className="mt-3 block text-xs font-medium text-white/50" htmlFor="date-to">
-              To
+              {t('conversations.dateFilter.to')}
             </label>
             <input
               id="date-to"

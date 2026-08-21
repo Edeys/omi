@@ -137,7 +137,11 @@ export function ConversationListRow({
         <EmojiTile emoji={row.emoji} />
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm font-medium text-text-primary">
-            {row.title || <span className="italic text-text-tertiary">loading…</span>}
+            {row.title || (
+              <span className="italic text-text-tertiary">
+                {i18n.t('conversations.row.loading')}
+              </span>
+            )}
           </div>
           {row.subtitle && (
             <div className="mt-0.5 text-xs text-text-quaternary">{row.subtitle}</div>

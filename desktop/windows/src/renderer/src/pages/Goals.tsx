@@ -577,16 +577,16 @@ export function Goals(): React.JSX.Element {
                       ) : (
                         <Plus className="h-4 w-4" />
                       )}
-                      Add this goal
+                      {t('goals.candidate.add')}
                     </button>
                     <button
                       onClick={generateGoal}
                       disabled={generating || accepting}
                       className="btn-ghost px-3 py-2 disabled:opacity-50"
-                      title="Suggest another"
+                      title={t('goals.candidate.another')}
                     >
                       <RefreshCw className={`h-4 w-4 ${generating ? 'animate-spin' : ''}`} />
-                      Another
+                      {t('goals.candidate.another')}
                     </button>
                   </div>
                 </div>
@@ -658,7 +658,11 @@ export function Goals(): React.JSX.Element {
                   disabled={saving || !draftTitle.trim()}
                   className="btn-primary px-4 py-2 disabled:opacity-40"
                 >
-                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Add goal'}
+                  {saving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    t('goals.compose.addGoal')
+                  )}
                 </button>
               </div>
             </div>
@@ -686,7 +690,7 @@ export function Goals(): React.JSX.Element {
             list is on screen and the next successful fetch updates it. */}
         {error && goals.length === 0 && (
           <div className="glass-subtle mb-5 px-4 py-3 text-sm text-white/60">
-            <p className="text-white/80">Couldn’t load your goals.</p>
+            <p className="text-white/80">{t('goals.errorTitle')}</p>
             <div className="mt-2 flex items-center gap-3">
               <button
                 onClick={() => {
@@ -696,7 +700,7 @@ export function Goals(): React.JSX.Element {
                 className="btn-ghost px-3 py-1.5 text-xs"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
-                Try again
+                {t('goals.tryAgain')}
               </button>
               <span className="text-xs text-white/35">{error}</span>
             </div>

@@ -642,7 +642,7 @@ export function Tasks(): React.JSX.Element {
                 <button
                   key={f}
                   onClick={() => changeFilter(f)}
-                  className={`rounded-xl px-3 py-1.5 text-xs font-medium capitalize transition-all duration-200 ${
+                  className={`rounded-xl px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
                     filter === f
                       ? 'bg-white/15 text-white'
                       : 'text-white/55 hover:bg-white/5 hover:text-white/80'

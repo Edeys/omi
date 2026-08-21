@@ -32,10 +32,8 @@ describe('locale parity', () => {
       'settings.about.updateErrorMessage',
       'home.hub.header.discord',
       'home.hub.chatHistory.defaultAssistant',
-      'conversations.folders.colorValue',
       'memories.showingFirstManageSuffix',
-      'memories.toasts.deleteFailedSuffix',
-      'conversations.row.chatBadge'
+      'memories.toasts.deleteFailedSuffix'
     ])
     const check = (
       enObj: Record<string, unknown>,

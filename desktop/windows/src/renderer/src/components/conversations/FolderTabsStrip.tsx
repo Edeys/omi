@@ -54,14 +54,14 @@ export function FolderTabsStrip({
         onClick={() => onSelect({ kind: 'all' })}
         className={chipClass(selected.kind === 'all')}
       >
-        All
+        {t('conversations.folders.all')}
       </button>
       <button
         onClick={() => onSelect({ kind: 'starred' })}
         className={chipClass(selected.kind === 'starred')}
       >
         <Star className="h-3.5 w-3.5" />
-        Starred
+        {t('conversations.folders.starred')}
       </button>
 
       {folders.map((f) => {

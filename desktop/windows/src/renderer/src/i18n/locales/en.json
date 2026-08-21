@@ -503,6 +503,11 @@
                 "selectAssistant": "Select Assistant",
                 "defaultAssistant": "omi",
                 "defaultAssistantSub": "Default assistant"
+            },
+            "suggestions": {
+                "prompt1": "What should I focus on today to achieve my goals?",
+                "prompt2": "What did I spend my time on this week?",
+                "prompt3": "What's the highest-leverage thing I can do next?"
             }
         },
         "stats": {
@@ -521,6 +526,10 @@
         "quickGoals": {
             "title": "Goals",
             "more": "+{{count}} more"
+        },
+        "goalsChips": {
+            "setGoal": "Set a goal",
+            "allGoals": "All goals"
         }
     },
     "memories": {
@@ -590,7 +599,16 @@
             "layerDefault": "Default",
             "layerShortTerm": "Short-term",
             "layerLongTerm": "Long-term",
-            "layerArchive": "Archive"
+            "layerArchive": "Archive",
+            "selectedCount": "{{count}} selected",
+            "categoryManual": "Manual",
+            "categorySystem": "About You",
+            "categoryInteresting": "Insights",
+            "categoryWorkflow": "Workflow",
+            "layerDescDefault": "Short-term + Long-term",
+            "layerDescShortTerm": "Fresh source-backed memories",
+            "layerDescLongTerm": "Stable memories",
+            "layerDescArchive": "Explicit archive search"
         },
         "card": {
             "protected": "Protected memory",
@@ -628,6 +646,12 @@
             "deleted": "Memory deleted",
             "undo": "Undo",
             "dismiss": "Dismiss and delete now"
+        },
+        "time": {
+            "justNow": "just now",
+            "minutesAgo": "{{count}}m ago",
+            "hoursAgo": "{{count}}h ago",
+            "daysAgo": "{{count}}d ago"
         }
     },
     "tasks": {
@@ -635,9 +659,9 @@
         "loading": "Loading…",
         "subtitle": "{{open}} open · {{done}} done",
         "filters": {
-            "open": "open",
-            "done": "done",
-            "all": "all"
+            "open": "Open",
+            "done": "Done",
+            "all": "All"
         },
         "new": "New",
         "newTitle": "Add a task",
@@ -856,7 +880,9 @@
             "deleteConfirmTitle": "Delete “{{name}}”?",
             "deleteConfirmDesc": "The folder will be removed. Its conversations won’t be deleted — they’ll just be unfiled.",
             "couldNotSave": "Could not save folder",
-            "couldNotDelete": "Could not delete folder"
+            "couldNotDelete": "Could not delete folder",
+            "emptyTitle": "No folders yet",
+            "removeFromFolder": "Remove from folder"
         },
         "backfill": {
             "syncing": "Syncing past recordings… {{done}}/{{total}}",
@@ -915,9 +941,15 @@
             "loading": "loading…"
         },
         "contextMenu": {
-            "editTitle": "Edit title",
-            "moveToFolder": "Move to folder",
-            "delete": "Delete"
+            "editTitle": "Edit Title",
+            "moveToFolder": "Move to Folder",
+            "delete": "Delete",
+            "copyTranscript": "Copy Transcript",
+            "copyLink": "Copy Link",
+            "conversationActions": "Conversation actions",
+            "moveToFolderAria": "Move to folder",
+            "copied": "{{label}} copied",
+            "copyFailed": "Could not copy {{label}}"
         },
         "chat": {
             "copyMessage": "Copy message",

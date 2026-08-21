@@ -1,8 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { Search, X, Check, ChevronDown, SlidersHorizontal, Clock } from 'lucide-react'
 import {
-  CATEGORY_LABEL,
-  LAYER_FILTER_DESC,
   MEMORY_CATEGORIES,
   type MemoryCategory,
   type MemoryLayerFilter
@@ -29,10 +27,26 @@ type MemoryFilterBarProps = {
   onLayerChange: (l: MemoryLayerFilter) => void
 }
 
-function categoryButtonLabel(categories: Set<MemoryCategory>, t: (k: string) => string): string {
+function categoryKey(c: MemoryCategory): string {
+  switch (c) {
+    case 'manual':
+      return 'memories.filter.categoryManual'
+    case 'system':
+      return 'memories.filter.categorySystem'
+    case 'interesting':
+      return 'memories.filter.categoryInteresting'
+    case 'workflow':
+      return 'memories.filter.categoryWorkflow'
+  }
+}
+
+function categoryButtonLabel(
+  categories: Set<MemoryCategory>,
+  t: (k: string, o?: Record<string, unknown>) => string
+): string {
   if (categories.size === 0) return t('memories.filter.allCategories')
-  if (categories.size === 1) return CATEGORY_LABEL[[...categories][0]]
-  return `${categories.size} selected`
+  if (categories.size === 1) return t(categoryKey([...categories][0]))
+  return t('memories.filter.selectedCount', { count: categories.size })
 }
 
 export function MemoryFilterBar({
@@ -104,7 +118,7 @@ export function MemoryFilterBar({
                   <span className="flex h-4 w-4 items-center justify-center rounded border border-white/25">
                     {checked && <Check className="h-3 w-3 text-white" />}
                   </span>
-                  <span className="flex-1">{CATEGORY_LABEL[c]}</span>
+                  <span className="flex-1">{t(categoryKey(c))}</span>
                   <span className="text-white/35">{categoryCounts[c] ?? 0}</span>
                 </DropdownMenu.CheckboxItem>
               )
@@ -169,7 +183,9 @@ export function MemoryFilterBar({
                         )}
                       </span>
                       <span className="block text-[11px] text-white/40">
-                        {LAYER_FILTER_DESC[l]}
+                        {t(
+                          `memories.filter.${l === 'default' ? 'layerDescDefault' : l === 'short_term' ? 'layerDescShortTerm' : l === 'long_term' ? 'layerDescLongTerm' : 'layerDescArchive'}`
+                        )}
                       </span>
                     </span>
                   </DropdownMenu.RadioItem>

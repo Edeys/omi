@@ -4,6 +4,7 @@ import { omiApi } from '../../lib/apiClient'
 import { auth, onAuthStateChanged } from '../../lib/firebase'
 import { goalEmoji, DEFAULT_GOAL_EMOJI } from '../../lib/goalEmoji'
 import { isCompleted, progressColor, progressPct } from '../../lib/goalVisuals'
+import { useTranslation } from '../../i18n'
 import { cache as goalsCache, hydrateGoalsFromDisk, writeCache } from '../../lib/goalsCache'
 import { getCacheUid } from '../../lib/persistentCache'
 import { useThrottledWindowFocus } from '../../lib/focusRefetch'
@@ -40,6 +41,7 @@ function activeGoals(list: Goal[] | null): Goal[] | null {
 }
 
 export function HomeGoalsChips({ onShowAll, onOpenGoal }: HubHomeWidgetsProps): React.JSX.Element {
+  const { t } = useTranslation()
   // Seed from the per-uid cold-start snapshot before the initial state is read,
   // exactly as the Goals page does, so a fresh launch paints the last-known chips
   // instead of the skeleton. The revalidating fetch below still runs.
@@ -153,7 +155,7 @@ export function HomeGoalsChips({ onShowAll, onOpenGoal }: HubHomeWidgetsProps): 
           <span aria-hidden className="shrink-0 text-[12px] leading-none">
             {DEFAULT_GOAL_EMOJI}
           </span>
-          Set a goal
+          {t('home.goalsChips.setGoal')}
         </button>
       </div>
     )
@@ -197,7 +199,7 @@ export function HomeGoalsChips({ onShowAll, onOpenGoal }: HubHomeWidgetsProps): 
         onClick={showAll}
         className="focus-ring ml-auto shrink-0 rounded-full px-2 py-1 text-[11px] font-medium text-home-muted transition-colors duration-150 hover:text-home-ink"
       >
-        All goals
+        {t('home.goalsChips.allGoals')}
       </button>
     </div>
   )

@@ -503,6 +503,11 @@
                 "selectAssistant": "Chọn trợ lý",
                 "defaultAssistant": "omi",
                 "defaultAssistantSub": "Trợ lý mặc định"
+            },
+            "suggestions": {
+                "prompt1": "Hôm nay nên tập trung vào gì để đạt mục tiêu?",
+                "prompt2": "Tuần này tôi đã dành thời gian cho việc gì?",
+                "prompt3": "Việc có đòn bẩy cao nhất tiếp theo là gì?"
             }
         },
         "stats": {
@@ -521,6 +526,10 @@
         "quickGoals": {
             "title": "Mục tiêu",
             "more": "+{{count}} nữa"
+        },
+        "goalsChips": {
+            "setGoal": "Đặt mục tiêu",
+            "allGoals": "Tất cả mục tiêu"
         }
     },
     "memories": {
@@ -590,7 +599,16 @@
             "layerDefault": "Mặc định",
             "layerShortTerm": "Ngắn hạn",
             "layerLongTerm": "Dài hạn",
-            "layerArchive": "Lưu trữ"
+            "layerArchive": "Lưu trữ",
+            "selectedCount": "Đã chọn {{count}}",
+            "categoryManual": "Thủ công",
+            "categorySystem": "Về bạn",
+            "categoryInteresting": "Gợi ý",
+            "categoryWorkflow": "Quy trình",
+            "layerDescDefault": "Ngắn hạn + Dài hạn",
+            "layerDescShortTerm": "Ký ức mới có nguồn",
+            "layerDescLongTerm": "Ký ức ổn định",
+            "layerDescArchive": "Tìm kiếm lưu trữ"
         },
         "card": {
             "protected": "Ký ức được bảo vệ",
@@ -628,6 +646,12 @@
             "deleted": "Đã xóa ký ức",
             "undo": "Hoàn tác",
             "dismiss": "Đóng và xóa ngay"
+        },
+        "time": {
+            "justNow": "vừa xong",
+            "minutesAgo": "{{count}} phút trước",
+            "hoursAgo": "{{count}} giờ trước",
+            "daysAgo": "{{count}} ngày trước"
         }
     },
     "tasks": {
@@ -856,7 +880,9 @@
             "deleteConfirmTitle": "Xóa “{{name}}”?",
             "deleteConfirmDesc": "Thư mục sẽ bị xóa. Các cuộc trò chuyện trong đó không bị xóa — chỉ bỏ khỏi thư mục.",
             "couldNotSave": "Không thể lưu thư mục",
-            "couldNotDelete": "Không thể xóa thư mục"
+            "couldNotDelete": "Không thể xóa thư mục",
+            "emptyTitle": "Chưa có thư mục",
+            "removeFromFolder": "Gỡ khỏi thư mục"
         },
         "backfill": {
             "syncing": "Đang đồng bộ bản ghi cũ… {{done}}/{{total}}",
@@ -906,7 +932,7 @@
             "delete": "Xóa",
             "star": "Ghim",
             "unstar": "Bỏ ghim",
-            "chatBadge": "Chat",
+            "chatBadge": "Trò chuyện",
             "syncPending": "Đang đồng bộ",
             "syncFailed": "Đồng bộ thất bại",
             "notSynced": "Chưa đồng bộ",
@@ -915,9 +941,15 @@
             "loading": "đang tải…"
         },
         "contextMenu": {
-            "editTitle": "Chỉnh tiêu đề",
+            "editTitle": "Sửa tiêu đề",
             "moveToFolder": "Chuyển tới thư mục",
-            "delete": "Xóa"
+            "delete": "Xóa",
+            "copyTranscript": "Sao chép bản ghi",
+            "copyLink": "Sao chép liên kết",
+            "conversationActions": "Thao tác cuộc trò chuyện",
+            "moveToFolderAria": "Chuyển tới thư mục",
+            "copied": "Đã sao chép {{label}}",
+            "copyFailed": "Không thể sao chép {{label}}"
         },
         "chat": {
             "copyMessage": "Sao chép tin nhắn",

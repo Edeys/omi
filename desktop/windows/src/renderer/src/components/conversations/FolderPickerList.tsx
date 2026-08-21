@@ -25,7 +25,7 @@ export function FolderPickerList({
     <>
       {folders.length === 0 && (
         <div className="px-2.5 py-2 text-xs text-white/45">
-          {t('conversations.empty.noMatchTitle')}
+          {t('conversations.folders.emptyTitle')}
         </div>
       )}
       {folders.map((f) => (
@@ -57,7 +57,7 @@ export function FolderPickerList({
             className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm text-white/60 transition-colors hover:bg-white/10 hover:text-white"
           >
             <FolderMinus className="h-3.5 w-3.5 shrink-0" />
-            {t('conversations.folders.delete')}
+            {t('conversations.folders.removeFromFolder')}
           </button>
         </div>
       )}

@@ -176,7 +176,7 @@ describe('Tasks — local-first reads from the store', () => {
     // With only completed rows the default 'open' view says "All caught up"; wait
     // for the load, then switch to the completed view to assert order.
     await waitFor(() => expect(document.body.textContent).toContain('2 done'))
-    fireEvent.click(screen.getByRole('button', { name: 'done' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Done' }))
     const rows = screen.getAllByRole('listitem').map((li) => li.textContent)
     const newerIdx = rows.findIndex((t) => t?.includes('newer done'))
     const olderIdx = rows.findIndex((t) => t?.includes('older done'))
@@ -528,7 +528,7 @@ describe('Tasks — keyboard navigation (mac parity, flat list)', () => {
     await waitFor(() => expect(selectedText()).toContain('open row'))
 
     // Switch to the completed filter — the open row is no longer rendered.
-    fireEvent.click(screen.getByRole('button', { name: 'done' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Done' }))
     await waitFor(() => expect(selectedText()).toBeNull())
 
     // And Space no longer acts on the now-invisible task.

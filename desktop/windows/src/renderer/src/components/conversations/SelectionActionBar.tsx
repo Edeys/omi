@@ -49,12 +49,14 @@ export function SelectionActionBar({
           onClick={onMerge}
           disabled={!canMerge}
           title={
-            canMerge ? 'Merge into one conversation' : 'Select 2+ synced conversations to merge'
+            canMerge
+              ? t('conversations.selectionBar.mergeTitle')
+              : t('conversations.selectionBar.mergeDisabled')
           }
           className={`${actionClass(canMerge)} ${canMerge ? 'text-white hover:text-white' : ''}`}
         >
           <Merge className="h-3.5 w-3.5" />
-          Merge
+          {t('conversations.selectionBar.merge')}
         </button>
         <button
           onClick={onDelete}
@@ -62,7 +64,7 @@ export function SelectionActionBar({
           className={`${actionClass(canDelete)} text-red-400 hover:text-red-300`}
         >
           <Trash2 className="h-3.5 w-3.5" />
-          Delete
+          {t('conversations.selectionBar.delete')}
         </button>
       </div>
     </div>
