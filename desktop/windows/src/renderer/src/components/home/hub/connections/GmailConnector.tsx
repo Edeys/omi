@@ -1,6 +1,7 @@
 import { useGoogleConnection } from '../../../../hooks/useGoogleConnection'
 import { ConnectorRow, PillButton } from './ConnectorRow'
 import { ConnectorBrandMark } from './ConnectorBrandMark'
+import { useTranslation } from '../../../../i18n'
 
 // Email (Gmail) via the CLIENT-SIDE loopback OAuth lane — turns recent email
 // subjects/senders into memories. Config-gated on shipped builds (needs a Google
@@ -10,6 +11,7 @@ import { ConnectorBrandMark } from './ConnectorBrandMark'
 // shared with Settings via useGoogleConnection.
 
 export function GmailConnector(): React.JSX.Element {
+  const { t } = useTranslation()
   const { googleEnabled, status, connect, disconnect, syncNow, busy, syncing } =
     useGoogleConnection()
 
@@ -19,7 +21,9 @@ export function GmailConnector(): React.JSX.Element {
         iconNode={<ConnectorBrandMark brand="gmail" />}
         title="Email"
         description="Import email history and follow-ups."
-        action={<span className="text-[12px] text-home-faint">Requires setup</span>}
+        action={
+          <span className="text-[12px] text-home-faint">{t('home.connections.requiresSetup')}</span>
+        }
       />
     )
   }

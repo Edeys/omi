@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import type { McpCloudCopyRow } from '../../../../../../shared/mcpExports'
+import { useTranslation } from '../../../../i18n'
 
 // One copy-row on the assisted cloud-connector guide card: a label, the value in
 // a monospace field, and a copy button. A `blank` field (e.g. the client secret)
 // shows a muted "Leave blank" with nothing to copy — mirrors macOS's guidance
 // overlay, which renders empty required fields as "leave blank".
 export function McpCopyRow({ row }: { row: McpCloudCopyRow }): React.JSX.Element {
+  const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
 
   const copy = async (): Promise<void> => {
@@ -25,7 +27,9 @@ export function McpCopyRow({ row }: { row: McpCloudCopyRow }): React.JSX.Element
         {row.label}
       </span>
       {row.blank ? (
-        <span className="flex-1 text-[13px] italic text-home-faint">Leave blank</span>
+        <span className="flex-1 text-[13px] italic text-home-faint">
+          {t('home.connections.leaveBlank')}
+        </span>
       ) : (
         <>
           <code className="min-w-0 flex-1 truncate rounded-md bg-white/[0.04] px-2 py-1 font-mono text-[12px] text-home-ink">

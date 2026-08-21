@@ -30,7 +30,7 @@ export function BuildProfileStep({
   onContinue,
   onSkip
 }: BuildProfileStepProps): React.JSX.Element {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [phase, setPhase] = useState<Phase>('scanning')
   const [fileCount, setFileCount] = useState<number | null>(null)
   // Guard against React StrictMode's double-invoke so we only kick one scan.
@@ -68,7 +68,9 @@ export function BuildProfileStep({
           <p className="text-xs text-white/40">
             {fileCount == null
               ? ' '
-              : t('onboarding.buildProfile.filesIndexed', { count: fileCount.toLocaleString('en-US') })}
+              : t('onboarding.buildProfile.filesIndexed', {
+                  count: fileCount.toLocaleString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
+                })}
           </p>
         </div>
       </div>

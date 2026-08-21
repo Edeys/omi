@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronLeft, LayoutGrid, ArrowRight, X } from 'lucide-react'
 import type { HubConnectSlotProps } from '../hubConnectSlot'
+import { useTranslation } from '../../../../i18n'
 import { CalendarConnector } from './CalendarConnector'
 import { GmailConnector } from './GmailConnector'
 import { StickyNotesConnector } from './StickyNotesConnector'
@@ -113,6 +114,7 @@ function MarketplaceLink({ onOpen }: { onOpen: () => void }): React.JSX.Element 
 }
 
 export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.Element {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [view, setView] = useState<View>({ kind: 'tray' })
 
@@ -166,7 +168,7 @@ export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.
         <StickyNotesConnector />
       )
     return (
-      <DetailShell title="Connect data" onBack={back} onDismiss={onDismiss}>
+      <DetailShell title={t('home.connections.connectData')} onBack={back} onDismiss={onDismiss}>
         <div className="flex flex-col">{detail}</div>
       </DetailShell>
     )
@@ -174,8 +176,8 @@ export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.
 
   if (view.kind === 'imports') {
     return (
-      <DetailShell title="Import sources" onBack={back} onDismiss={onDismiss}>
-        <SectionHeader>Imports</SectionHeader>
+      <DetailShell title={t('home.connections.importSources')} onBack={back} onDismiss={onDismiss}>
+        <SectionHeader>{t('home.connections.imports')}</SectionHeader>
         <div className="flex flex-col">
           <CalendarConnector />
           <GmailConnector />
@@ -193,8 +195,8 @@ export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.
 
   if (view.kind === 'exports') {
     return (
-      <DetailShell title="Use omi memory anywhere" onBack={back} onDismiss={onDismiss}>
-        <SectionHeader>Exports</SectionHeader>
+      <DetailShell title={t('home.connections.useAnywhere')} onBack={back} onDismiss={onDismiss}>
+        <SectionHeader>{t('home.connections.exports')}</SectionHeader>
         <div className="flex flex-col">
           <ExportsConnector />
         </div>
@@ -210,7 +212,7 @@ export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.
   // give an external tool read access to your Omi memory.
   return (
     <DetailShell title={EXPORT_TITLES[view.id]} onBack={back} onDismiss={onDismiss}>
-      <SectionHeader>Use omi memory anywhere</SectionHeader>
+      <SectionHeader>{t('home.connections.useAnywhere')}</SectionHeader>
       <McpExportDetail exportId={view.id} />
       <div className="mt-6">
         <MarketplaceLink onOpen={openApps} />

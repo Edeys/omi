@@ -530,6 +530,17 @@
         "goalsChips": {
             "setGoal": "Đặt mục tiêu",
             "allGoals": "Tất cả mục tiêu"
+        },
+        "connections": {
+            "imports": "Nhập",
+            "exports": "Xuất",
+            "useAnywhere": "Dùng ký ức Omi ở mọi nơi",
+            "requiresSetup": "Cần thiết lập",
+            "leaveBlank": "Để trống",
+            "connected": "Đã kết nối",
+            "connectData": "Kết nối dữ liệu",
+            "importSources": "Nguồn nhập",
+            "exportSources": "Nguồn xuất"
         }
     },
     "memories": {
@@ -1138,7 +1149,7 @@
                 "disconnected": "Nhập sự kiện và thói quen lặp lại."
             },
             "email": {
-                "title": "Email",
+                "title": "Thư điện tử",
                 "requiresSetup": "Cần thiết lập",
                 "connected": "Đã kết nối",
                 "connectedAs": "Đã kết nối với {{email}}",
@@ -1177,7 +1188,13 @@
             "instruction": "Mở {{title}}, dán lời nhắc đã sao chép, rồi thả toàn bộ phản hồi vào đây.",
             "importing": "Đang nhập…",
             "import": "Nhập {{title}}",
-            "cancel": "Hủy"
+            "cancel": "Hủy",
+            "calendarConnected": "Đã kết nối Lịch Google",
+            "calendarWaiting": "Vẫn đang chờ Lịch Google",
+            "calendarWaitingBody": "Hoàn tất đăng nhập trong trình duyệt, rồi mở lại bước này để kiểm tra.",
+            "calendarStartFailed": "Không thể bắt đầu đăng nhập Lịch",
+            "calendarDisconnected": "Đã ngắt Lịch Google",
+            "couldNotDisconnect": "Không thể ngắt kết nối"
         },
         "goal": {
             "eyebrow": "MỤC TIÊU",
@@ -1215,8 +1232,15 @@
         "pickDayTitle": "Chọn ngày",
         "previousMonthTitle": "Tháng trước",
         "nextMonthTitle": "Tháng sau",
-        "noFramesYet": "Chưa có khung hình",
-        "loadingFrames": "Đang tải khung hình…"
+        "noFramesYet": "Chưa có khung hình — bật ghi Rewind trong Cài đặt.",
+        "loadingFrames": "Đang tải…",
+        "loading": "Đang tải…",
+        "noScreenshotNow": "Không có ảnh chụp ở thời điểm này.",
+        "searching": "Đang tìm…",
+        "noResults": "Không có kết quả",
+        "related": "Liên quan",
+        "screenshots": "{{count}} ảnh chụp",
+        "screenshotsOne": "{{count}} ảnh chụp"
     },
     "knowledgeGraph": {
         "title": "Bản đồ não",
@@ -1316,6 +1340,10 @@
             "source": "Nguồn",
             "duration": "Thời lượng",
             "category": "Danh mục"
+        },
+        "transcriptDrawer": {
+            "empty": "Chưa có bản ghi.",
+            "title": "Bản ghi"
         }
     },
     "liveConversation": {
@@ -1377,7 +1405,21 @@
         "couldNotLoadDescription": "Đã xảy ra lỗi khi truy cập chợ ứng dụng. Kiểm tra kết nối và thử lại.",
         "retry": "Thử lại",
         "clearSearch": "Xóa",
-        "filterBadge": "Lọc"
+        "filterBadge": "Lọc",
+        "review": {
+            "yourRating": "Đánh giá của bạn",
+            "yourReview": "Nhận xét của bạn",
+            "placeholder": "Chia sẻ cảm nhận của bạn về ứng dụng này…"
+        },
+        "detail": {
+            "developerResponse": "Phản hồi của nhà phát triển",
+            "yourReview": "Nhận xét của bạn",
+            "about": "Giới thiệu",
+            "setup": "Thiết lập",
+            "capabilities": "Khả năng",
+            "category": "Danh mục",
+            "disableApp": "Tắt ứng dụng"
+        }
     },
     "bar": {
         "signedOut": {
@@ -1457,5 +1499,14 @@
         "confirmDelete": "Xác nhận xóa",
         "retry": "Thử lại",
         "loading": "Đang tải…"
+    },
+    "voice": {
+        "defaultOutput": "Đầu ra mặc định",
+        "outputDeviceLabel": "Thiết bị đầu ra giọng nói",
+        "tryAgain": "Thử lại",
+        "dismissSession": "Đóng phiên thoại"
+    },
+    "chat": {
+        "agentRunning": "Đang chạy"
     }
 }

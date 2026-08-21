@@ -1,5 +1,6 @@
 import { AlertCircle, Bot, CheckCircle2, CircleSlash, Loader2 } from 'lucide-react'
 import type { AgentThreadCardBlock } from '../../../../shared/types'
+import { useTranslation } from '../../i18n'
 
 // Shared-thread agent cards (B4, INV-CHAT-1). The two durable artifacts a
 // background agent leaves in the shared thread: a spawn card at launch and one
@@ -30,6 +31,7 @@ export function AgentThreadCard({
   block: AgentThreadCardBlock
   compact: boolean
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const pad = compact ? 'px-3 py-2' : 'px-3.5 py-2.5'
   const shell = `mr-auto w-fit max-w-[85%] rounded-2xl border border-white/10 bg-white/[0.04] ${pad}`
   const titleCls = `truncate font-medium ${compact ? 'text-[13px]' : 'text-sm'} text-white/90`
@@ -43,7 +45,7 @@ export function AgentThreadCard({
           <span className={titleCls}>{block.title}</span>
           <span className="ml-1 flex shrink-0 items-center gap-1 text-white/45">
             <Loader2 className="h-3 w-3 animate-spin" />
-            <span className="text-[11px]">Running</span>
+            <span className="text-[11px]">{t('chat.agentRunning')}</span>
           </span>
         </div>
         {block.objective ? (

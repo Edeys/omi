@@ -40,10 +40,8 @@ describe('locale parity', () => {
       'onboarding.howDidYouHear.sources.podcast',
       'onboarding.dataSources.chatgpt.title',
       'onboarding.dataSources.claude.title',
-      'onboarding.dataSources.email.title',
       'conversationDetail.local.omi',
-      'bar.pill.omi',
-      'insightToast.whatsNew'
+      'bar.pill.omi'
     ])
     const check = (
       enObj: Record<string, unknown>,

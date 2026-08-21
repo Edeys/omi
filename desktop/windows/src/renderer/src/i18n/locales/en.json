@@ -530,6 +530,17 @@
         "goalsChips": {
             "setGoal": "Set a goal",
             "allGoals": "All goals"
+        },
+        "connections": {
+            "imports": "Imports",
+            "exports": "Exports",
+            "useAnywhere": "Use omi memory anywhere",
+            "requiresSetup": "Requires setup",
+            "leaveBlank": "Leave blank",
+            "connected": "Connected",
+            "connectData": "Connect data",
+            "importSources": "Import sources",
+            "exportSources": "Export sources"
         }
     },
     "memories": {
@@ -1177,7 +1188,13 @@
             "instruction": "Open {{title}}, paste the copied prompt, then drop the full response here.",
             "importing": "Importing…",
             "import": "Import {{title}}",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "calendarConnected": "Google Calendar connected",
+            "calendarWaiting": "Still waiting for Google Calendar",
+            "calendarWaitingBody": "Finish the sign-in in your browser, then reopen this step to check.",
+            "calendarStartFailed": "Could not start Calendar sign-in",
+            "calendarDisconnected": "Google Calendar disconnected",
+            "couldNotDisconnect": "Could not disconnect"
         },
         "goal": {
             "eyebrow": "GOAL",
@@ -1215,8 +1232,15 @@
         "pickDayTitle": "Pick a day",
         "previousMonthTitle": "Previous month",
         "nextMonthTitle": "Next month",
-        "noFramesYet": "No frames yet",
-        "loadingFrames": "Loading frames…"
+        "noFramesYet": "No frames yet — enable Rewind capture in Settings.",
+        "loadingFrames": "Loading…",
+        "loading": "Loading…",
+        "noScreenshotNow": "No screenshot at this moment.",
+        "searching": "Searching…",
+        "noResults": "No results found",
+        "related": "Related",
+        "screenshots": "{{count}} screenshots",
+        "screenshotsOne": "{{count}} screenshot"
     },
     "knowledgeGraph": {
         "title": "Brain Map",
@@ -1316,6 +1340,10 @@
             "source": "Source",
             "duration": "Duration",
             "category": "Category"
+        },
+        "transcriptDrawer": {
+            "empty": "No transcript yet.",
+            "title": "Transcript"
         }
     },
     "liveConversation": {
@@ -1377,7 +1405,21 @@
         "couldNotLoadDescription": "Something went wrong reaching the marketplace. Check your connection and try again.",
         "retry": "Retry",
         "clearSearch": "Clear",
-        "filterBadge": "Filter"
+        "filterBadge": "Filter",
+        "review": {
+            "yourRating": "Your rating",
+            "yourReview": "Your review",
+            "placeholder": "Share what you think about this app…"
+        },
+        "detail": {
+            "developerResponse": "Developer response",
+            "yourReview": "Your review",
+            "about": "About",
+            "setup": "Setup",
+            "capabilities": "Capabilities",
+            "category": "Category",
+            "disableApp": "Disable app"
+        }
     },
     "bar": {
         "signedOut": {
@@ -1457,5 +1499,14 @@
         "confirmDelete": "Confirm delete",
         "retry": "Retry",
         "loading": "Loading…"
+    },
+    "voice": {
+        "defaultOutput": "Default output",
+        "outputDeviceLabel": "Voice output device",
+        "tryAgain": "Try again",
+        "dismissSession": "Dismiss voice session"
+    },
+    "chat": {
+        "agentRunning": "Running"
     }
 }

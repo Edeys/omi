@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Mic, MicOff, X, RefreshCw } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import { useTranslation } from '../../i18n'
 import {
   getVoiceState,
   subscribeVoiceState,
@@ -49,6 +50,7 @@ function useOutputDevices(active: boolean): MediaDeviceInfo[] {
 const PROVIDER_LABEL = { openai: 'OpenAI', gemini: 'Gemini' } as const
 
 export function VoiceSessionSurface(props: { onClose?: () => void }): React.JSX.Element {
+  const { t } = useTranslation()
   const state = useVoiceSession()
   const devices = useOutputDevices(state.status === 'live')
   // Initialized from the controller so a remounted surface shows the routing
@@ -117,7 +119,7 @@ export function VoiceSessionSurface(props: { onClose?: () => void }): React.JSX.
           </div>
           {devices.length > 1 && (
             <select
-              aria-label="Voice output device"
+              aria-label={t('voice.outputDeviceLabel')}
               value={sink}
               onChange={(e) => {
                 setSink(e.target.value)
@@ -125,7 +127,7 @@ export function VoiceSessionSurface(props: { onClose?: () => void }): React.JSX.
               }}
               className="max-w-[180px] truncate rounded-lg border border-white/10 bg-transparent px-2 py-1 text-xs text-white/70 focus:outline-none [&>option]:bg-neutral-900"
             >
-              <option value="">Default output</option>
+              <option value="">{t('voice.defaultOutput')}</option>
               {devices.map((d) => (
                 <option key={d.deviceId} value={d.deviceId}>
                   {d.label}

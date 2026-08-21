@@ -184,16 +184,19 @@ function CalendarRow(): React.JSX.Element {
       if (canceled.current) return
       if (ok) {
         setStatus(await getCalendarStatus())
-        toast('Google Calendar connected', { tone: 'success' })
+        toast(t('onboarding.dataSources.calendarConnected'), { tone: 'success' })
       } else {
-        toast('Still waiting for Google Calendar', {
+        toast(t('onboarding.dataSources.calendarWaiting'), {
           tone: 'warn',
-          body: 'Finish the sign-in in your browser, then reopen this step to check.'
+          body: t('onboarding.dataSources.calendarWaitingBody')
         })
       }
     } catch (e) {
       if (!canceled.current)
-        toast('Could not start Calendar sign-in', { tone: 'error', body: (e as Error).message })
+        toast(t('onboarding.dataSources.calendarStartFailed'), {
+          tone: 'error',
+          body: (e as Error).message
+        })
     } finally {
       if (!canceled.current) setConnecting(false)
     }
@@ -205,9 +208,12 @@ function CalendarRow(): React.JSX.Element {
     try {
       await disconnectCalendar()
       setStatus({ connected: false })
-      toast('Google Calendar disconnected', { tone: 'success' })
+      toast(t('onboarding.dataSources.calendarDisconnected'), { tone: 'success' })
     } catch (e) {
-      toast('Could not disconnect', { tone: 'error', body: (e as Error).message })
+      toast(t('onboarding.dataSources.couldNotDisconnect'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setBusy(false)
     }
@@ -287,7 +293,7 @@ function EmailRow(): React.JSX.Element {
 // --- Local files (already indexed in the earlier BuildProfile step) ---------
 
 function LocalFilesRow(): React.JSX.Element {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   // The file index runs in the MAIN process during the earlier discovery step and
   // persists; we only READ its status here (never re-scan) and surface the count.
   const [fileCount, setFileCount] = useState<number | null>(null)
@@ -305,7 +311,9 @@ function LocalFilesRow(): React.JSX.Element {
 
   const status =
     fileCount && fileCount > 0
-      ? t('onboarding.dataSources.localFiles.statusOn', { count: fileCount.toLocaleString() })
+      ? t('onboarding.dataSources.localFiles.statusOn', {
+          count: fileCount.toLocaleString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
+        })
       : t('onboarding.dataSources.localFiles.statusFallback')
 
   return (
@@ -340,7 +348,7 @@ function prefilledUrl(source: MemorySource): string {
 }
 
 function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { memories, refresh } = useMemories()
   const uid = auth.currentUser?.uid ?? null
   // Cross-account-guarded: a different signed-in user never inherits this tally.
@@ -416,7 +424,7 @@ function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
               source === 'chatgpt'
                 ? 'onboarding.dataSources.chatgpt.imported'
                 : 'onboarding.dataSources.claude.imported',
-              { count: importedCount.toLocaleString() }
+              { count: importedCount.toLocaleString(i18n.language === 'vi' ? 'vi-VN' : 'en-US') }
             )
           : t(
               source === 'chatgpt'
