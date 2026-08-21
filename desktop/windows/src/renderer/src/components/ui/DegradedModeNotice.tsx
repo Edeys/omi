@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { TriangleAlert, X } from 'lucide-react'
+import { useTranslation } from '../../i18n'
 
 // A subtle, non-blocking banner shown while the backend is in a 429 "storm" (this
 // account hits recurring ones). During a storm, background work — task hydrate/
@@ -13,6 +14,7 @@ import { TriangleAlert, X } from 'lucide-react'
 // storm; a recovery re-arms it so the next storm shows again.
 
 export function DegradedModeNotice(): React.JSX.Element | null {
+  const { t } = useTranslation()
   const [degraded, setDegraded] = useState(false)
   const [dismissed, setDismissed] = useState(false)
 
@@ -48,15 +50,15 @@ export function DegradedModeNotice(): React.JSX.Element | null {
     >
       <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" strokeWidth={1.9} />
       <div className="min-w-0 flex-1">
-        <div className="text-sm font-medium text-white/95">Omi is catching up</div>
+        <div className="text-sm font-medium text-white/95">{t('degradedMode.title')}</div>
         <div className="mt-0.5 break-words text-xs leading-relaxed text-white/65">
-          Omi&rsquo;s servers are busy. Syncing will resume automatically.
+          {t('degradedMode.description')}
         </div>
       </div>
       <button
         onClick={() => setDismissed(true)}
         className="-mr-1 -mt-1 rounded-md p-1 text-white/45 hover:bg-white/10 hover:text-white"
-        aria-label="Dismiss"
+        aria-label={t('commonActions.dismiss')}
       >
         <X className="h-3.5 w-3.5" />
       </button>

@@ -1,3 +1,4 @@
+import './i18n'
 // Slim renderer entry for the halo window (#/glow). It mounts ONLY the
 // GlowWindow component tree — not the full app (MainViews, three.js orb,
 // onnxruntime VAD, all pages). Every aux window used to load index.html's full

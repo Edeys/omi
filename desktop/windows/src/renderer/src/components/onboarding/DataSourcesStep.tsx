@@ -12,6 +12,7 @@ import {
   toastForExtractResult
 } from '../../lib/pasteImport'
 import type { MemorySource } from '../../lib/memoryExtract'
+import { useTranslation } from '../../i18n'
 import {
   getCalendarStatus,
   getCalendarOAuthUrl,
@@ -45,15 +46,16 @@ export function DataSourcesStep({
   onContinue,
   onSkip
 }: DataSourcesStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <StepScaffold
       stepIndex={stepIndex}
       totalSteps={totalSteps}
       align="left"
       widthClassName="w-full max-w-[440px]"
-      eyebrow="DATA SOURCES"
-      title="Your 2nd brain is live."
-      subtitle="Connect more of your context — or skip and add it later."
+      eyebrow={t('onboarding.dataSources.eyebrow')}
+      title={t('onboarding.dataSources.title')}
+      subtitle={t('onboarding.dataSources.subtitle')}
       onContinue={onContinue}
       onSkip={onSkip}
     >
@@ -152,6 +154,7 @@ const POLL_INTERVAL_MS = 2000
 const POLL_MAX_ATTEMPTS = 60
 
 function CalendarRow(): React.JSX.Element {
+  const { t } = useTranslation()
   const [status, setStatus] = useState<CalendarStatus>({ connected: false })
   const [connecting, setConnecting] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -213,16 +216,20 @@ function CalendarRow(): React.JSX.Element {
   return (
     <Row
       brand="calendar"
-      title="Calendar"
-      status={status.connected ? 'Connected' : 'Import events and recurring routines.'}
+      title={t('onboarding.dataSources.calendar.title')}
+      status={
+        status.connected
+          ? t('onboarding.dataSources.calendar.connected')
+          : t('onboarding.dataSources.calendar.disconnected')
+      }
       action={
         status.connected ? (
           <Pill tone="ghost" onClick={disconnect} disabled={busy}>
-            Disconnect
+            {t('onboarding.dataSources.disconnect')}
           </Pill>
         ) : (
           <Pill tone="primary" onClick={connect} disabled={connecting}>
-            {connecting ? 'Waiting…' : 'Connect'}
+            {connecting ? t('onboarding.dataSources.waiting') : t('onboarding.dataSources.connect')}
           </Pill>
         )
       }
@@ -233,15 +240,20 @@ function CalendarRow(): React.JSX.Element {
 // --- Email / Gmail (client-side loopback OAuth, reused from useGoogleConnection) --
 
 function EmailRow(): React.JSX.Element {
+  const { t } = useTranslation()
   const { googleEnabled, status, connect, disconnect, busy } = useGoogleConnection()
 
   if (!googleEnabled) {
     return (
       <Row
         brand="gmail"
-        title="Email"
-        status="Import email history and follow-ups."
-        action={<span className="text-xs text-white/40">Requires setup</span>}
+        title={t('onboarding.dataSources.email.title')}
+        status={t('onboarding.dataSources.email.disconnected')}
+        action={
+          <span className="text-xs text-white/40">
+            {t('onboarding.dataSources.email.requiresSetup')}
+          </span>
+        }
       />
     )
   }
@@ -249,22 +261,22 @@ function EmailRow(): React.JSX.Element {
   return (
     <Row
       brand="gmail"
-      title="Email"
+      title={t('onboarding.dataSources.email.title')}
       status={
         status.connected
           ? status.email
-            ? `Connected as ${status.email}`
-            : 'Connected'
-          : 'Import email history and follow-ups.'
+            ? t('onboarding.dataSources.email.connectedAs', { email: status.email })
+            : t('onboarding.dataSources.email.connected')
+          : t('onboarding.dataSources.email.disconnected')
       }
       action={
         status.connected ? (
           <Pill tone="ghost" onClick={disconnect} disabled={busy}>
-            Disconnect
+            {t('onboarding.dataSources.disconnect')}
           </Pill>
         ) : (
           <Pill tone="primary" onClick={connect} disabled={busy}>
-            {busy ? 'Connecting…' : 'Connect'}
+            {busy ? t('onboarding.dataSources.connecting') : t('onboarding.dataSources.connect')}
           </Pill>
         )
       }
@@ -275,6 +287,7 @@ function EmailRow(): React.JSX.Element {
 // --- Local files (already indexed in the earlier BuildProfile step) ---------
 
 function LocalFilesRow(): React.JSX.Element {
+  const { t } = useTranslation()
   // The file index runs in the MAIN process during the earlier discovery step and
   // persists; we only READ its status here (never re-scan) and surface the count.
   const [fileCount, setFileCount] = useState<number | null>(null)
@@ -292,15 +305,19 @@ function LocalFilesRow(): React.JSX.Element {
 
   const status =
     fileCount && fileCount > 0
-      ? `On · ${fileCount.toLocaleString()} file${fileCount === 1 ? '' : 's'} indexed`
-      : 'On · indexed on this device'
+      ? t('onboarding.dataSources.localFiles.statusOn', { count: fileCount.toLocaleString() })
+      : t('onboarding.dataSources.localFiles.statusFallback')
 
   return (
     <Row
       brand="omi"
-      title="Local files"
+      title={t('onboarding.dataSources.localFiles.title')}
       status={status}
-      action={<span className="text-xs font-medium text-white/40">On</span>}
+      action={
+        <span className="text-xs font-medium text-white/40">
+          {t('onboarding.dataSources.localFiles.on')}
+        </span>
+      }
     />
   )
 }
@@ -323,6 +340,7 @@ function prefilledUrl(source: MemorySource): string {
 }
 
 function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
+  const { t } = useTranslation()
   const { memories, refresh } = useMemories()
   const uid = auth.currentUser?.uid ?? null
   // Cross-account-guarded: a different signed-in user never inherits this tally.
@@ -331,7 +349,11 @@ function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
   const [dump, setDump] = useState('')
   const [importing, setImporting] = useState(false)
 
-  const title = SOURCE_TITLE[source]
+  const title = t(
+    SOURCE_TITLE[source] === 'ChatGPT'
+      ? 'onboarding.dataSources.chatgpt.title'
+      : 'onboarding.dataSources.claude.title'
+  )
   const connected = importedCount > 0
 
   const openAndCopyPrompt = async (): Promise<void> => {
@@ -345,10 +367,13 @@ function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
     try {
       await window.omi.openExternalUrl(prefilledUrl(source))
     } catch (e) {
-      toast(`Could not open ${title}`, { tone: 'error', body: (e as Error).message })
+      toast(t('onboarding.dataSources.couldNotOpen', { title }), {
+        tone: 'error',
+        body: (e as Error).message
+      })
       return
     }
-    toast(`Prompt copied — paste it in ${title}`, { tone: 'success' })
+    toast(t('onboarding.dataSources.promptCopied', { title }), { tone: 'success' })
   }
 
   const runImport = async (): Promise<void> => {
@@ -372,7 +397,10 @@ function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
         setOpen(false)
       }
     } catch (e) {
-      toast('Could not import memories', { tone: 'error', body: (e as Error).message })
+      toast(t('onboarding.dataSources.couldNotImport'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setImporting(false)
     }
@@ -384,15 +412,26 @@ function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
       title={title}
       status={
         connected
-          ? `${importedCount.toLocaleString()} memor${importedCount === 1 ? 'y' : 'ies'} imported`
-          : 'Paste your memory export.'
+          ? t(
+              source === 'chatgpt'
+                ? 'onboarding.dataSources.chatgpt.imported'
+                : 'onboarding.dataSources.claude.imported',
+              { count: importedCount.toLocaleString() }
+            )
+          : t(
+              source === 'chatgpt'
+                ? 'onboarding.dataSources.chatgpt.pasteHint'
+                : 'onboarding.dataSources.claude.pasteHint'
+            )
       }
       action={
         connected ? (
-          <span className="text-xs font-medium text-white/40">Imported</span>
+          <span className="text-xs font-medium text-white/40">
+            {t('onboarding.dataSources.imported')}
+          </span>
         ) : (
           <Pill tone={open ? 'ghost' : 'primary'} onClick={() => setOpen((v) => !v)}>
-            {open ? 'Close' : 'Connect'}
+            {open ? t('onboarding.dataSources.openClose') : t('onboarding.dataSources.connect')}
           </Pill>
         )
       }
@@ -400,16 +439,16 @@ function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
       {open && !connected && (
         <div className="space-y-3 px-4 pb-4">
           <p className="text-xs leading-relaxed text-white/50">
-            Open {title}, paste the copied prompt, then drop the full response here.
+            {t('onboarding.dataSources.instruction', { title })}
           </p>
           <Pill tone="neutral" onClick={openAndCopyPrompt}>
-            Open {title} &amp; Copy Prompt
+            {t('onboarding.dataSources.openPrompt', { title })}
           </Pill>
           <textarea
             value={dump}
             onChange={(e) => setDump(e.target.value)}
             rows={4}
-            placeholder={`Paste ${title}’s full response here…`}
+            placeholder={t('onboarding.dataSources.pastePlaceholder', { title })}
             className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-[13px] text-white/85 placeholder:text-white/30 focus:border-white/20 focus:outline-none"
           />
           <div className="flex items-center gap-2">
@@ -419,7 +458,9 @@ function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
                 progressive reveal. "Open & Copy Prompt" stays the secondary CTA. */}
             {dump.trim() && (
               <Pill tone="primary" onClick={runImport} disabled={importing}>
-                {importing ? 'Importing…' : `Import ${title}`}
+                {importing
+                  ? t('onboarding.dataSources.importing')
+                  : t('onboarding.dataSources.import', { title })}
               </Pill>
             )}
             <Pill
@@ -429,7 +470,7 @@ function MemoryLogRow({ source }: { source: MemorySource }): React.JSX.Element {
                 setOpen(false)
               }}
             >
-              Cancel
+              {t('onboarding.dataSources.cancel')}
             </Pill>
           </div>
         </div>

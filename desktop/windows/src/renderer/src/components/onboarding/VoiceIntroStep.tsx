@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { StepScaffold } from './StepScaffold'
 import { getPreferences } from '../../lib/preferences'
 import { DEFAULT_OVERLAY_ACCELERATOR, acceleratorToTokens } from '../../lib/overlayShortcut'
+import { useTranslation } from '../../i18n'
 
 type VoiceIntroStepProps = {
   stepIndex: number
@@ -48,6 +49,7 @@ export function VoiceIntroStep({
   onContinue,
   onSkip
 }: VoiceIntroStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   const [captured, setCaptured] = useState(false)
   // The hotkey reached main at least once (fires for a tap AND a hold).
   const [summoned, setSummoned] = useState(false)
@@ -111,19 +113,17 @@ export function VoiceIntroStep({
   const stuck = micBlocked || !!failure || waited
   const canContinue = captured || stuck
 
-  const problem = micBlocked
-    ? 'Windows is blocking Omi’s microphone, so voice can’t work yet. You can fix this later in Settings → Privacy.'
-    : failure
+  const problem = micBlocked ? t('onboarding.voiceIntro.micBlocked') : failure
 
   const subtitle = captured
-    ? 'That’s it — Omi heard you.'
-    : `Hold ${hotkeyTokens.join(' + ')}, ask a question, then let go.`
+    ? t('onboarding.voiceIntro.capturedSubtitle')
+    : t('onboarding.voiceIntro.holdSubtitle', { keys: hotkeyTokens.join(' + ') })
 
   return (
     <StepScaffold
       stepIndex={stepIndex}
       totalSteps={totalSteps}
-      title="Talk to Omi"
+      title={t('onboarding.voiceIntro.title')}
       subtitle={subtitle}
       subtitleClassName="text-white"
       align="center"
@@ -132,10 +132,12 @@ export function VoiceIntroStep({
     >
       <div className="mt-2 flex w-full max-w-[420px] flex-col items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.03] px-6 py-9">
         <div className="flex items-center gap-2">
-          <span className="mr-1 text-sm font-medium text-white/50">Hold</span>
-          {hotkeyTokens.map((t, i) => (
+          <span className="mr-1 text-sm font-medium text-white/50">
+            {t('onboarding.voiceIntro.hold')}
+          </span>
+          {hotkeyTokens.map((tok, i) => (
             <kbd
-              key={`${t}-${i}`}
+              key={`${tok}-${i}`}
               className={
                 'flex h-[52px] min-w-[52px] items-center justify-center rounded-xl px-3 text-sm font-semibold transition-colors ' +
                 (captured
@@ -145,12 +147,13 @@ export function VoiceIntroStep({
                     : 'bg-white/[0.08] text-white/85')
               }
             >
-              {t}
+              {tok}
             </kbd>
           ))}
         </div>
         <p className="text-sm text-white/55">
-          Try asking: <span className="text-white/80">“What’s on my screen?”</span>
+          {t('onboarding.voiceIntro.tryAsking')}{' '}
+          <span className="text-white/80">{t('onboarding.voiceIntro.tryAskingQuery')}</span>
         </p>
       </div>
 
@@ -160,12 +163,11 @@ export function VoiceIntroStep({
         <p className="mt-4 max-w-[420px] text-sm text-amber-400">{problem}</p>
       ) : nudge && !captured ? (
         <p className="mt-4 max-w-[420px] text-sm text-white/55">
-          Keep the keys held down while you speak — a quick press just opens Omi. Let go when you’re
-          done.
+          {t('onboarding.voiceIntro.nudge')}
         </p>
       ) : waited && !captured ? (
         <p className="mt-4 max-w-[420px] text-sm text-white/55">
-          Can’t get it to work? Continue — you can try this any time from the bar.
+          {t('onboarding.voiceIntro.waited')}
         </p>
       ) : null}
     </StepScaffold>

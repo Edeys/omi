@@ -25,6 +25,7 @@ const openMicPrivacySettings = vi.fn()
 const setPreferences = vi.fn()
 
 vi.mock('../../lib/preferences', () => ({
+  getPreferences: () => ({ uiLanguage: 'en' }),
   setPreferences: (patch: unknown) => setPreferences(patch)
 }))
 

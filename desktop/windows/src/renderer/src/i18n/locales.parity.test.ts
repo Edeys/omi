@@ -33,7 +33,17 @@ describe('locale parity', () => {
       'home.hub.header.discord',
       'home.hub.chatHistory.defaultAssistant',
       'memories.showingFirstManageSuffix',
-      'memories.toasts.deleteFailedSuffix'
+      'memories.toasts.deleteFailedSuffix',
+      'onboarding.language.english',
+      'onboarding.howDidYouHear.sources.productHunt',
+      'onboarding.howDidYouHear.sources.youtube',
+      'onboarding.howDidYouHear.sources.podcast',
+      'onboarding.dataSources.chatgpt.title',
+      'onboarding.dataSources.claude.title',
+      'onboarding.dataSources.email.title',
+      'conversationDetail.local.omi',
+      'bar.pill.omi',
+      'insightToast.whatsNew'
     ])
     const check = (
       enObj: Record<string, unknown>,

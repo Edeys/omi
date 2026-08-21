@@ -4,6 +4,7 @@
 // meeting-detection notice ('meeting:toast' — Phase 5). Main owns visibility +
 // auto-dismiss; hover pause reuses the same IPC for both kinds.
 import { useEffect, useState } from 'react'
+import { useTranslation } from '../../i18n'
 import type { InsightPayload, MeetingToastPayload, WhatsNewPayload } from '../../../../shared/types'
 import './insight-toast.css'
 
@@ -15,6 +16,7 @@ type ToastContent =
 // Post-update changelog card (Phase 8). Shares the acrylic card shell; a compact
 // list of the version's changes with the full notes one click away.
 function WhatsNewCard({ p }: { p: WhatsNewPayload }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div
       className="insight-card"
@@ -22,12 +24,16 @@ function WhatsNewCard({ p }: { p: WhatsNewPayload }): React.JSX.Element {
       onMouseLeave={() => window.omi.insightHoverEnd()}
     >
       <div className="insight-head">
-        <span className="insight-cat">What&apos;s new</span>
-        <button className="insight-x" onClick={() => window.omi.insightDismiss()} aria-label="Dismiss">
+        <span className="insight-cat">{t('insightToast.whatsNew')}</span>
+        <button
+          className="insight-x"
+          onClick={() => window.omi.insightDismiss()}
+          aria-label={t('insightToast.dismiss')}
+        >
           ✕
         </button>
       </div>
-      <div className="insight-headline">New in Omi {p.version}</div>
+      <div className="insight-headline">{t('insightToast.newInOmi', { version: p.version })}</div>
       <ul className="whatsnew-list">
         {p.changes.slice(0, 3).map((c, i) => (
           <li key={i}>{c}</li>
@@ -38,7 +44,7 @@ function WhatsNewCard({ p }: { p: WhatsNewPayload }): React.JSX.Element {
           className="meeting-btn meeting-btn-primary"
           onClick={() => window.omi.whatsNewOpenNotes()}
         >
-          View release notes
+          {t('insightToast.viewReleaseNotes')}
         </button>
       </div>
     </div>
@@ -46,6 +52,7 @@ function WhatsNewCard({ p }: { p: WhatsNewPayload }): React.JSX.Element {
 }
 
 function MeetingCard({ p }: { p: MeetingToastPayload }): React.JSX.Element {
+  const { t } = useTranslation()
   const capturing = p.kind === 'capturing'
   const starting = p.kind === 'starting'
   const failed = p.kind === 'error'
@@ -57,56 +64,54 @@ function MeetingCard({ p }: { p: MeetingToastPayload }): React.JSX.Element {
       onMouseLeave={() => window.omi.insightHoverEnd()}
     >
       <div className="insight-head">
-        <span className="insight-cat">Meeting detected</span>
+        <span className="insight-cat">{t('insightToast.meetingDetected')}</span>
         <button
           className="insight-x"
           onClick={() => window.omi.meetingAction(p.meetingId, 'dismiss')}
-          aria-label="Dismiss"
+          aria-label={t('insightToast.dismiss')}
         >
           ✕
         </button>
       </div>
       <div className="insight-headline">
         {capturing
-          ? `Omi is capturing — ${p.appName}`
+          ? t('insightToast.capturingHeadline', { app: p.appName })
           : starting
-            ? `Starting capture — ${p.appName}`
+            ? t('insightToast.startingHeadline', { app: p.appName })
             : failed
               ? errorKind === 'runtime'
-                ? `Capture stopped — ${p.appName}`
+                ? t('insightToast.captureStopped', { app: p.appName })
                 : errorKind === 'save'
-                  ? `Capture couldn't be saved — ${p.appName}`
-                  : `Capture didn't start — ${p.appName}`
-              : `${p.appName} looks like a meeting`}
+                  ? t('insightToast.captureCouldNotSave', { app: p.appName })
+                  : t('insightToast.captureDidNotStart', { app: p.appName })
+              : t('insightToast.looksLikeMeeting', { app: p.appName })}
       </div>
       <div className="insight-advice">
         {capturing
-          ? 'Audio is being transcribed into a conversation.'
+          ? t('insightToast.adviceCapturing')
           : starting
-            ? 'Connecting audio and transcription…'
+            ? t('insightToast.adviceStarting')
             : failed
               ? errorKind === 'save'
-                ? 'The recording ended, but Omi could not save the local meeting transcript.'
-                : 'Check your sign-in, internet connection, and Windows microphone access, then retry.'
-              : 'Capture and transcribe this meeting?'}
+                ? t('insightToast.adviceSaveFailed')
+                : t('insightToast.adviceGenericFailed')
+              : t('insightToast.adviceAsk')}
       </div>
-      {p.firstRun ? (
-        <div className="insight-foot">First run — change this in Settings → General.</div>
-      ) : null}
+      {p.firstRun ? <div className="insight-foot">{t('insightToast.firstRun')}</div> : null}
       <div className="meeting-actions">
         {capturing || starting ? (
           <button
             className="meeting-btn"
             onClick={() => window.omi.meetingAction(p.meetingId, 'stop')}
           >
-            {starting ? 'Cancel' : 'Stop'}
+            {starting ? t('insightToast.cancel') : t('insightToast.stop')}
           </button>
         ) : failed && errorKind === 'save' ? (
           <button
             className="meeting-btn"
             onClick={() => window.omi.meetingAction(p.meetingId, 'dismiss')}
           >
-            Dismiss
+            {t('insightToast.dismiss')}
           </button>
         ) : (
           <>
@@ -114,13 +119,13 @@ function MeetingCard({ p }: { p: MeetingToastPayload }): React.JSX.Element {
               className="meeting-btn meeting-btn-primary"
               onClick={() => window.omi.meetingAction(p.meetingId, 'start')}
             >
-              {failed ? 'Retry' : 'Start capturing'}
+              {failed ? t('insightToast.retry') : t('insightToast.startCapturing')}
             </button>
             <button
               className="meeting-btn"
               onClick={() => window.omi.meetingAction(p.meetingId, 'dismiss')}
             >
-              Not now
+              {t('insightToast.notNow')}
             </button>
           </>
         )}
@@ -130,6 +135,7 @@ function MeetingCard({ p }: { p: MeetingToastPayload }): React.JSX.Element {
 }
 
 export function InsightToast(): React.JSX.Element {
+  const { t } = useTranslation()
   const [content, setContent] = useState<ToastContent | null>(null)
 
   useEffect(() => {
@@ -167,7 +173,11 @@ export function InsightToast(): React.JSX.Element {
     >
       <div className="insight-head">
         <span className="insight-cat">{insight.category}</span>
-        <button className="insight-x" onClick={() => window.omi.insightDismiss()} aria-label="Dismiss">
+        <button
+          className="insight-x"
+          onClick={() => window.omi.insightDismiss()}
+          aria-label={t('insightToast.dismiss')}
+        >
           ✕
         </button>
       </div>

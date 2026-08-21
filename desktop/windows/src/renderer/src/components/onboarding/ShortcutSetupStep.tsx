@@ -3,6 +3,7 @@ import { StepScaffold } from './StepScaffold'
 import { getPreferences, setPreferences } from '../../lib/preferences'
 import { DEFAULT_OVERLAY_ACCELERATOR, acceleratorToTokens } from '../../lib/overlayShortcut'
 import { useChordRecorder } from '../../hooks/useChordRecorder'
+import { useTranslation } from '../../i18n'
 
 type ShortcutSetupStepProps = {
   stepIndex: number
@@ -23,6 +24,7 @@ export function ShortcutSetupStep({
   onContinue,
   onSkip
 }: ShortcutSetupStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   const [accel, setAccel] = useState<string>(
     () => getPreferences().overlayShortcut ?? DEFAULT_OVERLAY_ACCELERATOR
   )
@@ -88,8 +90,8 @@ export function ShortcutSetupStep({
     <StepScaffold
       stepIndex={stepIndex}
       totalSteps={totalSteps}
-      title={'Let’s set your “Ask a question” shortcut'}
-      subtitle="Press this key combination. Do buttons light up?"
+      title={t('onboarding.shortcutSetup.title')}
+      subtitle={t('onboarding.shortcutSetup.subtitle')}
       subtitleClassName="text-white"
       align="center"
       // Continue only appears once the floating bar has actually been summoned
@@ -102,13 +104,14 @@ export function ShortcutSetupStep({
       <div className="mt-2 flex w-full max-w-[420px] flex-col items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.03] px-6 py-8">
         {recorder.recording ? (
           <div className="flex h-[52px] items-center text-sm text-white/60">
-            Recording… press your keys <span className="ml-2 text-white/35">(Esc to cancel)</span>
+            {t('onboarding.shortcutSetup.recording')}{' '}
+            <span className="ml-2 text-white/35">{t('onboarding.shortcutSetup.escToCancel')}</span>
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            {tokens.map((t, i) => (
+            {tokens.map((tok, i) => (
               <kbd
-                key={`${t}-${i}`}
+                key={`${tok}-${i}`}
                 className={
                   'flex h-[52px] min-w-[52px] items-center justify-center rounded-xl px-3 text-sm font-semibold transition-all duration-150 ' +
                   (lit
@@ -116,7 +119,7 @@ export function ShortcutSetupStep({
                     : 'bg-white/[0.08] text-white/85')
                 }
               >
-                {t}
+                {tok}
               </kbd>
             ))}
           </div>
@@ -124,13 +127,15 @@ export function ShortcutSetupStep({
         <p className={'text-xs ' + (error ? 'text-amber-400' : 'text-white/40')}>
           {/* No success line — a successful test just reveals Continue. The
               non-breaking space when worked keeps the box from shifting height. */}
-          {error ?? (worked ? ' ' : 'Press to test')}
+          {error ?? (worked ? ' ' : t('onboarding.shortcutSetup.pressToTest'))}
         </p>
       </div>
 
       {/* Choose a different shortcut */}
       <div className="mt-6 flex flex-col items-center gap-2">
-        <p className="text-sm leading-relaxed text-white">Choose a different shortcut</p>
+        <p className="text-sm leading-relaxed text-white">
+          {t('onboarding.shortcutSetup.chooseDifferent')}
+        </p>
         <button
           type="button"
           onClick={startCustom}
@@ -142,7 +147,9 @@ export function ShortcutSetupStep({
               : 'bg-white/[0.06] text-white/80 hover:bg-white/[0.1]')
           }
         >
-          {recorder.recording ? 'Recording…' : 'Custom'}
+          {recorder.recording
+            ? t('onboarding.shortcutSetup.recordingButton')
+            : t('onboarding.shortcutSetup.custom')}
         </button>
       </div>
     </StepScaffold>

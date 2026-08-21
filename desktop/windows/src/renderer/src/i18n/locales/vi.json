@@ -956,5 +956,506 @@
             "copied": "Đã sao chép",
             "processing": "Đang xử lý"
         }
+    },
+    "login": {
+        "signInSubtitle": "Đăng nhập để tiếp tục",
+        "continueWithApple": "Tiếp tục với Apple",
+        "continueWithGoogle": "Tiếp tục với Google",
+        "tryAgain": "Thử lại",
+        "waiting": "Đang chờ trình duyệt… hoàn tất đăng nhập rồi quay lại."
+    },
+    "onboarding": {
+        "scaffold": {
+            "continue": "Tiếp tục",
+            "back": "Quay lại",
+            "skip": "Bỏ qua"
+        },
+        "name": {
+            "eyebrow": "TÊN",
+            "title": "Omi nên gọi bạn là gì?",
+            "placeholder": "Tên của bạn"
+        },
+        "language": {
+            "eyebrow": "NGÔN NGỮ",
+            "title": "Chọn ngôn ngữ.",
+            "english": "English",
+            "other": "Khác",
+            "otherPlaceholder": "Tiếng Tây Ban Nha, Bồ Đào Nha, Nhật…",
+            "saveLanguage": "Lưu ngôn ngữ"
+        },
+        "howDidYouHear": {
+            "eyebrow": "CÂU HỎI NHANH",
+            "title": "Bạn biết tới Omi qua đâu?",
+            "sources": {
+                "other": "Khác",
+                "colleague": "Đồng nghiệp",
+                "productHunt": "Product Hunt",
+                "article": "Bài báo",
+                "friend": "Bạn bè",
+                "event": "Sự kiện",
+                "aiChat": "Chat AI",
+                "youtube": "YouTube",
+                "searchEngine": "Công cụ tìm kiếm",
+                "newsletter": "Bản tin",
+                "podcast": "Podcast",
+                "socialMedia": "Mạng xã hội"
+            }
+        },
+        "trust": {
+            "eyebrow": "TRƯỚC KHI TIẾP TỤC",
+            "title": "Mình sẽ xin vài quyền",
+            "intro": "Omi mã nguồn mở và riêng tư theo thiết kế. Trong lúc cài đặt, chúng mình sẽ xin các quyền này để hiểu công việc của bạn và giúp đúng lúc.",
+            "permissions": {
+                "screen": {
+                    "title": "Màn hình + ghi hình",
+                    "detail": "Tạo ngữ cảnh cho công việc bạn đang làm."
+                },
+                "microphone": {
+                    "title": "Micro",
+                    "detail": "Ghi chú thoại và ngữ cảnh cuộc họp."
+                },
+                "automation": {
+                    "title": "Thao tác trong ứng dụng",
+                    "detail": "Xem cửa sổ đang hoạt động và, khi bạn cho phép từng lần, nhấp và gõ giúp bạn."
+                }
+            },
+            "back": "Quay lại",
+            "continue": "Tiếp tục",
+            "readSource": "Xem mã nguồn"
+        },
+        "backgroundPrivacy": {
+            "eyebrow": "NỀN & RIÊNG TƯ",
+            "title": "Cách Omi chạy trên PC của bạn",
+            "intro": "Omi hoạt động tốt nhất như người bạn đồng hành chạy âm thầm ở nền. Bạn luôn kiểm soát — đổi bất cứ lúc nào trong Cài đặt.",
+            "continuousTitle": "Nghe liên tục",
+            "continuousDetail": "Omi nghe qua micro và tự biến những gì bạn nghe thành cuộc trò chuyện. Tắt để chỉ nghe khi bạn yêu cầu.",
+            "backgroundTitle": "Chạy trong nền",
+            "backgroundDetail": "Omi ở lại khay hệ thống sau khi bạn đóng cửa sổ, sẵn sàng khi bạn cần. Thoát bất cứ lúc nào từ khay.",
+            "backgroundChip": "Luôn bật",
+            "launchTitle": "Khởi chạy khi đăng nhập",
+            "launchDetail": "Tự khởi chạy Omi khi bạn đăng nhập Windows.",
+            "launchDetailUninstalled": "Tự khởi chạy Omi khi đăng nhập Windows. Chỉ khả dụng ở bản đã cài đặt."
+        },
+        "screenPermission": {
+            "eyebrow": "MÀN HÌNH",
+            "title": "Cho phép Omi đọc màn hình",
+            "subtitle": "Omi giữ dòng thời gian cục bộ, riêng tư về nội dung trên màn hình. Nó ở lại trên thiết bị này, và bạn có thể tắt bất cứ lúc nào trong Cài đặt.",
+            "cardLabel": "Ghi màn hình",
+            "status": {
+                "idle": "Tắt",
+                "waiting": "Đang bật",
+                "granted": "Bật",
+                "denied": "Không bật được"
+            },
+            "button": {
+                "idle": "Bật",
+                "waiting": "Đang bật",
+                "granted": "Đã bật",
+                "denied": "Thử lại"
+            },
+            "error": "Không thể bật ghi màn hình. Bạn có thể bật lại bất cứ lúc nào trong Cài đặt → Quay lại."
+        },
+        "buildProfile": {
+            "eyebrow": "KHÁM PHÁ",
+            "title": "Bắt đầu dựng hồ sơ",
+            "subtitle": "Omi quét dự án và tệp gần đây",
+            "scanning": "Đang quét dự án và ứng dụng",
+            "mapped": "Đã lập bản đồ không gian làm việc",
+            "filesIndexed": "Đã lập chỉ mục {{count}} tệp",
+            "filesIndexedOne": "Đã lập chỉ mục {{count}} tệp"
+        },
+        "micPermission": {
+            "eyebrow": "QUYỀN",
+            "title": "Cho phép Omi dùng micro",
+            "subtitle": "Để Omi phiên âm cuộc họp và ghi chú thoại",
+            "cardLabel": "Micro",
+            "status": {
+                "idle": "Chưa cấp",
+                "waiting": "Đang chờ Windows",
+                "granted": "Đã cấp",
+                "denied": "Bị Windows chặn"
+            },
+            "button": {
+                "idle": "Cấp quyền",
+                "waiting": "Đang chờ Windows",
+                "granted": "Đã cấp",
+                "denied": "Thử lại"
+            },
+            "recoveryLabel": "Mở Cài đặt Windows",
+            "errorBlocked": "Windows đã chặn micro. Mở Cài đặt → Quyền riêng tư & bảo mật → Micro, cho phép ứng dụng này, rồi quay lại — Omi sẽ tự nhận.",
+            "errorFailed": "Không truy cập được micro: {{message}}"
+        },
+        "automationPermission": {
+            "eyebrow": "QUYỀN",
+            "title": "Cho phép Omi thao tác khi được yêu cầu",
+            "subtitle": "Tự động hóa để Omi thao tác giúp bạn",
+            "cardLabel": "Tự động hóa",
+            "status": {
+                "idle": "Chưa bật",
+                "waiting": "Đang bật",
+                "granted": "Đã bật",
+                "denied": "Không bật được"
+            },
+            "button": {
+                "idle": "Bật",
+                "waiting": "Đang bật",
+                "granted": "Đã bật",
+                "denied": "Thử lại"
+            }
+        },
+        "shortcutSetup": {
+            "title": "Đặt phím tắt “Hỏi” của bạn",
+            "subtitle": "Nhấn tổ hợp phím này. Nút có sáng không?",
+            "recording": "Đang ghi… nhấn phím của bạn",
+            "escToCancel": "(Esc để hủy)",
+            "pressToTest": "Nhấn để thử",
+            "chooseDifferent": "Chọn phím tắt khác",
+            "custom": "Tùy chỉnh",
+            "recordingButton": "Đang ghi…"
+        },
+        "voiceIntro": {
+            "title": "Nói với Omi",
+            "hold": "Giữ",
+            "tryAsking": "Thử hỏi:",
+            "tryAskingQuery": "“Trên màn hình tôi có gì?”",
+            "capturedSubtitle": "Vậy là xong — Omi đã nghe bạn.",
+            "holdSubtitle": "Giữ {{keys}}, hỏi một câu, rồi thả ra.",
+            "micBlocked": "Windows đang chặn micro của Omi, nên chưa dùng giọng nói được. Bạn có thể sửa sau trong Cài đặt → Quyền riêng tư.",
+            "nudge": "Giữ phím trong khi nói — nhấn nhanh chỉ mở Omi. Thả ra khi xong.",
+            "waited": "Không làm được? Cứ tiếp tục — bạn có thể thử lại bất cứ lúc nào từ thanh nổi."
+        },
+        "askDemo": {
+            "title": "Gõ trong thanh nổi “Nên mua máy tính nào?”",
+            "imageAlt": "Câu trả lời của Omi: so sánh các mẫu Mac"
+        },
+        "dataSources": {
+            "eyebrow": "NGUỒN DỮ LIỆU",
+            "title": "Bộ não thứ hai của bạn đã sẵn sàng.",
+            "subtitle": "Kết nối thêm ngữ cảnh — hoặc bỏ qua và thêm sau.",
+            "calendar": {
+                "title": "Lịch",
+                "connected": "Đã kết nối",
+                "disconnected": "Nhập sự kiện và thói quen lặp lại."
+            },
+            "email": {
+                "title": "Email",
+                "requiresSetup": "Cần thiết lập",
+                "connected": "Đã kết nối",
+                "connectedAs": "Đã kết nối với {{email}}",
+                "disconnected": "Nhập lịch sử email và việc cần làm."
+            },
+            "localFiles": {
+                "title": "Tệp cục bộ",
+                "on": "Bật",
+                "statusOn": "Bật · đã lập chỉ mục {{count}} tệp",
+                "statusOnOne": "Bật · đã lập chỉ mục {{count}} tệp",
+                "statusFallback": "Bật · đã lập chỉ mục trên thiết bị này"
+            },
+            "chatgpt": {
+                "title": "ChatGPT",
+                "pasteHint": "Dán bản xuất ký ức của bạn.",
+                "imported": "Đã nhập {{count}} ký ức",
+                "importedOne": "Đã nhập {{count}} ký ức"
+            },
+            "claude": {
+                "title": "Claude",
+                "pasteHint": "Dán bản xuất ký ức của bạn.",
+                "imported": "Đã nhập {{count}} ký ức",
+                "importedOne": "Đã nhập {{count}} ký ức"
+            },
+            "connect": "Kết nối",
+            "disconnect": "Ngắt kết nối",
+            "waiting": "Đang chờ…",
+            "connecting": "Đang kết nối…",
+            "imported": "Đã nhập",
+            "openClose": "Đóng",
+            "promptCopied": "Đã sao chép lời nhắc — dán vào {{title}}",
+            "couldNotOpen": "Không thể mở {{title}}",
+            "couldNotImport": "Không thể nhập ký ức",
+            "openPrompt": "Mở {{title}} & Sao chép lời nhắc",
+            "pastePlaceholder": "Dán toàn bộ phản hồi của {{title}} vào đây…",
+            "instruction": "Mở {{title}}, dán lời nhắc đã sao chép, rồi thả toàn bộ phản hồi vào đây.",
+            "importing": "Đang nhập…",
+            "import": "Nhập {{title}}",
+            "cancel": "Hủy"
+        },
+        "goal": {
+            "eyebrow": "MỤC TIÊU",
+            "title": "Chọn một mục tiêu.",
+            "subtitle": "Chọn mục tiêu đúng và chi tiết rất quan trọng - Omi sẽ tối ưu mọi lời khuyên để đạt mục tiêu đó. Hãy đảm bảo mục tiêu có con số để đo lường.",
+            "suggested1": "Làm việc hiệu quả và tập trung hơn mỗi ngày",
+            "suggested2": "Tiến triển ý nghĩa cho dự án của tôi",
+            "typeMyOwn": "Tự nhập",
+            "generate": "Để AI tạo",
+            "generating": "Đang tạo…",
+            "placeholder": "ví dụ Hoàn thành 2 tính năng mỗi tuần",
+            "back": "Quay lại",
+            "continue": "Tiếp tục"
+        },
+        "toasts": {
+            "couldNotSyncName": "Không thể đồng bộ tên",
+            "savedLocallyLanguage": "Đã lưu cục bộ — sẽ thử đồng bộ ngôn ngữ lại sau",
+            "savedLocallyGoal": "Đã lưu cục bộ — sẽ thử đồng bộ mục tiêu lại sau"
+        }
+    },
+    "rewind": {
+        "title": "Quay lại",
+        "searchPlaceholder": "Tìm nội dung trên màn hình…",
+        "clearSearchTitle": "Xóa tìm kiếm (Esc)",
+        "viewModeListTitle": "Danh sách kết quả",
+        "viewModeTimelineTitle": "Dòng thời gian (mở một kết quả để xem chi tiết)",
+        "backToResults": "Quay lại kết quả",
+        "play": "Phát",
+        "pause": "Tạm dừng",
+        "playTitle": "Phát",
+        "pauseTitle": "Tạm dừng",
+        "noActivity": "không có hoạt động",
+        "tryDifferentTerm": "Thử từ khóa khác",
+        "semanticMatchTitle": "Khớp theo nghĩa, không phải từ khóa chính xác",
+        "pickDayTitle": "Chọn ngày",
+        "previousMonthTitle": "Tháng trước",
+        "nextMonthTitle": "Tháng sau",
+        "noFramesYet": "Chưa có khung hình",
+        "loadingFrames": "Đang tải khung hình…"
+    },
+    "knowledgeGraph": {
+        "title": "Bản đồ não",
+        "backToMemories": "Quay lại Ký ức",
+        "backAriaLabel": "Quay lại",
+        "emptyTitle": "Bản đồ não trống",
+        "emptyDescription": "Bản đồ xuất hiện khi bạn có đủ ký ức liên kết. Hãy trò chuyện với Omi nhiều hơn — hoặc xây dựng lại để tạo từ ký ức mới nhất.",
+        "rebuild": "Xây dựng lại",
+        "rebuilding": "Đang xây lại…",
+        "showAll": "Hiện tất cả {{count}}",
+        "showKey": "Hiện {{count}} chính",
+        "showAllLabels": "Hiện tất cả nhãn",
+        "showKeyLabels": "Hiện nhãn chính",
+        "showAllTitle": "Hiển thị mọi nút trong bản đồ não",
+        "showKeyTitle": "Chỉ hiện các nút liên kết nhiều nhất",
+        "showAllLabelsTitle": "Hiện nhãn trên mọi nút hiển thị",
+        "showKeyLabelsTitle": "Chỉ gắn nhãn các nút chính",
+        "rebuildTitle": "Xây dựng lại bản đồ não từ ký ức mới nhất"
+    },
+    "conversationDetail": {
+        "title": "Cuộc trò chuyện",
+        "backTitle": "Quay lại",
+        "backAriaLabel": "Quay lại",
+        "loading": "Đang tải cuộc trò chuyện…",
+        "pendingTitle": "Cuộc trò chuyện",
+        "pendingBody": "Omi vẫn đang xử lý cuộc trò chuyện này. Nó sẽ sớm xuất hiện trong danh sách.",
+        "errorTitle": "Cuộc trò chuyện",
+        "tryAgain": "Thử lại",
+        "local": {
+            "transcriptHeader": "Bản ghi",
+            "messagesHeader": "Tin nhắn",
+            "copy": "Sao chép",
+            "copied": "Đã sao chép",
+            "noTranscript": "(không có bản ghi)",
+            "you": "Bạn",
+            "omi": "Omi",
+            "chatFallbackTitle": "Trò chuyện với Omi",
+            "recordingFallbackTitle": "Bản ghi",
+            "copyTitle": "Sao chép bản ghi"
+        },
+        "header": {
+            "editTitle": "Chỉnh sửa tiêu đề",
+            "viewTranscript": "Xem bản ghi",
+            "hideTranscript": "Ẩn bản ghi",
+            "copyLink": "Sao chép liên kết",
+            "copyTranscript": "Sao chép bản ghi",
+            "delete": "Xóa cuộc trò chuyện",
+            "moveToFolder": "Chuyển tới thư mục"
+        },
+        "body": {
+            "processingTitle": "Đang xử lý cuộc trò chuyện…",
+            "processingSubtitle": "Đang tạo tóm tắt và việc cần làm",
+            "summaryTitle": "Tóm tắt",
+            "appInsightsTitle": "Gợi ý ứng dụng",
+            "reprocess": "Xử lý lại",
+            "reprocessing": "Đang xử lý…",
+            "tryWithAppsTitle": "Thử với Ứng dụng",
+            "tryWithAppsDescription": "Chạy một ứng dụng Omi trên cuộc trò chuyện này để có thêm gợi ý.",
+            "browseApps": "Duyệt ứng dụng",
+            "actionItemsTitle": "Việc cần làm",
+            "sourceUnknown": "không rõ",
+            "expand": "Mở rộng",
+            "collapse": "Thu gọn"
+        },
+        "toolbar": {
+            "markDone": "Đánh dấu đã xong",
+            "markOpen": "Đánh dấu chưa xong"
+        },
+        "modals": {
+            "renameTitle": "Chỉnh sửa tiêu đề",
+            "renameAriaLabel": "Tiêu đề cuộc trò chuyện",
+            "cancel": "Hủy",
+            "save": "Lưu",
+            "deleteTitle": "Xóa cuộc trò chuyện?",
+            "deleteBody": "“{{title}}” sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
+            "deleteConfirm": "Xóa",
+            "reprocessTitle": "Xử lý lại bằng ứng dụng",
+            "reprocessDefault": "Tóm tắt mặc định",
+            "transcriptTitle": "Bản ghi",
+            "closeTranscript": "Đóng bản ghi",
+            "closeTranscriptAria": "Đóng bản ghi",
+            "editTitleModal": "Chỉnh sửa tiêu đề"
+        },
+        "toasts": {
+            "couldNotCopyLink": "Không thể sao chép liên kết",
+            "renameFailed": "Đổi tên thất bại",
+            "conversationDeleted": "Đã xóa cuộc trò chuyện",
+            "deleteFailed": "Xóa thất bại",
+            "couldNotMove": "Không thể di chuyển cuộc trò chuyện",
+            "reprocessingBody": "Omi đang tạo lại tóm tắt.",
+            "reprocessingTitle": "Đang xử lý lại",
+            "reprocessFailed": "Xử lý lại thất bại",
+            "couldNotUpdateTask": "Không thể cập nhật công việc",
+            "couldNotNameSpeaker": "Không thể đặt tên người nói"
+        },
+        "chips": {
+            "source": "Nguồn",
+            "duration": "Thời lượng",
+            "category": "Danh mục"
+        }
+    },
+    "liveConversation": {
+        "title": "Cuộc trò chuyện trực tiếp",
+        "savedFallbackTitle": "Cuộc trò chuyện",
+        "loadingTitle": "đang tải…",
+        "subtitle": {
+            "connecting": "Đang kết nối…",
+            "listening": "Đang nghe",
+            "error": "Không dùng được micro",
+            "idle": "Nhàn rỗi"
+        },
+        "saveNow": "Lưu ngay",
+        "saveNowTitle": "Kết thúc cuộc trò chuyện này ngay thay vì chờ ngưỡng im lặng",
+        "transcriptTitle": "Bản ghi",
+        "notesTitle": "Ghi chú",
+        "notesEmpty": "Ghi chú sẽ hiện ở đây",
+        "notesAiHint": "AI tạo ghi chú khi bạn nói",
+        "listeningEmpty": "Đang nghe… hãy bắt đầu nói và lời của bạn sẽ hiện ở đây. Cuộc trò chuyện hoàn chỉnh sẽ tự hiện trong danh sách.",
+        "errorEmpty": "Không thể bắt đầu nghe: {{message}}. Nếu do quyền, hãy cho phép micro trong Cài đặt Windows → Quyền riêng tư → Micro; nếu không sẽ tự thử lại.",
+        "speakerFallback": "người nói",
+        "aiNotesLabel": "Ghi chú AI",
+        "addNotePlaceholder": "Thêm ghi chú…",
+        "addNoteTitle": "Thêm ghi chú",
+        "editTitle": "Chỉnh sửa",
+        "deleteTitle": "Xóa",
+        "saveTitle": "Lưu",
+        "cancelTitle": "Hủy"
+    },
+    "apps": {
+        "title": "Ứng dụng",
+        "loading": "Đang tải…",
+        "subtitle": "{{available}} khả dụng · {{installed}} đã cài",
+        "marketplace": "Chợ ứng dụng",
+        "installed": "Đã cài",
+        "refreshTitle": "Làm mới",
+        "searchPlaceholder": "Tìm ứng dụng…",
+        "filterTitle": "Lọc theo danh mục",
+        "filterLabel": "Lọc",
+        "categoriesTitle": "Danh mục",
+        "clear": "Xóa",
+        "noCategories": "Không có danh mục",
+        "searching": "Đang tìm…",
+        "localResultsNotice": "Đang hiện kết quả cục bộ — tìm kiếm tạm không khả dụng.",
+        "noAppsMatch": "Không có ứng dụng phù hợp",
+        "noAppsInstalled": "Chưa cài ứng dụng nào",
+        "noAppsAvailable": "Không có ứng dụng khả dụng",
+        "tryDifferentSearch": "Thử tìm kiếm khác.",
+        "browseMarketplace": "Duyệt tab Chợ ứng dụng để tìm ứng dụng cài đặt.",
+        "tryAgainLater": "Thử lại sau.",
+        "showingFirst": "Hiện {{limit}} đầu trong {{count}}. Thu hẹp bằng tìm kiếm hoặc bộ lọc.",
+        "sectionTruncated": "Hiện {{shown}} / {{total}}. Dùng tìm kiếm để tìm phần còn lại.",
+        "showLess": "Thu gọn",
+        "seeMore": "Xem thêm",
+        "installedBadge": "Đã cài",
+        "install": "Cài đặt",
+        "settingUp": "Đang thiết lập…",
+        "couldNotLoad": "Không tải được ứng dụng",
+        "couldNotLoadDescription": "Đã xảy ra lỗi khi truy cập chợ ứng dụng. Kiểm tra kết nối và thử lại.",
+        "retry": "Thử lại",
+        "clearSearch": "Xóa",
+        "filterBadge": "Lọc"
+    },
+    "bar": {
+        "signedOut": {
+            "title": "Đăng nhập Omi để trò chuyện.",
+            "openButton": "Mở Omi để đăng nhập"
+        },
+        "pill": {
+            "listening": "Đang nghe",
+            "thinking": "Đang nghĩ",
+            "speaking": "Đang nói",
+            "omi": "Omi"
+        },
+        "openOmiAria": "Mở Omi",
+        "loading": "Đang tải…",
+        "omiChat": "Trò chuyện Omi",
+        "dismiss": "Bỏ qua",
+        "stop": "Dừng",
+        "backToList": "Quay lại danh sách",
+        "close": "Đóng",
+        "closeTitle": "Đóng (giống phím tắt)",
+        "askPlaceholder": "Hỏi Omi bất cứ gì…  ·  giữ Space để nói",
+        "askPlaceholderShort": "Hỏi Omi…  ·  giữ Space để nói",
+        "emptyHint": "Hỏi Omi bất cứ gì, hoặc giữ Space để nói.",
+        "hintStripFallback": "Giữ lâu hơn để ghi",
+        "send": "Gửi"
+    },
+    "insightToast": {
+        "whatsNew": "Có gì mới",
+        "newInOmi": "Mới trong Omi {{version}}",
+        "viewReleaseNotes": "Xem ghi chú phát hành",
+        "meetingDetected": "Phát hiện cuộc họp",
+        "dismiss": "Bỏ qua",
+        "capturingHeadline": "Omi đang ghi — {{app}}",
+        "startingHeadline": "Đang bắt đầu ghi — {{app}}",
+        "captureDidNotStart": "Không bắt đầu ghi — {{app}}",
+        "captureStopped": "Đã dừng ghi — {{app}}",
+        "captureCouldNotSave": "Không lưu được bản ghi — {{app}}",
+        "looksLikeMeeting": "{{app}} trông như cuộc họp",
+        "adviceCapturing": "Âm thanh đang được phiên âm thành cuộc trò chuyện.",
+        "adviceStarting": "Đang kết nối âm thanh và phiên âm…",
+        "adviceSaveFailed": "Đã kết thúc ghi, nhưng Omi không lưu được bản ghi cục bộ.",
+        "adviceGenericFailed": "Kiểm tra đăng nhập, kết nối internet và quyền micro Windows, rồi thử lại.",
+        "adviceAsk": "Ghi và phiên âm cuộc họp này?",
+        "firstRun": "Lần đầu — đổi trong Cài đặt → Chung.",
+        "stop": "Dừng",
+        "cancel": "Hủy",
+        "retry": "Thử lại",
+        "startCapturing": "Bắt đầu ghi",
+        "notNow": "Để sau"
+    },
+    "capture": {
+        "placeholder": "Không có chế độ xem ghi"
+    },
+    "glow": {
+        "placeholder": "Phát sáng"
+    },
+    "appCrash": {
+        "title": "Đã xảy ra lỗi",
+        "description": "Không tải được trang này. Hãy thử tải lại.",
+        "reload": "Tải lại",
+        "retry": "Thử lại"
+    },
+    "degradedMode": {
+        "title": "Omi đang đồng bộ",
+        "description": "Một số tính năng có thể tạm không khả dụng trong khi khôi phục dữ liệu."
+    },
+    "commonActions": {
+        "back": "Quay lại",
+        "continue": "Tiếp tục",
+        "skip": "Bỏ qua",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "dismiss": "Bỏ qua",
+        "close": "Đóng",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "confirmDelete": "Xác nhận xóa",
+        "retry": "Thử lại",
+        "loading": "Đang tải…"
     }
 }

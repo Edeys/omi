@@ -1,3 +1,4 @@
+import './i18n'
 // Slim renderer entry for the hidden capture window (#/capture). It mounts ONLY
 // the CaptureApp host tree (mic, VAD, PTT, screen, rewind) — not the full app UI
 // graph (MainViews, all pages, Hub) or the three.js orb. Every aux window used to

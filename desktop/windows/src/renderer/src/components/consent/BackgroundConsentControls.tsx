@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Mic, AppWindow, Power, type LucideIcon } from 'lucide-react'
 import { Toggle } from '../settings/Toggle'
+import { useTranslation } from '../../i18n'
 
 // The three items every background/privacy consent surface shows. Shared by the
 // onboarding step (BackgroundPrivacyStep) and the one-time interstitial for
@@ -40,6 +41,7 @@ export function BackgroundConsentControls({
   launchAtLogin,
   onLaunchAtLoginChange
 }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   // Launch-at-login is only writable in packaged builds (see the app:get-login-item
   // handler). In unpackaged dev the card stays visible but its toggle is disabled
   // so the UI never offers a switch that silently does nothing.
@@ -52,36 +54,40 @@ export function BackgroundConsentControls({
     <div className="flex w-full flex-col gap-3">
       <Row
         icon={Mic}
-        title="Continuous listening"
-        detail="Omi listens through your microphone and turns what you hear into conversations automatically. Turn this off to listen only when you ask."
+        title={t('onboarding.backgroundPrivacy.continuousTitle')}
+        detail={t('onboarding.backgroundPrivacy.continuousDetail')}
         control={
-          <Toggle on={listening} onChange={onListeningChange} label="Continuous listening" />
+          <Toggle
+            on={listening}
+            onChange={onListeningChange}
+            label={t('onboarding.backgroundPrivacy.continuousTitle')}
+          />
         }
       />
       <Row
         icon={AppWindow}
-        title="Runs in the background"
-        detail="Omi stays in your system tray after you close the window, so it's ready the moment you need it. Quit any time from the tray."
+        title={t('onboarding.backgroundPrivacy.backgroundTitle')}
+        detail={t('onboarding.backgroundPrivacy.backgroundDetail')}
         control={
           <span className="rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white/70">
-            Always on
+            {t('onboarding.backgroundPrivacy.backgroundChip')}
           </span>
         }
       />
       <Row
         icon={Power}
-        title="Launch at login"
+        title={t('onboarding.backgroundPrivacy.launchTitle')}
         detail={
           launchSupported
-            ? 'Start Omi automatically when you sign in to Windows.'
-            : 'Start Omi automatically when you sign in to Windows. Available in installed builds only.'
+            ? t('onboarding.backgroundPrivacy.launchDetail')
+            : t('onboarding.backgroundPrivacy.launchDetailUninstalled')
         }
         control={
           <Toggle
             on={launchAtLogin}
             onChange={onLaunchAtLoginChange}
             disabled={!launchSupported}
-            label="Launch at login"
+            label={t('onboarding.backgroundPrivacy.launchTitle')}
           />
         }
       />

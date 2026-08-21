@@ -956,5 +956,506 @@
             "copied": "Copied",
             "processing": "Processing"
         }
+    },
+    "login": {
+        "signInSubtitle": "Sign in to continue",
+        "continueWithApple": "Continue with Apple",
+        "continueWithGoogle": "Continue with Google",
+        "tryAgain": "Try again",
+        "waiting": "Waiting for your browser… finish signing in there, then come back."
+    },
+    "onboarding": {
+        "scaffold": {
+            "continue": "Continue",
+            "back": "Back",
+            "skip": "Skip"
+        },
+        "name": {
+            "eyebrow": "NAME",
+            "title": "What should Omi call you?",
+            "placeholder": "Your name"
+        },
+        "language": {
+            "eyebrow": "LANGUAGE",
+            "title": "Pick your language.",
+            "english": "English",
+            "other": "Other",
+            "otherPlaceholder": "Spanish, Portuguese, Japanese…",
+            "saveLanguage": "Save language"
+        },
+        "howDidYouHear": {
+            "eyebrow": "QUICK QUESTION",
+            "title": "How did you hear about Omi?",
+            "sources": {
+                "other": "Other",
+                "colleague": "Colleague",
+                "productHunt": "Product Hunt",
+                "article": "Article",
+                "friend": "Friend",
+                "event": "Event",
+                "aiChat": "AI chat",
+                "youtube": "YouTube",
+                "searchEngine": "Search engine",
+                "newsletter": "Newsletter",
+                "podcast": "Podcast",
+                "socialMedia": "Social media"
+            }
+        },
+        "trust": {
+            "eyebrow": "BEFORE WE CONTINUE",
+            "title": "I'm going to ask you for a few permissions",
+            "intro": "Omi is open source and private by design. During setup, we’ll ask you for these permissions to understand your work and help in the right places.",
+            "permissions": {
+                "screen": {
+                    "title": "Screen + recording",
+                    "detail": "Build context for what you’re working on."
+                },
+                "microphone": {
+                    "title": "Microphone",
+                    "detail": "Capture voice notes and meeting context."
+                },
+                "automation": {
+                    "title": "Take actions in your apps",
+                    "detail": "See the active window and, with your approval each time, click and type for you."
+                }
+            },
+            "back": "Back",
+            "continue": "Continue",
+            "readSource": "Read the source code"
+        },
+        "backgroundPrivacy": {
+            "eyebrow": "BACKGROUND & PRIVACY",
+            "title": "How Omi runs on your PC",
+            "intro": "Omi works best as a quiet companion running in the background. You’re in control — change any of this now or later in Settings.",
+            "continuousTitle": "Continuous listening",
+            "continuousDetail": "Omi listens through your microphone and turns what you hear into conversations automatically. Turn this off to listen only when you ask.",
+            "backgroundTitle": "Runs in the background",
+            "backgroundDetail": "Omi stays in your system tray after you close the window, so it's ready the moment you need it. Quit any time from the tray.",
+            "backgroundChip": "Always on",
+            "launchTitle": "Launch at login",
+            "launchDetail": "Start Omi automatically when you sign in to Windows.",
+            "launchDetailUninstalled": "Start Omi automatically when you sign in to Windows. Available in installed builds only."
+        },
+        "screenPermission": {
+            "eyebrow": "SCREEN",
+            "title": "Let Omi read your screen",
+            "subtitle": "Omi keeps a private, local timeline of what's on your screen. It stays on this device, and you can turn it off any time in Settings.",
+            "cardLabel": "Screen capture",
+            "status": {
+                "idle": "Off",
+                "waiting": "Turning on",
+                "granted": "On",
+                "denied": "Couldn't turn on"
+            },
+            "button": {
+                "idle": "Turn on",
+                "waiting": "Turning on",
+                "granted": "On",
+                "denied": "Try again"
+            },
+            "error": "Couldn't turn on screen capture. You can enable it any time in Settings → Rewind."
+        },
+        "buildProfile": {
+            "eyebrow": "DISCOVERY",
+            "title": "Start building your profile",
+            "subtitle": "Omi scans projects and recent files",
+            "scanning": "Scanning your projects and apps",
+            "mapped": "Your workspace is mapped",
+            "filesIndexed": "{{count}} files indexed",
+            "filesIndexedOne": "{{count}} file indexed"
+        },
+        "micPermission": {
+            "eyebrow": "PERMISSION",
+            "title": "Let Omi use your mic",
+            "subtitle": "This lets Omi transcribe meetings and voice notes",
+            "cardLabel": "Microphone",
+            "status": {
+                "idle": "Not granted yet",
+                "waiting": "Waiting for Windows",
+                "granted": "Granted",
+                "denied": "Blocked by Windows"
+            },
+            "button": {
+                "idle": "Grant access",
+                "waiting": "Waiting for Windows",
+                "granted": "Granted",
+                "denied": "Try again"
+            },
+            "recoveryLabel": "Open Windows Settings",
+            "errorBlocked": "Windows blocked microphone access. Open Settings → Privacy & security → Microphone, allow this app, then come back — Omi will pick it up automatically.",
+            "errorFailed": "Microphone access failed: {{message}}"
+        },
+        "automationPermission": {
+            "eyebrow": "PERMISSION",
+            "title": "Let Omi act when asked",
+            "subtitle": "Automation lets Omi take actions for you",
+            "cardLabel": "Automation",
+            "status": {
+                "idle": "Not enabled yet",
+                "waiting": "Enabling",
+                "granted": "Enabled",
+                "denied": "Couldn't enable"
+            },
+            "button": {
+                "idle": "Enable",
+                "waiting": "Enabling",
+                "granted": "Enabled",
+                "denied": "Try again"
+            }
+        },
+        "shortcutSetup": {
+            "title": "Let’s set your “Ask a question” shortcut",
+            "subtitle": "Press this key combination. Do buttons light up?",
+            "recording": "Recording… press your keys",
+            "escToCancel": "(Esc to cancel)",
+            "pressToTest": "Press to test",
+            "chooseDifferent": "Choose a different shortcut",
+            "custom": "Custom",
+            "recordingButton": "Recording…"
+        },
+        "voiceIntro": {
+            "title": "Talk to Omi",
+            "hold": "Hold",
+            "tryAsking": "Try asking:",
+            "tryAskingQuery": "“What’s on my screen?”",
+            "capturedSubtitle": "That’s it — Omi heard you.",
+            "holdSubtitle": "Hold {{keys}}, ask a question, then let go.",
+            "micBlocked": "Windows is blocking Omi’s microphone, so voice can’t work yet. You can fix this later in Settings → Privacy.",
+            "nudge": "Keep the keys held down while you speak — a quick press just opens Omi. Let go when you’re done.",
+            "waited": "Can’t get it to work? Continue — you can try this any time from the bar."
+        },
+        "askDemo": {
+            "title": "Type in the floating bar “Which computer should I buy?”",
+            "imageAlt": "Omi's answer: a comparison of Mac models"
+        },
+        "dataSources": {
+            "eyebrow": "DATA SOURCES",
+            "title": "Your 2nd brain is live.",
+            "subtitle": "Connect more of your context — or skip and add it later.",
+            "calendar": {
+                "title": "Calendar",
+                "connected": "Connected",
+                "disconnected": "Import events and recurring routines."
+            },
+            "email": {
+                "title": "Email",
+                "requiresSetup": "Requires setup",
+                "connected": "Connected",
+                "connectedAs": "Connected as {{email}}",
+                "disconnected": "Import email history and follow-ups."
+            },
+            "localFiles": {
+                "title": "Local files",
+                "on": "On",
+                "statusOn": "On · {{count}} files indexed",
+                "statusOnOne": "On · {{count}} file indexed",
+                "statusFallback": "On · indexed on this device"
+            },
+            "chatgpt": {
+                "title": "ChatGPT",
+                "pasteHint": "Paste your memory export.",
+                "imported": "{{count}} memories imported",
+                "importedOne": "{{count}} memory imported"
+            },
+            "claude": {
+                "title": "Claude",
+                "pasteHint": "Paste your memory export.",
+                "imported": "{{count}} memories imported",
+                "importedOne": "{{count}} memory imported"
+            },
+            "connect": "Connect",
+            "disconnect": "Disconnect",
+            "waiting": "Waiting…",
+            "connecting": "Connecting…",
+            "imported": "Imported",
+            "openClose": "Close",
+            "promptCopied": "Prompt copied — paste it in {{title}}",
+            "couldNotOpen": "Could not open {{title}}",
+            "couldNotImport": "Could not import memories",
+            "openPrompt": "Open {{title}} & Copy Prompt",
+            "pastePlaceholder": "Paste {{title}}’s full response here…",
+            "instruction": "Open {{title}}, paste the copied prompt, then drop the full response here.",
+            "importing": "Importing…",
+            "import": "Import {{title}}",
+            "cancel": "Cancel"
+        },
+        "goal": {
+            "eyebrow": "GOAL",
+            "title": "Pick one goal.",
+            "subtitle": "Selecting a correct and detailed goal is very important - Omi will optimize all advice to achieve that goal. Make sure your goal contains a number to measure progress.",
+            "suggested1": "Be more productive and focused every day",
+            "suggested2": "Make meaningful progress on my projects",
+            "typeMyOwn": "Type my own",
+            "generate": "Let AI generate it",
+            "generating": "Generating…",
+            "placeholder": "e.g. Ship 2 product features every week",
+            "back": "Back",
+            "continue": "Continue"
+        },
+        "toasts": {
+            "couldNotSyncName": "Could not sync your name",
+            "savedLocallyLanguage": "Saved locally — language sync will retry later",
+            "savedLocallyGoal": "Saved locally — goal sync will retry later"
+        }
+    },
+    "rewind": {
+        "title": "Rewind",
+        "searchPlaceholder": "Search what was on screen…",
+        "clearSearchTitle": "Clear search (Esc)",
+        "viewModeListTitle": "Results list",
+        "viewModeTimelineTitle": "Timeline (open a result to drill in)",
+        "backToResults": "Back to results",
+        "play": "Play",
+        "pause": "Pause",
+        "playTitle": "Play",
+        "pauseTitle": "Pause",
+        "noActivity": "no activity",
+        "tryDifferentTerm": "Try a different search term",
+        "semanticMatchTitle": "Matched by meaning, not an exact keyword",
+        "pickDayTitle": "Pick a day",
+        "previousMonthTitle": "Previous month",
+        "nextMonthTitle": "Next month",
+        "noFramesYet": "No frames yet",
+        "loadingFrames": "Loading frames…"
+    },
+    "knowledgeGraph": {
+        "title": "Brain Map",
+        "backToMemories": "Back to Memories",
+        "backAriaLabel": "Back",
+        "emptyTitle": "Your brain map is empty",
+        "emptyDescription": "The map appears once you have enough linked memories. Keep talking to Omi — or rebuild to re-derive it from your latest memories.",
+        "rebuild": "Rebuild",
+        "rebuilding": "Rebuilding…",
+        "showAll": "Show all {{count}}",
+        "showKey": "Show key {{count}}",
+        "showAllLabels": "Show all labels",
+        "showKeyLabels": "Show key labels",
+        "showAllTitle": "Render every node in your brain map",
+        "showKeyTitle": "Show only the most connected nodes",
+        "showAllLabelsTitle": "Show a label on every visible node",
+        "showKeyLabelsTitle": "Label only the most connected nodes",
+        "rebuildTitle": "Rebuild the brain map from your latest memories"
+    },
+    "conversationDetail": {
+        "title": "Conversation",
+        "backTitle": "Back",
+        "backAriaLabel": "Back",
+        "loading": "Loading conversation…",
+        "pendingTitle": "Conversation",
+        "pendingBody": "Omi is still processing this conversation. It’ll appear in your list shortly.",
+        "errorTitle": "Conversation",
+        "tryAgain": "Try again",
+        "local": {
+            "transcriptHeader": "Transcript",
+            "messagesHeader": "Messages",
+            "copy": "Copy",
+            "copied": "Copied",
+            "noTranscript": "(no transcript)",
+            "you": "You",
+            "omi": "Omi",
+            "chatFallbackTitle": "Chat with Omi",
+            "recordingFallbackTitle": "Recording",
+            "copyTitle": "Copy transcript"
+        },
+        "header": {
+            "editTitle": "Edit title",
+            "viewTranscript": "View Transcript",
+            "hideTranscript": "Hide Transcript",
+            "copyLink": "Copy link",
+            "copyTranscript": "Copy transcript",
+            "delete": "Delete conversation",
+            "moveToFolder": "Move to folder"
+        },
+        "body": {
+            "processingTitle": "Processing conversation…",
+            "processingSubtitle": "Generating summary and action items",
+            "summaryTitle": "Summary",
+            "appInsightsTitle": "App Insights",
+            "reprocess": "Reprocess",
+            "reprocessing": "Reprocessing…",
+            "tryWithAppsTitle": "Try with Apps",
+            "tryWithAppsDescription": "Run an Omi app over this conversation for extra insights.",
+            "browseApps": "Browse apps",
+            "actionItemsTitle": "Action Items",
+            "sourceUnknown": "unknown",
+            "expand": "Expand",
+            "collapse": "Collapse"
+        },
+        "toolbar": {
+            "markDone": "Mark as done",
+            "markOpen": "Mark as open"
+        },
+        "modals": {
+            "renameTitle": "Edit title",
+            "renameAriaLabel": "Conversation title",
+            "cancel": "Cancel",
+            "save": "Save",
+            "deleteTitle": "Delete conversation?",
+            "deleteBody": "“{{title}}” will be permanently deleted. This cannot be undone.",
+            "deleteConfirm": "Delete",
+            "reprocessTitle": "Reprocess with an app",
+            "reprocessDefault": "Default summary",
+            "transcriptTitle": "Transcript",
+            "closeTranscript": "Close transcript",
+            "closeTranscriptAria": "Close transcript",
+            "editTitleModal": "Edit title"
+        },
+        "toasts": {
+            "couldNotCopyLink": "Could not copy link",
+            "renameFailed": "Rename failed",
+            "conversationDeleted": "Conversation deleted",
+            "deleteFailed": "Delete failed",
+            "couldNotMove": "Could not move conversation",
+            "reprocessingBody": "Omi is regenerating the summary.",
+            "reprocessingTitle": "Reprocessing",
+            "reprocessFailed": "Reprocess failed",
+            "couldNotUpdateTask": "Could not update task",
+            "couldNotNameSpeaker": "Could not name speaker"
+        },
+        "chips": {
+            "source": "Source",
+            "duration": "Duration",
+            "category": "Category"
+        }
+    },
+    "liveConversation": {
+        "title": "Live conversation",
+        "savedFallbackTitle": "Conversation",
+        "loadingTitle": "loading…",
+        "subtitle": {
+            "connecting": "Connecting…",
+            "listening": "Listening",
+            "error": "Microphone unavailable",
+            "idle": "Idle"
+        },
+        "saveNow": "Save now",
+        "saveNowTitle": "Finalize this conversation now instead of waiting for the silence boundary",
+        "transcriptTitle": "Transcript",
+        "notesTitle": "Notes",
+        "notesEmpty": "Notes will appear here",
+        "notesAiHint": "AI generates notes as you speak",
+        "listeningEmpty": "Listening… start speaking and your words will appear here. The finished conversation will show up in your list automatically.",
+        "errorEmpty": "Couldn't start listening: {{message}}. If this is a permission issue, allow the mic in Windows Settings → Privacy → Microphone; otherwise it'll retry automatically.",
+        "speakerFallback": "speaker",
+        "aiNotesLabel": "AI notes",
+        "addNotePlaceholder": "Add a note…",
+        "addNoteTitle": "Add note",
+        "editTitle": "Edit",
+        "deleteTitle": "Delete",
+        "saveTitle": "Save",
+        "cancelTitle": "Cancel"
+    },
+    "apps": {
+        "title": "Apps",
+        "loading": "Loading…",
+        "subtitle": "{{available}} available · {{installed}} installed",
+        "marketplace": "Marketplace",
+        "installed": "Installed",
+        "refreshTitle": "Refresh",
+        "searchPlaceholder": "Search apps…",
+        "filterTitle": "Filter by category",
+        "filterLabel": "Filter",
+        "categoriesTitle": "Categories",
+        "clear": "Clear",
+        "noCategories": "No categories",
+        "searching": "Searching…",
+        "localResultsNotice": "Showing local results — search is temporarily unavailable.",
+        "noAppsMatch": "No apps match",
+        "noAppsInstalled": "No apps installed",
+        "noAppsAvailable": "No apps available",
+        "tryDifferentSearch": "Try a different search.",
+        "browseMarketplace": "Browse the Marketplace tab to find apps to install.",
+        "tryAgainLater": "Try again later.",
+        "showingFirst": "Showing the first {{limit}} of {{count}}. Narrow with search or filters.",
+        "sectionTruncated": "Showing {{shown}} of {{total}}. Use search to find the rest.",
+        "showLess": "Show less",
+        "seeMore": "See more",
+        "installedBadge": "Installed",
+        "install": "Install",
+        "settingUp": "Setting up…",
+        "couldNotLoad": "Couldn’t load apps",
+        "couldNotLoadDescription": "Something went wrong reaching the marketplace. Check your connection and try again.",
+        "retry": "Retry",
+        "clearSearch": "Clear",
+        "filterBadge": "Filter"
+    },
+    "bar": {
+        "signedOut": {
+            "title": "Sign in to Omi to chat.",
+            "openButton": "Open Omi to sign in"
+        },
+        "pill": {
+            "listening": "Listening",
+            "thinking": "Thinking",
+            "speaking": "Speaking",
+            "omi": "Omi"
+        },
+        "openOmiAria": "Open Omi",
+        "loading": "Loading…",
+        "omiChat": "Omi Chat",
+        "dismiss": "Dismiss",
+        "stop": "Stop",
+        "backToList": "Back to list",
+        "close": "Close",
+        "closeTitle": "Close (same as the shortcut)",
+        "askPlaceholder": "Ask Omi anything…  ·  hold Space to talk",
+        "askPlaceholderShort": "Ask Omi…  ·  hold Space to talk",
+        "emptyHint": "Ask Omi anything, or hold Space to talk.",
+        "hintStripFallback": "Hold longer to record",
+        "send": "Send"
+    },
+    "insightToast": {
+        "whatsNew": "What's new",
+        "newInOmi": "New in Omi {{version}}",
+        "viewReleaseNotes": "View release notes",
+        "meetingDetected": "Meeting detected",
+        "dismiss": "Dismiss",
+        "capturingHeadline": "Omi is capturing — {{app}}",
+        "startingHeadline": "Starting capture — {{app}}",
+        "captureDidNotStart": "Capture didn't start — {{app}}",
+        "captureStopped": "Capture stopped — {{app}}",
+        "captureCouldNotSave": "Capture couldn't be saved — {{app}}",
+        "looksLikeMeeting": "{{app}} looks like a meeting",
+        "adviceCapturing": "Audio is being transcribed into a conversation.",
+        "adviceStarting": "Connecting audio and transcription…",
+        "adviceSaveFailed": "The recording ended, but Omi could not save the local meeting transcript.",
+        "adviceGenericFailed": "Check your sign-in, internet connection, and Windows microphone access, then retry.",
+        "adviceAsk": "Capture and transcribe this meeting?",
+        "firstRun": "First run — change this in Settings → General.",
+        "stop": "Stop",
+        "cancel": "Cancel",
+        "retry": "Retry",
+        "startCapturing": "Start capturing",
+        "notNow": "Not now"
+    },
+    "capture": {
+        "placeholder": "No capture view"
+    },
+    "glow": {
+        "placeholder": "Glow"
+    },
+    "appCrash": {
+        "title": "Something went wrong",
+        "description": "This page couldn't load. Try reloading.",
+        "reload": "Reload",
+        "retry": "Try again"
+    },
+    "degradedMode": {
+        "title": "Omi is catching up",
+        "description": "Some features may be temporarily unavailable while we restore your data."
+    },
+    "commonActions": {
+        "back": "Back",
+        "continue": "Continue",
+        "skip": "Skip",
+        "cancel": "Cancel",
+        "save": "Save",
+        "dismiss": "Dismiss",
+        "close": "Close",
+        "edit": "Edit",
+        "delete": "Delete",
+        "confirmDelete": "Confirm delete",
+        "retry": "Retry",
+        "loading": "Loading…"
     }
 }

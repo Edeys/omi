@@ -68,21 +68,25 @@ const HUB_ORB_IDLE: VoiceHubBarState = {
   hint: ''
 }
 
+import { useTranslation as useBarTranslation } from '../../i18n'
+
 function SignedOutContent(): React.JSX.Element {
+  const { t } = useBarTranslation()
   return (
     <div className="flex flex-col items-center gap-3 px-6 pb-5 pt-6 text-center text-neutral-100">
-      <div className="text-sm text-neutral-300">Sign in to Omi to chat.</div>
+      <div className="text-sm text-neutral-300">{t('bar.signedOut.title')}</div>
       <button
         onClick={() => window.omiOverlay.focusMain()}
         className="rounded-xl bg-neutral-200 px-4 py-2 text-sm font-medium text-neutral-900"
       >
-        Open Omi to sign in
+        {t('bar.signedOut.openButton')}
       </button>
     </div>
   )
 }
 
 export function BarApp(): React.JSX.Element {
+  const { t } = useBarTranslation()
   const { user, loading } = useAuth()
   const [authReady, setAuthReady] = useState(false)
   const [mode, setMode] = useState<BarMode | null>(null)
@@ -553,13 +557,21 @@ export function BarApp(): React.JSX.Element {
   // Activity-keyed, not orb-pose-keyed: a PTT hold derives as the 'speaking'
   // pose but is still Omi listening to you. barChat.status folds a hub spoken
   // reply into 'speaking' (deriveBarVoiceState), so both voice routes match.
-  const pillText = pillLabel({
+  const rawPill = pillLabel({
     recording: recordingNow,
     transcribing: thinkingNow,
     status: barChat.status,
     continuousListening,
     agentsActive
   })
+  const pillText =
+    rawPill === 'Listening'
+      ? t('bar.pill.listening')
+      : rawPill === 'Thinking'
+        ? t('bar.pill.thinking')
+        : rawPill === 'Speaking'
+          ? t('bar.pill.speaking')
+          : t('bar.pill.omi')
   // The orb's live level, by lane: the user's mic while capturing (hub-projected
   // or local analyser), the reply's own played audio while Omi speaks (fresh
   // playback tap only — stale ⇒ null ⇒ pose-only choreography), else none.
@@ -635,7 +647,7 @@ export function BarApp(): React.JSX.Element {
           <div
             className={`bar-content ${!expanded ? 'bar-content-active' : ''}`}
             role="button"
-            aria-label="Open Omi"
+            aria-label={t('bar.openOmiAria')}
             tabIndex={-1}
             onClick={() => window.omiBar.expand()}
           >
@@ -658,7 +670,7 @@ export function BarApp(): React.JSX.Element {
               </div>
               <div className="bar-zoom">
                 {!ready ? (
-                  <div className="px-4 pb-4 pt-2 text-sm text-neutral-400">Loading…</div>
+                  <div className="px-4 pb-4 pt-2 text-sm text-neutral-400">{t('bar.loading')}</div>
                 ) : !user ? (
                   <SignedOutContent />
                 ) : view === 'agent' && activePill ? (
@@ -678,7 +690,7 @@ export function BarApp(): React.JSX.Element {
                     chat={barChat}
                     view={view === 'conversation' ? 'conversation' : 'list'}
                     expanded={expanded}
-                    conversationTitle="Omi Chat"
+                    conversationTitle={t('bar.omiChat')}
                     onOpenConversation={openConversation}
                     pills={pills}
                     onOpenPill={openPill}

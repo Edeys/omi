@@ -1,6 +1,7 @@
 import { Mic } from 'lucide-react'
 import { PermissionStep } from './PermissionStep'
 import { setPreferences } from '../../lib/preferences'
+import { useTranslation } from '../../i18n'
 
 type MicPermissionStepProps = {
   stepIndex: number
@@ -40,6 +41,7 @@ export function MicPermissionStep({
   onBack,
   onSkip
 }: MicPermissionStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   // Trigger the real Windows microphone grant. getUserMedia surfaces the OS
   // prompt; we immediately release the device since we only needed the grant.
   // A denial REJECTS — PermissionStep turns that into an explicit denied state
@@ -52,8 +54,8 @@ export function MicPermissionStep({
       const err = e as Error
       throw new Error(
         err.name === 'NotAllowedError'
-          ? 'Windows blocked microphone access. Open Settings → Privacy & security → Microphone, allow this app, then come back — Omi will pick it up automatically.'
-          : `Microphone access failed: ${err.message}`
+          ? t('onboarding.micPermission.errorBlocked')
+          : t('onboarding.micPermission.errorFailed', { message: err.message })
       )
     }
   }
@@ -76,27 +78,27 @@ export function MicPermissionStep({
       stepIndex={stepIndex}
       totalSteps={totalSteps}
       aside={aside}
-      eyebrow="PERMISSION"
-      title="Let Omi use your mic"
-      subtitle="This lets Omi transcribe meetings and voice notes"
+      eyebrow={t('onboarding.micPermission.eyebrow')}
+      title={t('onboarding.micPermission.title')}
+      subtitle={t('onboarding.micPermission.subtitle')}
       icon={<Mic className="h-5 w-5 text-white/60" />}
-      cardLabel="Microphone"
+      cardLabel={t('onboarding.micPermission.cardLabel')}
       statusText={{
-        idle: 'Not granted yet',
-        waiting: 'Waiting for Windows',
-        granted: 'Granted',
-        denied: 'Blocked by Windows'
+        idle: t('onboarding.micPermission.status.idle'),
+        waiting: t('onboarding.micPermission.status.waiting'),
+        granted: t('onboarding.micPermission.status.granted'),
+        denied: t('onboarding.micPermission.status.denied')
       }}
       buttonLabel={{
-        idle: 'Grant access',
-        waiting: 'Waiting for Windows',
-        granted: 'Granted',
-        denied: 'Try again'
+        idle: t('onboarding.micPermission.button.idle'),
+        waiting: t('onboarding.micPermission.button.waiting'),
+        granted: t('onboarding.micPermission.button.granted'),
+        denied: t('onboarding.micPermission.button.denied')
       }}
       onActivate={requestAccess}
       checkGranted={isMicGranted}
       onGranted={handleGranted}
-      recoveryLabel="Open Windows Settings"
+      recoveryLabel={t('onboarding.micPermission.recoveryLabel')}
       onRecover={() => window.omi?.openMicPrivacySettings?.()}
       onContinue={onContinue}
       onBack={onBack}
