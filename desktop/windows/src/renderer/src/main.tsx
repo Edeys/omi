@@ -38,6 +38,7 @@ import { AppCrashScreen } from './components/ui/AppCrashScreen'
 import { scrubEventPii } from '../../shared/sentryScrub'
 import { isSecondaryWindow } from './lib/windowRole'
 import { initFontScale } from './lib/fontScale'
+import './i18n'
 
 // Renderer-side crash reporting. Only initializes when a DSN is configured, so
 // dev builds (and any build without the env var) stay entirely offline. Emails

@@ -1,0 +1,33 @@
+{
+    "app": {
+        "name": "Omi"
+    },
+    "settings": {
+        "title": "Cài đặt",
+        "back": "Quay lại",
+        "searchPlaceholder": "Tìm kiếm cài đặt…",
+        "tabs": {
+            "general": "Chung",
+            "memories": "Ký ức",
+            "agents": "Trợ lý",
+            "transcription": "Phiên âm",
+            "rewind": "Quay lại",
+            "notifications": "Thông báo",
+            "privacy": "Quyền riêng tư",
+            "account": "Tài khoản",
+            "planUsage": "Gói & Hạn mức",
+            "shortcuts": "Phím tắt",
+            "advanced": "Nâng cao",
+            "about": "Giới thiệu",
+            "language": "Ngôn ngữ"
+        },
+        "language": {
+            "title": "Ngôn ngữ",
+            "subtitle": "Chọn ngôn ngữ hiển thị của giao diện. Nội dung do AI tạo ra vẫn giữ nguyên ngôn ngữ của nó."
+        }
+    },
+    "common": {
+        "english": "English",
+        "vietnamese": "Tiếng Việt"
+    }
+}
