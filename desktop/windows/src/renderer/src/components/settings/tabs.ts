@@ -11,11 +11,13 @@ import {
   Keyboard,
   Bell,
   Info,
+  Languages,
   type LucideIcon
 } from 'lucide-react'
 
 export type SettingsTabId =
   | 'general'
+  | 'language'
   | 'memories'
   | 'agents'
   | 'transcription'
@@ -30,6 +32,7 @@ export type SettingsTabId =
 
 export const SETTINGS_TABS: { id: SettingsTabId; label: string; Icon: LucideIcon }[] = [
   { id: 'general', label: 'General', Icon: SettingsIcon },
+  { id: 'language', label: 'Language', Icon: Languages },
   { id: 'memories', label: 'Memories', Icon: Brain },
   { id: 'agents', label: 'Agents', Icon: Bot },
   { id: 'transcription', label: 'Transcription', Icon: AudioLines },
