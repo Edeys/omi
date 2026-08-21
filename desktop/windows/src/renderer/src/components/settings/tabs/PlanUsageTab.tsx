@@ -8,6 +8,7 @@ import { ChatUsageCard } from '../billing/ChatUsageCard'
 import { OverageCard } from '../billing/OverageCard'
 import { TrialCard } from '../billing/TrialCard'
 import { PlanGrid } from '../billing/PlanGrid'
+import { useTranslation } from '../../../i18n'
 import {
   fetchSubscription,
   fetchChatQuota,
@@ -45,6 +46,7 @@ export function PlanUsageTab(): React.JSX.Element {
   useSearchableRow(
     'plan usage billing subscription upgrade quota trial overage payment neo operator architect'
   )
+  const { t } = useTranslation()
 
   const [sub, setSub] = useState<UserSubscriptionResponse | null>(null)
   const [quota, setQuota] = useState<ChatUsageQuota | null>(null)
@@ -182,7 +184,7 @@ export function PlanUsageTab(): React.JSX.Element {
         <div className="glass-subtle mb-4 px-4 py-3 text-sm text-white/60">{error}</div>
         <button onClick={onRefresh} disabled={refreshing} className="btn-ghost">
           <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-          Try again
+          {t('settings.planUsage.tryAgain')}
         </button>
       </div>
     )
@@ -195,11 +197,11 @@ export function PlanUsageTab(): React.JSX.Element {
     return (
       <div>
         <div className="glass-subtle mb-4 px-4 py-3 text-sm text-white/60">
-          Couldn’t load your plan details.
+          {t('settings.planUsage.couldNotLoad')}
         </div>
         <button onClick={onRefresh} disabled={refreshing} className="btn-ghost">
           <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-          Try again
+          {t('settings.planUsage.tryAgain')}
         </button>
       </div>
     )
@@ -222,15 +224,14 @@ export function PlanUsageTab(): React.JSX.Element {
           icon={AlertTriangle}
           iconTone="amber"
           className="border border-amber-400/25"
-          title="Plan Retiring"
+          title={t('settings.planUsage.planRetiringTitle')}
           subtitle={
-            subscription.deprecation_message ??
-            'Your Unlimited plan is being retired. Try the new Operator plan — same great features at $49/mo.'
+            subscription.deprecation_message ?? t('settings.planUsage.planRetiringFallback')
           }
           trailing={
             showCatalog ? (
               <button onClick={jumpToOperator} className="btn-ghost">
-                Try Operator
+                {t('settings.planUsage.tryOperator')}
               </button>
             ) : undefined
           }

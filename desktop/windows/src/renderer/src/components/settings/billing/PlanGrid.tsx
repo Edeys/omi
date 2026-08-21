@@ -11,6 +11,7 @@ import {
   canPurchasePlan,
   planAccent
 } from '../../../lib/billing'
+import { useTranslation } from '../../../i18n'
 import type { Subscription, SubscriptionPlan } from '../../../lib/omiApi.generated'
 
 /**
@@ -28,11 +29,14 @@ export function PlanGrid(props: {
   activePriceId: string | null
   onBuy: (priceId: string, promotionCode?: string) => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <section>
-      <h2 className="text-[15px] font-semibold text-text-primary">Choose a plan</h2>
+      <h2 className="text-[15px] font-semibold text-text-primary">
+        {t('settings.planUsage.choosePlanTitle')}
+      </h2>
       <p className="mt-1 text-sm text-text-tertiary">
-        Pick one plan first. Billing options appear only after the card is selected.
+        {t('settings.planUsage.choosePlanSubtitle')}
       </p>
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {props.plans.map((plan) => (
@@ -66,6 +70,7 @@ function PlanCard(props: {
   const accent = planAccent(plan)
   const checkColor = accent === 'green' ? 'text-emerald-400' : 'text-white/55'
   const anyCheckoutActive = activePriceId != null
+  const { t } = useTranslation()
 
   return (
     // h-full + flex column: grid stretches the cards to equal height, and the
@@ -91,7 +96,7 @@ function PlanCard(props: {
           <span className="text-lg font-semibold text-text-primary">{plan.title}</span>
           <span className="shrink-0 text-right text-xs text-white/45">
             {planStartingPrice(plan)}
-            <span className="ml-1 text-white/30">starting</span>
+            <span className="ml-1 text-white/30">{t('settings.planUsage.starting')}</span>
           </span>
         </div>
         <p className="text-sm text-text-tertiary">{planSubtitle(plan)}</p>
@@ -107,7 +112,7 @@ function PlanCard(props: {
       </button>
 
       {!purchasable ? (
-        <p className="mt-auto text-xs text-white/40">Included with your current plan.</p>
+        <p className="mt-auto text-xs text-white/40">{t('settings.planUsage.includedWithPlan')}</p>
       ) : selected ? (
         <div className="mt-auto flex flex-col gap-2 border-t border-white/[0.06] pt-3">
           <button
@@ -116,7 +121,7 @@ function PlanCard(props: {
             className="flex items-center gap-1.5 text-xs text-white/55 hover:text-white/80"
           >
             <Tag className="h-3.5 w-3.5" />
-            Promo code
+            {t('settings.planUsage.promoCode')}
             <ChevronDown
               className={cn('h-3.5 w-3.5 transition-transform', promoOpen && 'rotate-180')}
             />
@@ -125,11 +130,13 @@ function PlanCard(props: {
             <input
               value={promo}
               onChange={(e) => setPromo(e.target.value)}
-              placeholder="Enter promo code"
+              placeholder={t('settings.planUsage.promoPlaceholder')}
               className="input-field py-2 text-sm"
             />
           ) : null}
-          <div className="mt-1 text-xs font-medium text-white/45">Choose billing</div>
+          <div className="mt-1 text-xs font-medium text-white/45">
+            {t('settings.planUsage.chooseBilling')}
+          </div>
           {sortedPrices(plan).map((price) => {
             const busy = activePriceId === price.id
             return (
@@ -154,7 +161,7 @@ function PlanCard(props: {
           onClick={() => onSelect(plan.id)}
           className="btn-ghost mt-auto w-full"
         >
-          Select {plan.title}
+          {t('settings.planUsage.selectPlan', { title: plan.title })}
         </button>
       )}
     </div>

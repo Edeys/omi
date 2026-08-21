@@ -19,7 +19,17 @@ describe('locale parity', () => {
 
   it('every vi value is non-empty and not a copy of the en key path', () => {
     // Brand / native language names are intentionally identical across locales.
-    const allowIdentical = new Set(['app.name', 'common.english', 'common.vietnamese'])
+    const allowIdentical = new Set([
+      'app.name',
+      'common.english',
+      'common.vietnamese',
+      'settings.agents.claudeTitle',
+      'settings.agents.apiKeyPlaceholderEmpty',
+      'settings.advanced.chatgpt',
+      'settings.advanced.claude',
+      'settings.about.versionName',
+      'settings.about.updateErrorMessage'
+    ])
     const check = (
       enObj: Record<string, unknown>,
       viObj: Record<string, unknown>,

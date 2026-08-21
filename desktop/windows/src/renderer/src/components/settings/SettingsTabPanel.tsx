@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { cn } from '../../lib/utils'
 import { TabIdContext, useSettingsSearch } from './searchContext'
 import type { SettingsTabId } from './tabs'
+import { useTranslation } from '../../i18n'
 
 /**
  * Wraps one tab's content. Always mounted (so its rows register for search);
@@ -15,8 +16,12 @@ export function SettingsTabPanel(props: {
   active: boolean
   children: React.ReactNode
 }): React.JSX.Element {
-  const { id, label, active, children } = props
+  const { id, label: _label, active, children } = props
   const { isSearching, tabHasMatch } = useSettingsSearch()
+  const { t } = useTranslation()
+  const tabKey = (tid: SettingsTabId): string =>
+    tid.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())
+  const label = t(`settings.tabs.${tabKey(id)}`)
   const show = isSearching ? tabHasMatch(id) : active
 
   // Panel enter motion. Panels stay mounted (display:none) for search, so a

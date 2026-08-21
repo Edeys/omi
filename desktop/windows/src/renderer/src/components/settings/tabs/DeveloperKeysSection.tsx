@@ -14,6 +14,7 @@ import { SettingRow } from '../SettingRow'
 import { auth } from '../../../lib/firebase'
 import { dismissUsageLimit } from '../../../lib/usageLimit'
 import { fetchSubscription, fetchChatQuota } from '../../../lib/billing'
+import { useTranslation } from '../../../i18n'
 import {
   BYOK_PROVIDERS,
   type ByokProvider,
@@ -21,16 +22,36 @@ import {
 } from '../../../../../shared/byok'
 
 /** Field metadata per provider — titles/subtitles verbatim from the macOS view. */
-const PROVIDERS: { id: ByokProvider; title: string; subtitle: string; displayName: string }[] = [
-  { id: 'openai', title: 'OpenAI API Key', subtitle: 'For GPT calls.', displayName: 'OpenAI' },
-  { id: 'anthropic', title: 'Anthropic API Key', subtitle: 'For chat (Claude).', displayName: 'Anthropic' },
+const PROVIDERS: {
+  id: ByokProvider
+  titleKey: string
+  subtitleKey: string
+  displayName: string
+}[] = [
+  {
+    id: 'openai',
+    titleKey: 'settings.advanced.devKeysOpenaiTitle',
+    subtitleKey: 'settings.advanced.devKeysOpenaiSubtitle',
+    displayName: 'OpenAI'
+  },
+  {
+    id: 'anthropic',
+    titleKey: 'settings.advanced.devKeysAnthropicTitle',
+    subtitleKey: 'settings.advanced.devKeysAnthropicSubtitle',
+    displayName: 'Anthropic'
+  },
   {
     id: 'gemini',
-    title: 'Gemini API Key',
-    subtitle: 'For proactive AI (memory, tasks, insights, focus).',
+    titleKey: 'settings.advanced.devKeysGeminiTitle',
+    subtitleKey: 'settings.advanced.devKeysGeminiSubtitle',
     displayName: 'Gemini'
   },
-  { id: 'deepgram', title: 'Deepgram API Key', subtitle: 'For live transcription.', displayName: 'Deepgram' }
+  {
+    id: 'deepgram',
+    titleKey: 'settings.advanced.devKeysDeepgramTitle',
+    subtitleKey: 'settings.advanced.devKeysDeepgramSubtitle',
+    displayName: 'Deepgram'
+  }
 ]
 
 const emptyKeys = (): Record<ByokProvider, string> => ({
@@ -55,6 +76,7 @@ export function DeveloperKeysSection(): React.JSX.Element {
     gemini: false,
     deepgram: false
   })
+  const { t } = useTranslation()
 
   // Latest keys for the debounced commit (avoids a stale closure), plus the
   // pending timer so rapid edits collapse into one validate/enroll.
@@ -105,14 +127,14 @@ export function DeveloperKeysSection(): React.JSX.Element {
       void fetchSubscription().catch(() => {})
       void fetchChatQuota().catch(() => {})
     } else if (result.backendError) {
-      setActivationError("Couldn't reach Omi to switch on the free plan. Try again.")
+      setActivationError(t('settings.advanced.devKeysUnreachable'))
     } else if (willValidate) {
       const rejected = PROVIDERS.filter((p) => result.results[p.id] && !result.results[p.id]?.ok)
         .map((p) => p.displayName)
         .sort()
       setActivationError(
         rejected.length
-          ? `Rejected by provider: ${rejected.join(', ')}. Free plan stays off until all 4 keys authenticate.`
+          ? t('settings.advanced.devKeysRejected', { providers: rejected.join(', ') })
           : null
       )
     }
@@ -147,7 +169,7 @@ export function DeveloperKeysSection(): React.JSX.Element {
       <div className="mb-4 mt-2 flex items-center gap-2 border-t border-white/[0.06] pt-6">
         <KeyRound className="h-4 w-4 text-white/45" strokeWidth={1.9} />
         <h3 className="text-sm font-semibold uppercase tracking-wide text-text-tertiary">
-          Developer API Keys
+          {t('settings.advanced.devKeysTitle')}
         </h3>
       </div>
 
@@ -160,12 +182,14 @@ export function DeveloperKeysSection(): React.JSX.Element {
         )}
         <div className="min-w-0">
           <div className="text-[15px] font-semibold text-text-primary">
-            {hasAll ? 'Free plan active' : 'Use Omi free forever'}
+            {hasAll
+              ? t('settings.advanced.devKeysActiveTitle')
+              : t('settings.advanced.devKeysInactiveTitle')}
           </div>
           <div className="mt-0.5 text-sm text-text-tertiary">
             {hasAll
-              ? "You're paying your own providers. Omi skips the subscription charge. Keys stay on this PC."
-              : 'Provide all four keys (OpenAI, Anthropic, Gemini, Deepgram) to switch to the free plan. Keys stay on this PC — we never store them on our servers.'}
+              ? t('settings.advanced.devKeysActiveSubtitle')
+              : t('settings.advanced.devKeysInactiveSubtitle')}
           </div>
         </div>
       </div>
@@ -177,27 +201,31 @@ export function DeveloperKeysSection(): React.JSX.Element {
         </div>
       )}
 
-      {PROVIDERS.map(({ id, title, subtitle, displayName }) => {
+      {PROVIDERS.map(({ id, titleKey, subtitleKey, displayName }) => {
         const status = statuses[id]
         const showChecking = checking && keys[id].trim().length > 0
         const dot = status?.ok ? 'on' : status && !status.ok ? 'warn' : undefined
         return (
           <SettingRow
             key={id}
-            title={title}
-            subtitle={subtitle}
+            title={t(titleKey)}
+            subtitle={t(subtitleKey)}
             keywords={`${id} ${displayName} api key byok developer bring your own key`}
             dot={dot}
             control={
               showChecking ? (
                 <span className="flex items-center gap-1.5 text-sm text-text-tertiary">
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  Checking…
+                  {t('settings.advanced.devKeysChecking')}
                 </span>
               ) : status?.ok ? (
-                <span className="text-sm font-semibold text-emerald-400">Valid</span>
+                <span className="text-sm font-semibold text-emerald-400">
+                  {t('settings.advanced.devKeysValid')}
+                </span>
               ) : status && !status.ok ? (
-                <span className="text-sm font-semibold text-amber-400">Invalid</span>
+                <span className="text-sm font-semibold text-amber-400">
+                  {t('settings.advanced.devKeysInvalid')}
+                </span>
               ) : undefined
             }
           >
@@ -206,7 +234,7 @@ export function DeveloperKeysSection(): React.JSX.Element {
                 type={reveal[id] ? 'text' : 'password'}
                 value={keys[id]}
                 onChange={(e) => onFieldChange(id, e.target.value)}
-                placeholder="Leave blank for default"
+                placeholder={t('settings.advanced.devKeysLeaveBlank')}
                 className="glass-subtle w-full rounded-lg px-4 py-3 pr-11 font-mono text-sm text-text-secondary focus:outline-none"
                 spellCheck={false}
                 autoComplete="off"
@@ -215,7 +243,7 @@ export function DeveloperKeysSection(): React.JSX.Element {
                 type="button"
                 onClick={() => setReveal((r) => ({ ...r, [id]: !r[id] }))}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-white/45 hover:text-white/75"
-                aria-label={reveal[id] ? `Hide ${title}` : `Show ${title}`}
+                aria-label={reveal[id] ? `Hide ${t(titleKey)}` : `Show ${t(titleKey)}`}
               >
                 {reveal[id] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
@@ -229,8 +257,11 @@ export function DeveloperKeysSection(): React.JSX.Element {
 
       {hasAnyKey && (
         <div className="mt-5 flex justify-center">
-          <button onClick={() => void clearAll()} className="text-sm font-medium text-red-400 hover:text-red-300">
-            Clear All Custom Keys
+          <button
+            onClick={() => void clearAll()}
+            className="text-sm font-medium text-red-400 hover:text-red-300"
+          >
+            {t('settings.advanced.devKeysClear')}
           </button>
         </div>
       )}

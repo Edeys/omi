@@ -2,6 +2,7 @@ import { Clock, AlertCircle, Check } from 'lucide-react'
 import { BillingCard } from './BillingCard'
 import { cn } from '../../../lib/utils'
 import { trialCountdownText, trialProgress, trialTimeTone } from '../../../lib/billing'
+import { useTranslation } from '../../../i18n'
 import type { TrialMetadata } from '../../../lib/omiApi.generated'
 
 const RING_STROKE: Record<'amber' | 'yellow' | 'green', string> = {
@@ -35,12 +36,6 @@ function ProgressRing(props: {
   )
 }
 
-const TRIAL_INCLUDED = [
-  'Unlimited listening & transcription',
-  'Unlimited memories & insights',
-  'Chat questions'
-]
-
 /**
  * Trial card (AccountBilling): an active countdown with a progress ring, or the
  * expired variant whose "View Plans" jumps to the Operator card. Ring/clock tone
@@ -51,17 +46,18 @@ export function TrialCard(props: {
   onViewPlans: () => void
 }): React.JSX.Element {
   const { trial, onViewPlans } = props
+  const { t } = useTranslation()
 
   if (trial.trial_expired) {
     return (
       <BillingCard
         icon={AlertCircle}
         iconTone="amber"
-        title="Trial Ended"
-        subtitle="Upgrade to keep unlimited access"
+        title={t('settings.planUsage.trialEndedTitle')}
+        subtitle={t('settings.planUsage.trialEndedSubtitle')}
         trailing={
           <button onClick={onViewPlans} className="btn-primary">
-            View Plans
+            {t('settings.planUsage.viewPlans')}
           </button>
         }
       />
@@ -75,19 +71,27 @@ export function TrialCard(props: {
     <BillingCard
       icon={Clock}
       iconTone={tone}
-      title="Premium Trial Active"
+      title={t('settings.planUsage.trialActiveTitle')}
       subtitle={trialCountdownText(remaining)}
       trailing={<ProgressRing progress={trialProgress(trial)} tone={tone} />}
     >
       <div className="border-t border-white/[0.06] pt-3">
-        <div className="mb-2 text-xs font-medium text-white/45">Included in your trial</div>
+        <div className="mb-2 text-xs font-medium text-white/45">
+          {t('settings.planUsage.trialIncludedTitle')}
+        </div>
         <ul className="space-y-1.5">
-          {TRIAL_INCLUDED.map((f) => (
-            <li key={f} className="flex items-start gap-2 text-sm text-white/75">
-              <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" />
-              <span>{f}</span>
-            </li>
-          ))}
+          <li className="flex items-start gap-2 text-sm text-white/75">
+            <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" />
+            <span>{t('settings.planUsage.trialUnlimitedListening')}</span>
+          </li>
+          <li className="flex items-start gap-2 text-sm text-white/75">
+            <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" />
+            <span>{t('settings.planUsage.trialUnlimitedMemories')}</span>
+          </li>
+          <li className="flex items-start gap-2 text-sm text-white/75">
+            <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" />
+            <span>{t('settings.planUsage.trialChatQuestions')}</span>
+          </li>
         </ul>
       </div>
     </BillingCard>

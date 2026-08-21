@@ -8,10 +8,12 @@ import { useGoogleConnection } from '../../../hooks/useGoogleConnection'
 import { GMAIL_SESSION_ENABLED } from '../../../lib/gmailSessionFeatureFlag'
 import { auth } from '../../../lib/firebase'
 import { SettingRow } from '../SettingRow'
+import { useTranslation } from '../../../i18n'
 import type { GmailSessionStatus } from '../../../../../shared/types'
 
 export function IntegrationsTab(): React.JSX.Element {
   const { memories, refresh } = useMemories()
+  const { t } = useTranslation()
 
   // --- Sticky Notes ---
   const [stickyReading, setStickyReading] = useState(false)
@@ -27,14 +29,14 @@ export function IntegrationsTab(): React.JSX.Element {
     try {
       const outcome = await readAndExtractStickyNotes(memories.map((m) => m.content))
       if (outcome.status === 'unavailable')
-        toast('No Sticky Notes found on this PC', { tone: 'warn' })
+        toast(t('settings.advanced.noStickyFound'), { tone: 'warn' })
       else if (outcome.status === 'error')
-        toast('Could not read Sticky Notes', { tone: 'error', body: outcome.error })
+        toast(t('settings.advanced.stickyReadFailed'), { tone: 'error', body: outcome.error })
       else if (outcome.status === 'empty')
         toast(
           outcome.reason === 'no-notes'
-            ? 'No note text to import'
-            : 'No new memories found in your notes',
+            ? t('settings.advanced.stickyNoNotes')
+            : t('settings.advanced.stickyNoNew'),
           { tone: 'warn' }
         )
       else {
@@ -42,7 +44,10 @@ export function IntegrationsTab(): React.JSX.Element {
         setStickyProfile(outcome.profile)
       }
     } catch (e) {
-      toast('Could not read Sticky Notes', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.stickyCouldNotRead'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setStickyReading(false)
     }
@@ -95,10 +100,14 @@ export function IntegrationsTab(): React.JSX.Element {
       // lands on "Continue as <account>" instead of an empty identifier field.
       const next = await window.omi.gmailSessionConnect(auth.currentUser?.email ?? undefined)
       setGmailStatus(next)
-      if (next.connected) toast('Gmail connected', { tone: 'success' })
-      else if (next.message) toast('Gmail not connected', { tone: 'warn', body: next.message })
+      if (next.connected) toast(t('settings.advanced.gmailConnected'), { tone: 'success' })
+      else if (next.message)
+        toast(t('settings.advanced.gmailNotConnected'), { tone: 'warn', body: next.message })
     } catch (e) {
-      toast('Could not connect Gmail', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.gmailCouldNotConnect'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setGmailBusy(false)
     }
@@ -110,17 +119,23 @@ export function IntegrationsTab(): React.JSX.Element {
     try {
       const res = await window.omi.gmailSessionFetch('newer_than:7d', 25)
       if (res.ok) {
-        toast(`Read ${res.emails.length} recent email${res.emails.length === 1 ? '' : 's'}`, {
-          tone: 'success'
-        })
+        toast(
+          t('settings.advanced.gmailReadCount', {
+            count: res.emails.length,
+            plural: res.emails.length === 1 ? '' : 's'
+          }),
+          {
+            tone: 'success'
+          }
+        )
       } else {
-        toast('Could not read Gmail', { tone: 'warn', body: res.error })
+        toast(t('settings.advanced.gmailCouldNotRead'), { tone: 'warn', body: res.error })
         // Network-probe the session (not the cheap cookie check): a stale-but-present
         // session verifies as disconnected, flipping the row back to a Connect prompt.
         setGmailStatus(await window.omi.gmailSessionVerify())
       }
     } catch (e) {
-      toast('Could not read Gmail', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.gmailCouldNotRead'), { tone: 'error', body: (e as Error).message })
     } finally {
       setGmailFetching(false)
     }
@@ -131,9 +146,12 @@ export function IntegrationsTab(): React.JSX.Element {
     setGmailBusy(true)
     try {
       setGmailStatus(await window.omi.gmailSessionDisconnect())
-      toast('Gmail disconnected', { tone: 'success' })
+      toast(t('settings.advanced.gmailDisconnected'), { tone: 'success' })
     } catch (e) {
-      toast('Could not disconnect', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.gmailCouldNotDisconnect'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setGmailBusy(false)
     }
@@ -143,8 +161,8 @@ export function IntegrationsTab(): React.JSX.Element {
     <>
       <SettingRow
         icon={StickyNote}
-        title="Windows Sticky Notes"
-        subtitle="Reads your Sticky Notes locally and saves durable facts as memories. Your notes are never uploaded — only the synthesized facts."
+        title={t('settings.advanced.integrationsStickyTitle')}
+        subtitle={t('settings.advanced.integrationsStickySubtitle')}
         keywords="sticky notes import integration"
         control={
           <div className="flex items-center gap-2">
@@ -153,7 +171,7 @@ export function IntegrationsTab(): React.JSX.Element {
               disabled={stickyReading || stickyImporting}
               className="btn-ghost disabled:opacity-40"
             >
-              {stickyReading ? 'Reading…' : 'Read notes'}
+              {stickyReading ? t('settings.advanced.reading') : t('settings.advanced.readNotes')}
             </button>
             {stickyMemories && stickyMemories.length > 0 && (
               <button
@@ -162,8 +180,11 @@ export function IntegrationsTab(): React.JSX.Element {
                 className="btn-primary px-4 py-2 disabled:opacity-40"
               >
                 {stickyImporting
-                  ? 'Importing…'
-                  : `Import ${stickyMemories.length} memor${stickyMemories.length === 1 ? 'y' : 'ies'}`}
+                  ? t('settings.advanced.importing')
+                  : t('settings.advanced.importButton', {
+                      count: stickyMemories.length,
+                      plural: stickyMemories.length === 1 ? 'y' : 'ies'
+                    })}
               </button>
             )}
           </div>
@@ -189,15 +210,20 @@ export function IntegrationsTab(): React.JSX.Element {
         <SettingRow
           icon={Mail}
           dot={googleStatus.connected ? 'on' : 'off'}
-          title="Google (Gmail + Calendar)"
+          title={t('settings.advanced.googleTitle')}
           subtitle={
             googleStatus.connected
-              ? `Connected${googleStatus.email ? ` as ${googleStatus.email}` : ''}${
-                  googleStatus.lastSyncAt
-                    ? ` · last sync ${new Date(googleStatus.lastSyncAt).toLocaleString()}`
+              ? t('settings.advanced.googleConnected', {
+                  email: googleStatus.email
+                    ? t('settings.advanced.googleConnectedAs', { email: googleStatus.email })
+                    : '',
+                  sync: googleStatus.lastSyncAt
+                    ? t('settings.advanced.googleLastSync', {
+                        date: new Date(googleStatus.lastSyncAt).toLocaleString()
+                      })
                     : ''
-                }`
-              : 'Turn recent email (subject/sender only) into memories and upcoming events into tasks.'
+                })
+              : t('settings.advanced.googleSubtitleDisconnected')
           }
           keywords="google gmail calendar sync integration"
           control={
@@ -208,14 +234,14 @@ export function IntegrationsTab(): React.JSX.Element {
                   disabled={googleSyncing}
                   className="btn-primary px-4 py-2 disabled:opacity-40"
                 >
-                  {googleSyncing ? 'Syncing…' : 'Sync now'}
+                  {googleSyncing ? t('settings.advanced.syncing') : t('settings.advanced.syncNow')}
                 </button>
                 <button
                   onClick={disconnectGoogle}
                   disabled={googleBusy}
                   className="btn-ghost disabled:opacity-40"
                 >
-                  Disconnect
+                  {t('settings.advanced.disconnect')}
                 </button>
               </div>
             ) : (
@@ -224,7 +250,7 @@ export function IntegrationsTab(): React.JSX.Element {
                 disabled={googleBusy}
                 className="btn-ghost disabled:opacity-40"
               >
-                {googleBusy ? 'Connecting…' : 'Connect'}
+                {googleBusy ? t('settings.advanced.connecting') : t('settings.advanced.connect')}
               </button>
             )
           }
@@ -235,12 +261,11 @@ export function IntegrationsTab(): React.JSX.Element {
         <SettingRow
           icon={Inbox}
           dot={gmailStatus.connected ? 'on' : 'off'}
-          title="Gmail (session)"
+          title={t('settings.advanced.gmailSessionTitle')}
           subtitle={
             gmailStatus.connected
-              ? 'Connected — reads recent mail through your signed-in Google session. No OAuth scopes; sign-in stays inside Omi.'
-              : gmailStatus.message ||
-                'Sign into Google once inside Omi, then read recent mail without restricted-scope OAuth.'
+              ? t('settings.advanced.gmailConnectedSubtitle')
+              : gmailStatus.message || t('settings.advanced.gmailDisconnectedSubtitle')
           }
           keywords="gmail session email inbox connect integration"
           control={
@@ -251,14 +276,16 @@ export function IntegrationsTab(): React.JSX.Element {
                   disabled={gmailFetching}
                   className="btn-primary px-4 py-2 disabled:opacity-40"
                 >
-                  {gmailFetching ? 'Reading…' : 'Fetch recent'}
+                  {gmailFetching
+                    ? t('settings.advanced.reading')
+                    : t('settings.advanced.fetchRecent')}
                 </button>
                 <button
                   onClick={disconnectGmail}
                   disabled={gmailBusy}
                   className="btn-ghost disabled:opacity-40"
                 >
-                  Disconnect
+                  {t('settings.advanced.disconnect')}
                 </button>
               </div>
             ) : (
@@ -267,7 +294,7 @@ export function IntegrationsTab(): React.JSX.Element {
                 disabled={gmailBusy}
                 className="btn-ghost disabled:opacity-40"
               >
-                {gmailBusy ? 'Connecting…' : 'Connect'}
+                {gmailBusy ? t('settings.advanced.connecting') : t('settings.advanced.connect')}
               </button>
             )
           }

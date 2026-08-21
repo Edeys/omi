@@ -27,6 +27,7 @@ import { syncLanguage } from '../../../lib/userProfile'
 import { toast } from '../../../lib/toast'
 import { SettingRow } from '../SettingRow'
 import { Toggle } from '../Toggle'
+import { useTranslation } from '../../../i18n'
 
 const AUTO_DETECT = 'multi'
 // Single-language choices exclude the 'multi' auto-detect sentinel.
@@ -41,6 +42,7 @@ export function TranscriptionTab(): React.JSX.Element {
   )
   // Default ON (gated) — matches the macOS-faithful default; undefined = enabled.
   const [vadGate, setVadGate] = useState(() => getPreferences().vadGateEnabled !== false)
+  const { t } = useTranslation()
 
   const autoDetect = language === AUTO_DETECT
 
@@ -62,26 +64,26 @@ export function TranscriptionTab(): React.JSX.Element {
     <>
       <SettingRow
         icon={Languages}
-        title="Language mode"
-        subtitle="How Omi transcribes what you say. Applies to your next recording session."
+        title={t('settings.transcription.languageModeTitle')}
+        subtitle={t('settings.transcription.languageModeSubtitle')}
         keywords="language transcription auto-detect multilingual single accuracy speech"
       >
         <div className="space-y-2">
           <RadioCard
             selected={autoDetect}
             onSelect={() => applyLanguage(AUTO_DETECT)}
-            title="Auto-detect (multi-language)"
-            subtitle="Detects and transcribes several languages at once — best when you switch languages."
+            title={t('settings.transcription.autoDetectTitle')}
+            subtitle={t('settings.transcription.autoDetectSubtitle')}
           />
           <RadioCard
             selected={!autoDetect}
             onSelect={() => applyLanguage(lastSingle)}
-            title="Single language (better accuracy)"
-            subtitle="Best when you speak one language. Pick it below."
+            title={t('settings.transcription.singleLanguageTitle')}
+            subtitle={t('settings.transcription.singleLanguageSubtitle')}
           >
             {!autoDetect && (
               <div className="mt-3 flex items-center gap-2 text-sm text-text-tertiary">
-                Language
+                {t('settings.transcription.languageLabel')}
                 <select
                   value={language}
                   onChange={(e) => applyLanguage(e.target.value)}
@@ -102,10 +104,16 @@ export function TranscriptionTab(): React.JSX.Element {
       <SettingRow
         icon={Waves}
         dot={vadGate ? 'on' : 'off'}
-        title="Local VAD gate"
-        subtitle="On-device voice-activity detection skips silence before it reaches transcription, reducing usage and cost. Turn off to send all captured audio."
+        title={t('settings.transcription.vadTitle')}
+        subtitle={t('settings.transcription.vadSubtitle')}
         keywords="vad voice activity detection silence gate deepgram cost usage"
-        control={<Toggle on={vadGate} onChange={changeVadGate} label="Local VAD gate" />}
+        control={
+          <Toggle
+            on={vadGate}
+            onChange={changeVadGate}
+            label={t('settings.transcription.vadTitle')}
+          />
+        }
       />
     </>
   )

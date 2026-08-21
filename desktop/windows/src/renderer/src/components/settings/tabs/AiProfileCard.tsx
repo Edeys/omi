@@ -11,6 +11,7 @@
 import { useEffect, useState } from 'react'
 import { UserRound } from 'lucide-react'
 import { SettingRow } from '../SettingRow'
+import { useTranslation } from '../../../i18n'
 import type { AiUserProfileRecord } from '../../../../../shared/types'
 
 export function AiProfileCard(): React.JSX.Element {
@@ -25,6 +26,7 @@ export function AiProfileCard(): React.JSX.Element {
   const [saving, setSaving] = useState(false)
 
   const [confirmingDelete, setConfirmingDelete] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     void window.omi
@@ -46,7 +48,7 @@ export function AiProfileCard(): React.JSX.Element {
     } catch {
       // Never surface a raw Error string (it can echo a backend body / no-data
       // reason). Plain-English line instead.
-      setError("Couldn't generate a profile right now. Make sure you're signed in and try again.")
+      setError(t('settings.advanced.aiProfileGenerateFailed'))
     } finally {
       setGenerating(false)
     }
@@ -70,7 +72,7 @@ export function AiProfileCard(): React.JSX.Element {
       setRecord(next)
       setEditing(false)
     } catch {
-      setError("Couldn't save your changes. Try again.")
+      setError(t('settings.advanced.aiProfileSaveFailed'))
     } finally {
       setSaving(false)
     }
@@ -84,7 +86,7 @@ export function AiProfileCard(): React.JSX.Element {
       const next = await window.omi.aiProfileGetLatest()
       setRecord(next)
     } catch {
-      setError("Couldn't delete the profile. Try again.")
+      setError(t('settings.advanced.aiProfileDeleteFailed'))
     } finally {
       setConfirmingDelete(false)
     }
@@ -93,23 +95,25 @@ export function AiProfileCard(): React.JSX.Element {
   return (
     <SettingRow
       icon={UserRound}
-      title="AI profile"
-      subtitle="A synthesized “about you” summary Omi builds from your memories, tasks, goals, and conversations — used to personalize proactive help."
+      title={t('settings.advanced.aiProfileTitle')}
+      subtitle={t('settings.advanced.aiProfileSubtitle')}
       keywords="ai profile about you dossier synthesized personalize regenerate"
     >
       <div className="space-y-3">
         {loading ? (
-          <p className="text-sm text-text-tertiary">Loading…</p>
+          <p className="text-sm text-text-tertiary">{t('settings.advanced.aiProfileLoading')}</p>
         ) : !record ? (
           // Empty state.
           <div className="space-y-3">
-            <p className="text-sm text-text-tertiary">No profile yet.</p>
+            <p className="text-sm text-text-tertiary">{t('settings.advanced.aiProfileEmpty')}</p>
             <button
               onClick={regenerate}
               disabled={generating}
               className="btn-primary px-4 py-2 disabled:opacity-40"
             >
-              {generating ? 'Generating…' : 'Generate Now'}
+              {generating
+                ? t('settings.advanced.aiProfileGenerating')
+                : t('settings.advanced.aiProfileGenerate')}
             </button>
           </div>
         ) : editing ? (
@@ -127,7 +131,9 @@ export function AiProfileCard(): React.JSX.Element {
                 disabled={saving}
                 className="btn-primary px-4 py-2 disabled:opacity-40"
               >
-                {saving ? 'Saving…' : 'Save'}
+                {saving
+                  ? t('settings.advanced.aiProfileSaving')
+                  : t('settings.advanced.aiProfileSave')}
               </button>
               <button
                 onClick={() => {
@@ -137,7 +143,7 @@ export function AiProfileCard(): React.JSX.Element {
                 disabled={saving}
                 className="btn-ghost disabled:opacity-40"
               >
-                Cancel
+                {t('settings.advanced.aiProfileCancel')}
               </button>
             </div>
           </div>
@@ -148,9 +154,14 @@ export function AiProfileCard(): React.JSX.Element {
               {record.profileText}
             </div>
             <p className="text-xs text-text-tertiary">
-              Last updated: {new Date(record.generatedAt).toLocaleDateString()} · Data sources:{' '}
-              {record.dataSourcesUsed.length}{' '}
-              {record.dataSourcesUsed.length === 1 ? 'item' : 'items'}
+              {t('settings.advanced.aiProfileLastUpdated', {
+                date: new Date(record.generatedAt).toLocaleDateString(),
+                count: record.dataSourcesUsed.length,
+                plural:
+                  record.dataSourcesUsed.length === 1
+                    ? t('settings.advanced.aiProfileItem')
+                    : t('settings.advanced.aiProfileItems')
+              })}
             </p>
             <div className="flex flex-wrap items-center gap-2">
               <button
@@ -158,14 +169,16 @@ export function AiProfileCard(): React.JSX.Element {
                 disabled={generating}
                 className="btn-ghost disabled:opacity-40"
               >
-                {generating ? 'Regenerating…' : 'Regenerate'}
+                {generating
+                  ? t('settings.advanced.aiProfileRegenerating')
+                  : t('settings.advanced.aiProfileRegenerate')}
               </button>
               <button
                 onClick={startEdit}
                 disabled={generating}
                 className="btn-ghost disabled:opacity-40"
               >
-                Edit
+                {t('settings.advanced.aiProfileEdit')}
               </button>
               {confirmingDelete ? (
                 <>
@@ -173,13 +186,13 @@ export function AiProfileCard(): React.JSX.Element {
                     onClick={remove}
                     className="text-sm font-medium text-red-400 hover:text-red-300"
                   >
-                    Confirm delete
+                    {t('settings.advanced.aiProfileConfirmDelete')}
                   </button>
                   <button
                     onClick={() => setConfirmingDelete(false)}
                     className="btn-ghost disabled:opacity-40"
                   >
-                    Cancel
+                    {t('settings.advanced.aiProfileCancel')}
                   </button>
                 </>
               ) : (
@@ -188,7 +201,7 @@ export function AiProfileCard(): React.JSX.Element {
                   disabled={generating}
                   className="text-sm font-medium text-red-400 hover:text-red-300 disabled:opacity-40"
                 >
-                  Delete
+                  {t('settings.advanced.aiProfileDelete')}
                 </button>
               )}
             </div>
