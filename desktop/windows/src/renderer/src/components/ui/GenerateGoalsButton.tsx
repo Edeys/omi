@@ -1,5 +1,6 @@
 import { Sparkles, Loader2 } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import { useTranslation } from '../../i18n'
 
 // Shared "generate goals with AI" button: dark surface background with the
 // accent-colored Sparkles icon + label. Used both on the Goals tab and on the
@@ -10,6 +11,7 @@ export function GenerateGoalsButton(props: {
   label?: string
   className?: string
 }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <button
       type="button"
@@ -25,7 +27,7 @@ export function GenerateGoalsButton(props: {
       ) : (
         <Sparkles className="h-4 w-4" />
       )}
-      {props.label ?? 'Generate goals with AI'}
+      {props.label ?? t('goals.generateButton.defaultLabel')}
     </button>
   )
 }

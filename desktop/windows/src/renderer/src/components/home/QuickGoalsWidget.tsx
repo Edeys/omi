@@ -7,6 +7,7 @@ import { toast } from '../../lib/toast'
 import { GenerateGoalsButton } from '../ui/GenerateGoalsButton'
 import { goalEmoji } from '../../lib/goalEmoji'
 import { isCompleted, progressColor, progressPct } from '../../lib/goalVisuals'
+import { useTranslation } from '../../i18n'
 
 // Compact dashboard surface for the idle Home screen: the active goals with
 // their progress, mirroring the macOS dashboard Goals widget. Reads the same
@@ -25,6 +26,7 @@ type Goal = {
 const MAX_SHOWN = 2
 
 export function QuickGoalsWidget({ onReady }: { onReady?: () => void }): React.JSX.Element | null {
+  const { t } = useTranslation()
   const [goals, setGoals] = useState<Goal[] | null>(null)
   const { pathname } = useLocation()
   // Tell the parent once our data has loaded, so it can reveal both widgets
@@ -98,7 +100,10 @@ export function QuickGoalsWidget({ onReady }: { onReady?: () => void }): React.J
       const res = await omiApi.get('/v1/goals/suggest')
       const s = res.data as { suggested_title?: string; suggested_target?: number | null }
       if (!s?.suggested_title) {
-        toast('No suggestion right now', { tone: 'info', body: 'Omi needs a few memories first.' })
+        toast(t('goals.toasts.notEnoughContext'), {
+          tone: 'info',
+          body: t('goals.toasts.notEnoughContextBody')
+        })
         return
       }
       const target =
@@ -106,7 +111,7 @@ export function QuickGoalsWidget({ onReady }: { onReady?: () => void }): React.J
       await omiApi.post('/v1/goals', { title: s.suggested_title, target_value: target })
       fetchGoals()
     } catch {
-      toast('Could not generate a goal', { tone: 'error' })
+      toast(t('goals.toasts.suggestFailed'), { tone: 'error' })
     } finally {
       setGenerating(false)
     }
@@ -134,7 +139,7 @@ export function QuickGoalsWidget({ onReady }: { onReady?: () => void }): React.J
           <Target className="h-4 w-4 text-white/70" />
         </div>
         <div className="flex flex-1 items-center gap-1.5 text-sm font-medium text-white/85">
-          Goals
+          {t('home.quickGoals.title')}
           <span className="text-white/35">{goals.length}</span>
         </div>
         <ChevronRight className="h-4 w-4 shrink-0 text-white/25 transition-colors group-hover:text-white/50" />
@@ -163,7 +168,9 @@ export function QuickGoalsWidget({ onReady }: { onReady?: () => void }): React.J
           )
         })}
         {goals.length > MAX_SHOWN && (
-          <p className="text-[11px] text-white/35">+{goals.length - MAX_SHOWN} more</p>
+          <p className="text-[11px] text-white/35">
+            {t('home.quickGoals.more', { count: goals.length - MAX_SHOWN })}
+          </p>
         )}
       </div>
     </Link>

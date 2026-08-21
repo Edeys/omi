@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Loader2, Merge } from 'lucide-react'
 import { ModalShell } from './ModalShell'
+import { useTranslation } from '../../i18n'
 
 // Confirm a multi-select merge. Copy matches the Mac alert verbatim. Merge is
 // fire-and-forget on the backend (returns {status:'merging'}, no new id) — the
 // caller refetches the list after onConfirm resolves.
 export function MergeConfirmDialog({
+  // i18n inside
   count,
   onCancel,
   onConfirm
@@ -14,6 +16,7 @@ export function MergeConfirmDialog({
   onCancel: () => void
   onConfirm: () => Promise<void>
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -24,7 +27,7 @@ export function MergeConfirmDialog({
     try {
       await onConfirm()
     } catch (e) {
-      setError((e as Error).message || 'Could not merge conversations')
+      setError((e as Error).message || t('conversations.mergeDialog.couldNotMerge'))
       setBusy(false)
     }
   }
@@ -32,20 +35,19 @@ export function MergeConfirmDialog({
   return (
     <ModalShell onClose={onCancel} labelledBy="merge-title">
       <h2 id="merge-title" className="text-lg font-semibold text-text-primary">
-        Merge {count} conversations?
+        {t('conversations.mergeDialog.title', { count })}
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-text-tertiary">
-        This will combine them into a single conversation and delete the originals. This action
-        cannot be undone.
+        {t('conversations.mergeDialog.description')}
       </p>
       {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
       <div className="mt-6 flex justify-end gap-2">
         <button onClick={onCancel} disabled={busy} className="btn-ghost">
-          Cancel
+          {t('conversations.mergeDialog.cancel')}
         </button>
         <button onClick={() => void confirm()} disabled={busy} className="btn-primary">
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Merge className="h-4 w-4" />}
-          Merge
+          {t('conversations.mergeDialog.merge')}
         </button>
       </div>
     </ModalShell>

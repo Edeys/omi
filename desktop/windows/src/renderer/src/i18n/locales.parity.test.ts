@@ -29,7 +29,13 @@ describe('locale parity', () => {
       'settings.advanced.claude',
       'settings.advanced.exportSuccessLocation',
       'settings.about.versionName',
-      'settings.about.updateErrorMessage'
+      'settings.about.updateErrorMessage',
+      'home.hub.header.discord',
+      'home.hub.chatHistory.defaultAssistant',
+      'conversations.folders.colorValue',
+      'memories.showingFirstManageSuffix',
+      'memories.toasts.deleteFailedSuffix',
+      'conversations.row.chatBadge'
     ])
     const check = (
       enObj: Record<string, unknown>,

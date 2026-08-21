@@ -3,6 +3,7 @@
 // contracts/parity fixtures (see contracts/parity/README.md).
 
 import { startOfLocalDay, startOfDayOffset } from './localDay'
+import { i18n } from '../i18n'
 
 // Re-exported under the Tasks page's existing names; the implementation lives
 // in localDay.ts so the local-midnight rule has one copy.
@@ -31,9 +32,9 @@ export function formatDue(ms: number, now: number = Date.now()): string {
   const d = new Date(ms)
   if (Number.isNaN(d.getTime())) return ''
   const due = startOfDay(d.getTime())
-  if (due === startOfDay(now)) return 'Today'
-  if (due === startOfDayOffset(now, 1)) return 'Tomorrow'
-  if (due === startOfDayOffset(now, -1)) return 'Yesterday'
+  if (due === startOfDay(now)) return i18n.t('tasks.buckets.today')
+  if (due === startOfDayOffset(now, 1)) return i18n.t('tasks.buckets.tomorrow')
+  if (due === startOfDayOffset(now, -1)) return i18n.t('tasks.buckets.yesterday')
   const sameYear = d.getFullYear() === new Date(now).getFullYear()
   return d.toLocaleDateString(undefined, {
     month: 'short',

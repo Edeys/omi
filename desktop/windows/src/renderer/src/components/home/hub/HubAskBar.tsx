@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { ArrowUp, Link as LinkIcon, Loader2, Paperclip } from 'lucide-react'
 import { cn } from '../../../lib/utils'
+import { useTranslation } from '../../../i18n'
 import {
   addAttachments,
   removeAttachment,
@@ -14,11 +15,15 @@ import type { PickedChatFile } from '../../../../../shared/types'
 
 // A one-line summary of what the attachment layer rejected, so files never drop
 // silently (Mac surfaces these). Reasons are ranked by how actionable they are.
-function describeRejections(rejected: { reason: RejectReason }[]): string {
+function describeRejections(
+  rejected: { reason: RejectReason }[],
+  t: (key: string, opts?: Record<string, unknown>) => string
+): string {
   const reasons = new Set(rejected.map((r) => r.reason))
-  if (reasons.has('too_large')) return 'Some files exceed the 25 MB limit.'
-  if (reasons.has('cap_exceeded')) return `You can attach up to ${MAX_CHAT_ATTACHMENTS} files.`
-  return "Some files couldn't be added."
+  if (reasons.has('too_large')) return t('home.hub.rejections.tooLarge')
+  if (reasons.has('cap_exceeded'))
+    return t('home.hub.rejections.capExceeded', { max: MAX_CHAT_ATTACHMENTS })
+  return t('home.hub.rejections.generic')
 }
 
 // The Hub's ask bar. It is the ONLY chat input on the Hub — it re-docks to the
@@ -50,6 +55,7 @@ export function HubAskBar(props: {
 }): React.JSX.Element {
   const { value, onChange, onSubmit, onFocus, sending, connectActive, onToggleConnect, autoFocus } =
     props
+  const { t } = useTranslation()
   const [focused, setFocused] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [rejectNote, setRejectNote] = useState<string | null>(null)
@@ -67,7 +73,7 @@ export function HubAskBar(props: {
   // (over the 4-file cap, over 25 MB, or unreadable) rather than dropping silently.
   const stage = (picked: PickedChatFile[]): void => {
     const { rejected } = addAttachments(picked)
-    setRejectNote(rejected.length > 0 ? describeRejections(rejected) : null)
+    setRejectNote(rejected.length > 0 ? describeRejections(rejected, t) : null)
   }
 
   const pickFiles = async (): Promise<void> => {
@@ -157,7 +163,9 @@ export function HubAskBar(props: {
           onClick={pickFiles}
           disabled={atCap}
           aria-label={
-            atCap ? `Attachment limit reached (${MAX_CHAT_ATTACHMENTS} files)` : 'Attach files'
+            atCap
+              ? t('home.hub.attachLimitReached', { max: MAX_CHAT_ATTACHMENTS })
+              : t('home.hub.attachFiles')
           }
           className={cn(
             'focus-ring mr-1 flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full',
@@ -190,8 +198,8 @@ export function HubAskBar(props: {
             // the keystroke the user meant for the IME.
             if (e.key === 'Enter' && !e.nativeEvent.isComposing) onSubmit()
           }}
-          placeholder="Ask omi anything"
-          aria-label="Ask omi anything"
+          placeholder={t('home.hub.placeholder')}
+          aria-label={t('home.hub.askAriaLabel')}
           className="mr-3 min-w-0 flex-1 border-0 bg-transparent text-[15px] text-home-ink placeholder:text-home-muted focus:outline-none focus:ring-0"
         />
 
@@ -209,7 +217,7 @@ export function HubAskBar(props: {
           <div
             role="status"
             aria-busy="true"
-            aria-label="Omi is replying"
+            aria-label={t('home.hub.sendingLabel')}
             className="flex h-[34px] w-[34px] shrink-0 items-center justify-center"
           >
             <Loader2 className="h-4 w-4 animate-spin text-home-muted" strokeWidth={2.5} />
@@ -218,7 +226,7 @@ export function HubAskBar(props: {
           <button
             type="button"
             onClick={onSubmit}
-            aria-label="Send"
+            aria-label={t('home.legacyChat.send')}
             className="focus-ring flex h-[34px] w-[34px] shrink-0 cursor-pointer items-center justify-center rounded-full bg-white text-home-paper transition-opacity duration-150 hover:opacity-90"
           >
             <ArrowUp className="h-[13px] w-[13px]" strokeWidth={2.75} />
@@ -237,7 +245,7 @@ export function HubAskBar(props: {
             )}
           >
             <LinkIcon className="h-[11px] w-[11px] shrink-0" strokeWidth={2.5} />
-            Connect
+            {t('home.hub.connect')}
           </button>
         )}
       </div>

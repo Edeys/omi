@@ -448,5 +448,481 @@
     "common": {
         "english": "English",
         "vietnamese": "Tiếng Việt"
+    },
+    "home": {
+        "greeting": "Hi, {{name}}",
+        "legacyChat": {
+            "placeholder": "Ask Omi…",
+            "voiceHide": "Hide voice session",
+            "voiceTalk": "Talk with Omi",
+            "send": "Send",
+            "latest": "Latest"
+        },
+        "hub": {
+            "placeholder": "Ask omi anything",
+            "askAriaLabel": "Ask omi anything",
+            "emptyTitle": "Ask omi anything",
+            "emptySubtitle": "It can see your conversations, tasks, memories, and screen history.",
+            "closeChat": "Close chat",
+            "closeChatTitle": "Close chat (Esc)",
+            "connect": "Connect",
+            "attachFiles": "Attach files",
+            "attachLimitReached": "Attachment limit reached ({{max}} files)",
+            "sendingLabel": "Omi is replying",
+            "rejections": {
+                "tooLarge": "Some files exceed the 25 MB limit.",
+                "capExceeded": "You can attach up to {{max}} files.",
+                "generic": "Some files couldn't be added."
+            },
+            "header": {
+                "capture": "Capture",
+                "listening": "Listening",
+                "captureTurnOff": "Turn screen capture off",
+                "captureTurnOn": "Turn screen capture on",
+                "listeningStop": "Stop listening",
+                "listeningStart": "Start listening",
+                "referFriend": "Refer a Friend",
+                "discord": "Discord",
+                "settings": "Settings",
+                "menuLabel": "Home menu"
+            },
+            "chatHistory": {
+                "title": "Chats",
+                "searchPlaceholder": "Search chats",
+                "newChat": "New chat",
+                "starredOnly": "Show starred only",
+                "showAll": "Show all chats",
+                "noMatching": "No matching chats",
+                "noChats": "No chats yet",
+                "syncedChat": "Synced Chat",
+                "syncedTooltip": "Synced with the mobile app",
+                "synced": "Synced",
+                "backToSynced": "Back to Synced Chat",
+                "dismiss": "Dismiss",
+                "retry": "Retry",
+                "selectAssistant": "Select Assistant",
+                "defaultAssistant": "omi",
+                "defaultAssistantSub": "Default assistant"
+            }
+        },
+        "stats": {
+            "conversations": "Conversations",
+            "tasks": "Tasks",
+            "memories": "Memories",
+            "screenshots": "Screenshots"
+        },
+        "quickTasks": {
+            "title": "Tasks",
+            "more": "+{{count}} more",
+            "overdue": "Overdue",
+            "today": "Today",
+            "tomorrow": "Tomorrow"
+        },
+        "quickGoals": {
+            "title": "Goals",
+            "more": "+{{count}} more"
+        }
+    },
+    "memories": {
+        "title": "Memories",
+        "loading": "Loading…",
+        "headerCount": "{{count}} memor{{plural}}",
+        "headerCountSingle": "{{count}} memory",
+        "headerCountPlural": "{{count}} memories",
+        "loadingAll": "Loading all…",
+        "shownCount": "{{count}} shown",
+        "selectedCount": "{{count}} selected",
+        "actions": {
+            "select": "Select",
+            "selectTitle": "Select & delete memories",
+            "new": "New",
+            "newTitle": "Add a memory",
+            "done": "Done",
+            "filterPlaceholder": "Filter by text (e.g. local projects include)…",
+            "selectJunk": "Select file-index junk",
+            "selectAll": "Select all ({{count}})",
+            "selectAllMatching": "Select all matching ({{count}})",
+            "clear": "Clear",
+            "deleting": "Deleting {{deleted}}/{{total}}…",
+            "stop": "Stop",
+            "deleteSelected": "Delete selected ({{count}})"
+        },
+        "graph": {
+            "building": "Building your memory map…",
+            "open": "Open the full-screen brain map"
+        },
+        "compose": {
+            "placeholder": "Something Omi should remember about you…",
+            "hint": "⌘/Ctrl + Enter to save",
+            "cancel": "Cancel",
+            "save": "Save"
+        },
+        "empty": {
+            "title": "No memories yet",
+            "description": "Memories are distilled insights from your conversations. They will show up here as Omi learns about you."
+        },
+        "noResults": {
+            "title": "No results",
+            "description": "Try a different search or filter.",
+            "clearFilters": "Clear filters"
+        },
+        "showingFirst": "Showing first {{cap}} of {{count}}.",
+        "showingFirstManage": "Showing first {{cap}} of {{count}}. Selection and delete still apply to all {{filtered}} {{matching}}.",
+        "showingFirstManageSuffix": "{{count}}",
+        "matching": "matching",
+        "allMatching": "matching",
+        "error": "Failed to load memories: {{error}}",
+        "toasts": {
+            "created": "Memory created",
+            "createFailed": "Could not create memory",
+            "updateFailed": "Could not update memory",
+            "visibilityFailed": "Could not change visibility",
+            "deleteFailed": "Could not delete memory",
+            "loadAllFailed": "Could not load all memories",
+            "deletedCount": "Deleted {{deleted}} of {{total}}",
+            "deleteFailedSuffix": " — {{error}}."
+        },
+        "confirmDeleteSelected": "Delete {{count}} selected memories? The server allows ~60 deletes/hour, so this pauses when the limit is hit (you can stop and resume anytime). This cannot be undone.",
+        "filter": {
+            "searchPlaceholder": "Search memories…",
+            "allCategories": "All categories",
+            "clear": "Clear",
+            "layerDefault": "Default",
+            "layerShortTerm": "Short-term",
+            "layerLongTerm": "Long-term",
+            "layerArchive": "Archive"
+        },
+        "card": {
+            "protected": "Protected memory",
+            "newBadge": "New",
+            "memoryDetails": "Memory details",
+            "source": "Source",
+            "category": "Category",
+            "layer": "Layer",
+            "device": "Device",
+            "confidence": "Confidence",
+            "app": "App",
+            "created": "Created",
+            "tags": "Tags"
+        },
+        "detail": {
+            "title": "Memory details",
+            "public": "Public",
+            "private": "Private",
+            "toggleVisibility": "Toggle public visibility",
+            "delete": "Delete memory",
+            "close": "Close",
+            "learnedFrom": "Learned from",
+            "confidence": "Confidence",
+            "sourceApp": "Source app",
+            "device": "Device",
+            "created": "Created",
+            "tags": "Tags",
+            "viewSource": "View source conversation",
+            "clickToEdit": "Click to edit",
+            "save": "Save",
+            "cancel": "Cancel",
+            "protected": "Protected memory"
+        },
+        "undo": {
+            "deleted": "Memory deleted",
+            "undo": "Undo",
+            "dismiss": "Dismiss and delete now"
+        }
+    },
+    "tasks": {
+        "title": "Tasks",
+        "loading": "Loading…",
+        "subtitle": "{{open}} open · {{done}} done",
+        "filters": {
+            "open": "open",
+            "done": "done",
+            "all": "all"
+        },
+        "new": "New",
+        "newTitle": "Add a task",
+        "refreshTitle": "Refresh",
+        "compose": {
+            "placeholder": "What needs to get done?",
+            "dueLabel": "Due date",
+            "cancel": "Cancel",
+            "addTask": "Add task"
+        },
+        "errorTitle": "Couldn’t load your tasks.",
+        "tryAgain": "Try again",
+        "empty": {
+            "title": "No tasks yet",
+            "description": "Action items from your conversations show up here, alongside any tasks you add. Click New to create one."
+        },
+        "allCaughtUp": "All caught up.",
+        "buckets": {
+            "today": "Today",
+            "tomorrow": "Tomorrow",
+            "later": "Later",
+            "nodate": "No due date",
+            "completed": "Completed",
+            "yesterday": "Yesterday"
+        },
+        "row": {
+            "markDone": "Mark as done",
+            "markNotDone": "Mark as not done",
+            "clickToEdit": "Click to edit",
+            "setDueDate": "Set due date",
+            "clearDueDate": "Clear due date",
+            "setDate": "Set date",
+            "delete": "Delete task"
+        },
+        "toasts": {
+            "updateFailed": "Could not update task",
+            "deleteFailed": "Could not delete task",
+            "createFailed": "Could not create task"
+        },
+        "deleteFailed": "Could not delete task"
+    },
+    "insights": {
+        "title": "Insights",
+        "loading": "Loading…",
+        "subtitle": "{{total}} total",
+        "subtitleWithUnread": "{{total}} total · {{unread}} unread",
+        "actions": {
+            "markAllRead": "Mark all read",
+            "markAllReadTitle": "Mark all read",
+            "clear": "Clear",
+            "clearTitle": "Clear history",
+            "refreshTitle": "Refresh"
+        },
+        "searchPlaceholder": "Search insights…",
+        "tabs": {
+            "all": "All",
+            "productivity": "Productivity",
+            "communication": "Communication",
+            "learning": "Learning",
+            "health": "Health",
+            "other": "Other"
+        },
+        "row": {
+            "unreadLabel": "Unread",
+            "why": "Why",
+            "confidence": "Confidence: {{percent}}%",
+            "dismiss": "Dismiss",
+            "categoryProductivity": "Productivity",
+            "categoryCommunication": "Communication",
+            "categoryLearning": "Learning",
+            "categoryHealth": "Health",
+            "categoryOther": "Other"
+        },
+        "time": {
+            "justNow": "just now",
+            "minutesAgo": "{{count}}m ago",
+            "hoursAgo": "{{count}}h ago",
+            "daysAgo": "{{count}}d ago"
+        },
+        "empty": {
+            "title": "No insights yet",
+            "description": "Omi surfaces timely, private suggestions as you work. They'll collect here so you can revisit them anytime."
+        },
+        "noMatch": "No insights match your filters.",
+        "toasts": {
+            "dismissFailed": "Could not dismiss insight",
+            "markAllFailed": "Could not mark all read",
+            "clearFailed": "Could not clear history"
+        },
+        "confirmClear": "Clear all insight history? This cannot be undone."
+    },
+    "goals": {
+        "title": "Goals",
+        "loading": "Loading…",
+        "subtitle": "{{active}} active · {{done}} completed",
+        "filters": {
+            "active": "Active",
+            "completed": "Completed",
+            "all": "All"
+        },
+        "actions": {
+            "suggest": "Suggest",
+            "new": "New",
+            "newTitle": "Add a goal",
+            "refreshTitle": "Refresh"
+        },
+        "candidate": {
+            "suggested": "Suggested goal",
+            "target": "Target {{target}}",
+            "add": "Add this goal",
+            "another": "Another",
+            "dismissTitle": "Dismiss",
+            "dismissLabel": "Dismiss suggestion"
+        },
+        "compose": {
+            "placeholder": "What do you want to achieve?",
+            "targetPlaceholder": "Target (1)",
+            "unitPlaceholder": "Unit (e.g. books)",
+            "cancel": "Cancel",
+            "addGoal": "Add goal"
+        },
+        "errorTitle": "Couldn’t load your goals.",
+        "tryAgain": "Try again",
+        "empty": {
+            "title": "No goals yet",
+            "description": "Set a goal to track progress over time. Click New to create one."
+        },
+        "nothingHere": "Nothing here yet.",
+        "card": {
+            "reopen": "Reopen goal",
+            "markComplete": "Mark as complete",
+            "clickToEdit": "Click to edit",
+            "updateProgress": "Update progress",
+            "getInsight": "Get goal insight",
+            "delete": "Delete goal",
+            "targetFirst": "Set a target first",
+            "targetFirstBody": "Goals complete when their progress reaches the target."
+        },
+        "toasts": {
+            "updateFailed": "Could not update goal",
+            "progressFailed": "Could not update progress",
+            "deleteFailed": "Could not delete goal",
+            "createFailed": "Could not create goal",
+            "suggestFailed": "Could not suggest a goal",
+            "suggestRetry": "Try again in a moment.",
+            "notEnoughContext": "Not enough context yet",
+            "notEnoughContextBody": "Omi needs a few memories, conversations, or tasks before it can suggest a goal.",
+            "signIn": "Sign in to suggest a goal",
+            "addFailed": "Could not add goal",
+            "goalAdded": "Goal added ✨"
+        },
+        "sections": {
+            "active": "Active",
+            "completed": "Completed"
+        },
+        "insightPanel": {
+            "title": "Goal Insight",
+            "close": "Close",
+            "thisWeeksAction": "This week's action",
+            "noInsight": "No insight yet. Add a few more conversations and check back.",
+            "loading": "Getting personalized insight…",
+            "notFound": "This goal no longer exists. It may have been deleted.",
+            "ratelimit": "You're asking for insights a little fast. Try again in a moment.",
+            "retry": "Retry",
+            "refresh": "Refresh",
+            "refreshTitle": "Get a fresh insight",
+            "done": "Done"
+        },
+        "generateButton": {
+            "defaultLabel": "Generate goals with AI"
+        }
+    },
+    "conversations": {
+        "title": "Conversations",
+        "loading": "Loading…",
+        "subtitle": "{{count}} conversation{{plural}}",
+        "subtitleOne": "{{count}} conversation",
+        "new": "New",
+        "newTitle": "Start a live conversation",
+        "searchPlaceholder": "Search conversations…",
+        "searchClear": "Clear",
+        "typeTabs": {
+            "all": "All",
+            "chats": "Chats",
+            "recordings": "Recordings"
+        },
+        "dateFilter": {
+            "title": "Filter by date",
+            "label": "Date",
+            "clear": "Clear",
+            "dateRange": "Date range",
+            "from": "From",
+            "to": "To"
+        },
+        "select": {
+            "select": "Select",
+            "done": "Done",
+            "title": "Select conversations"
+        },
+        "folders": {
+            "all": "All",
+            "starred": "Starred",
+            "newFolder": "New folder",
+            "editFolder": "Edit {{name}}",
+            "editTitle": "Edit folder",
+            "newTitle": "New folder",
+            "nameLabel": "Name",
+            "namePlaceholder": "Folder name",
+            "colorLabel": "Color",
+            "colorValue": "Color {{color}}",
+            "delete": "Delete",
+            "cancel": "Cancel",
+            "create": "Create",
+            "save": "Save",
+            "deleteFolder": "Delete folder",
+            "deleteConfirmTitle": "Delete “{{name}}”?",
+            "deleteConfirmDesc": "The folder will be removed. Its conversations won’t be deleted — they’ll just be unfiled.",
+            "couldNotSave": "Could not save folder",
+            "couldNotDelete": "Could not delete folder"
+        },
+        "backfill": {
+            "syncing": "Syncing past recordings… {{done}}/{{total}}",
+            "onlyOnDevice": "{{count}} past recording{{plural}} {{verb}} only on this device",
+            "onlyOnDeviceOne": "{{count}} past recording is only on this device",
+            "hourlyLimit": "hourly sync limit reached, run again later",
+            "action": "Sync past recordings"
+        },
+        "error": "Cloud conversations: {{error}}",
+        "empty": {
+            "noMatchTitle": "No matching conversations",
+            "noConversationsTitle": "No conversations yet",
+            "noMatchDesc": "Try a different search or filter.",
+            "noConversationsDesc": "Start a recording to capture audio and screen context. Your conversations will appear here.",
+            "clearFilters": "Clear filters",
+            "startRecording": "Start recording",
+            "startRecordingTitle": "Start a live conversation"
+        },
+        "sections": {
+            "today": "Today",
+            "yesterday": "Yesterday"
+        },
+        "undo": {
+            "willDelete": "{{count}} conversation{{plural}} will be deleted in 5s",
+            "willDeleteOne": "{{count}} conversation will be deleted in 5s",
+            "undo": "Undo"
+        },
+        "selectionBar": {
+            "selected": "{{count}} selected",
+            "selectAll": "Select all",
+            "deselectAll": "Deselect all",
+            "merge": "Merge",
+            "mergeTitle": "Merge into one conversation",
+            "mergeDisabled": "Select 2+ synced conversations to merge",
+            "delete": "Delete"
+        },
+        "mergeDialog": {
+            "title": "Merge {{count}} conversations?",
+            "description": "This will combine them into a single conversation and delete the originals. This action cannot be undone.",
+            "cancel": "Cancel",
+            "merge": "Merge",
+            "couldNotMerge": "Could not merge conversations"
+        },
+        "row": {
+            "moveToFolder": "Move to folder",
+            "rename": "Rename",
+            "delete": "Delete",
+            "star": "Star",
+            "unstar": "Unstar",
+            "chatBadge": "Chat",
+            "syncPending": "Sync pending",
+            "syncFailed": "Sync failed",
+            "notSynced": "Not synced",
+            "retry": "Retry",
+            "processing": "Processing",
+            "loading": "loading…"
+        },
+        "contextMenu": {
+            "editTitle": "Edit title",
+            "moveToFolder": "Move to folder",
+            "delete": "Delete"
+        },
+        "chat": {
+            "copyMessage": "Copy message",
+            "copied": "Copied",
+            "processing": "Processing"
+        }
     }
 }

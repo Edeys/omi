@@ -8,6 +8,7 @@ import { TasksGoalsToggle } from '../components/layout/TasksGoalsToggle'
 import { EmptyState } from '../components/ui/EmptyState'
 import { toast } from '../lib/toast'
 import { bucketOf, formatDue, startOfDay, startOfDayOffset, type Bucket } from '../lib/taskBuckets'
+import { useTranslation } from '../i18n'
 import type { ActionItemRecord } from '../../../shared/types'
 import type { Conversation as CloudConversation } from '../lib/omiApi.generated'
 
@@ -77,12 +78,6 @@ function isOverdue(t: ActionItemRecord): boolean {
 }
 
 const BUCKET_ORDER: Bucket[] = ['today', 'tomorrow', 'later', 'nodate']
-const BUCKET_LABEL: Record<Bucket, string> = {
-  today: 'Today',
-  tomorrow: 'Tomorrow',
-  later: 'Later',
-  nodate: 'No due date'
-}
 
 // Move the keyboard selection across the flat, rendered task order. Clamps at the
 // ends (no wrap) and, when nothing is selected yet, Down picks the first row and Up
@@ -100,6 +95,7 @@ function moveSelection(
 }
 
 export function Tasks(): React.JSX.Element {
+  const { t } = useTranslation()
   const { pathname } = useLocation()
   // This panel stays mounted while the user is on another tab, so "mounted" is not
   // "on screen". Same signal the Conversations panel gates its fetches on.
@@ -212,42 +208,42 @@ export function Tasks(): React.JSX.Element {
   // Thin mutations: main owns the optimistic write + revert-on-failure and fires
   // `onTasksChanged`, which re-reads the list. All mutations require a synced row
   // (non-null backendId); the caller gates on that before invoking these.
-  const toggleItem = async (t: ActionItemRecord): Promise<void> => {
-    if (!t.backendId) return
-    markBusy(t.id, true)
+  const toggleItem = async (task: ActionItemRecord): Promise<void> => {
+    if (!task.backendId) return
+    markBusy(task.id, true)
     try {
-      await window.omi.tasksToggle({ backendId: t.backendId, completed: !t.completed })
+      await window.omi.tasksToggle({ backendId: task.backendId, completed: !task.completed })
     } catch (e) {
-      toast('Could not update task', { tone: 'error', body: apiError(e) })
+      toast(t('tasks.toasts.updateFailed'), { tone: 'error', body: apiError(e) })
     } finally {
-      markBusy(t.id, false)
+      markBusy(task.id, false)
     }
   }
 
   const updateItem = async (
-    t: ActionItemRecord,
+    task: ActionItemRecord,
     fields: Parameters<typeof window.omi.tasksUpdate>[0]['fields']
   ): Promise<void> => {
-    if (!t.backendId) return
-    markBusy(t.id, true)
+    if (!task.backendId) return
+    markBusy(task.id, true)
     try {
-      await window.omi.tasksUpdate({ backendId: t.backendId, fields })
+      await window.omi.tasksUpdate({ backendId: task.backendId, fields })
     } catch (e) {
-      toast('Could not update task', { tone: 'error', body: apiError(e) })
+      toast(t('tasks.toasts.updateFailed'), { tone: 'error', body: apiError(e) })
     } finally {
-      markBusy(t.id, false)
+      markBusy(task.id, false)
     }
   }
 
-  const deleteItem = async (t: ActionItemRecord): Promise<void> => {
-    if (!t.backendId) return
-    markBusy(t.id, true)
+  const deleteItem = async (task: ActionItemRecord): Promise<void> => {
+    if (!task.backendId) return
+    markBusy(task.id, true)
     try {
-      await window.omi.tasksDelete({ backendId: t.backendId })
+      await window.omi.tasksDelete({ backendId: task.backendId })
     } catch (e) {
-      toast('Could not delete task', { tone: 'error', body: apiError(e) })
+      toast(t('tasks.toasts.deleteFailed'), { tone: 'error', body: apiError(e) })
     } finally {
-      markBusy(t.id, false)
+      markBusy(task.id, false)
     }
   }
 
@@ -263,25 +259,25 @@ export function Tasks(): React.JSX.Element {
       setDraft('')
       setDraftDue('')
     } catch (e) {
-      toast('Could not create task', { tone: 'error', body: apiError(e) })
+      toast(t('tasks.toasts.createFailed'), { tone: 'error', body: apiError(e) })
     } finally {
       setSaving(false)
     }
   }
 
-  const commitEdit = (t: ActionItemRecord): void => {
+  const commitEdit = (task: ActionItemRecord): void => {
     const text = editDraft.trim()
     setEditingId(null)
-    if (text && text !== t.description) {
-      void updateItem(t, { description: text })
+    if (text && text !== task.description) {
+      void updateItem(task, { description: text })
     }
   }
 
   // Open the inline description editor for a row. Shared by the row's click-to-edit
   // and the keyboard Enter binding so both use the one edit-open path.
-  const startEdit = (t: ActionItemRecord): void => {
-    setEditDraft(t.description)
-    setEditingId(t.id)
+  const startEdit = (task: ActionItemRecord): void => {
+    setEditDraft(task.description)
+    setEditingId(task.id)
   }
 
   const openCount = useMemo(() => items.filter((t) => !t.completed).length, [items])
@@ -500,45 +496,45 @@ export function Tasks(): React.JSX.Element {
     return () => document.removeEventListener('keydown', handler)
   }, [])
 
-  const renderRow = (t: ActionItemRecord): React.JSX.Element => {
+  const renderRow = (row: ActionItemRecord): React.JSX.Element => {
     // A freshly-created row has backendId:null for a sub-second window until its
     // background POST + markSynced lands; treat that like the in-flight busy state
     // so its controls can't fire a mutation with no backendId.
-    const isBusy = busy.has(t.id) || !t.backendId
-    const conv = t.conversationId ? convs[t.conversationId] : undefined
-    const overdue = isOverdue(t)
-    const isSelected = keyboardSelectedTaskId === t.id
+    const isBusy = busy.has(row.id) || !row.backendId
+    const conv = row.conversationId ? convs[row.conversationId] : undefined
+    const overdue = isOverdue(row)
+    const isSelected = keyboardSelectedTaskId === row.id
     return (
       <li
-        key={t.id}
-        data-task-id={t.id}
+        key={row.id}
+        data-task-id={row.id}
         data-selected={isSelected ? 'true' : undefined}
         className={`surface-card group flex items-start gap-3 p-4 ${
           isSelected ? 'ring-1 ring-white/40' : ''
         }`}
       >
         <button
-          onClick={() => void toggleItem(t)}
+          onClick={() => void toggleItem(row)}
           disabled={isBusy}
-          aria-label={t.completed ? 'Mark as not done' : 'Mark as done'}
+          aria-label={row.completed ? t('tasks.row.markNotDone') : t('tasks.row.markDone')}
           className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-all duration-200 ${
-            t.completed
+            row.completed
               ? 'border-white/30 bg-white/15 text-white'
               : 'border-white/20 hover:border-white/45'
           } ${isBusy ? 'opacity-50' : ''}`}
         >
-          {t.completed && <Check className="h-3.5 w-3.5" />}
+          {row.completed && <Check className="h-3.5 w-3.5" />}
         </button>
 
         <div className="min-w-0 flex-1">
-          {editingId === t.id ? (
+          {editingId === row.id ? (
             <input
               autoFocus
               value={editDraft}
               onChange={(e) => setEditDraft(e.target.value)}
-              onBlur={() => commitEdit(t)}
+              onBlur={() => commitEdit(row)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') commitEdit(t)
+                if (e.key === 'Enter') commitEdit(row)
                 else if (e.key === 'Escape') setEditingId(null)
               }}
               className="w-full border-0 border-b border-white/25 bg-transparent pb-0.5 text-sm text-white focus:border-white/60 focus:outline-none focus:ring-0"
@@ -547,41 +543,41 @@ export function Tasks(): React.JSX.Element {
             <button
               onClick={() => {
                 if (isBusy) return
-                startEdit(t)
+                startEdit(row)
               }}
-              title="Click to edit"
+              title={t('tasks.row.clickToEdit')}
               className={`block w-full text-left text-sm leading-relaxed ${
-                t.completed ? 'text-white/40 line-through' : 'text-white/90'
+                row.completed ? 'text-white/40 line-through' : 'text-white/90'
               }`}
             >
-              {t.description}
+              {row.description}
             </button>
           )}
 
           <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[11px] text-white/45">
-            {dueEditingId === t.id ? (
+            {dueEditingId === row.id ? (
               <span className="inline-flex items-center gap-1">
                 <input
                   type="date"
                   autoFocus
-                  value={msToDateInput(t.dueAt)}
+                  value={msToDateInput(row.dueAt)}
                   onChange={(e) => {
                     const ms = dateInputToMs(e.target.value)
-                    void updateItem(t, ms != null ? { dueAt: ms } : { clearDueAt: true })
+                    void updateItem(row, ms != null ? { dueAt: ms } : { clearDueAt: true })
                     setDueEditingId(null)
                   }}
                   onBlur={() => setDueEditingId(null)}
                   className="rounded-md border border-white/20 bg-black/30 px-1.5 py-0.5 text-[11px] text-white [color-scheme:dark] focus:border-white/50 focus:outline-none"
                 />
-                {t.dueAt != null && (
+                {row.dueAt != null && (
                   <button
                     onMouseDown={(e) => {
                       e.preventDefault()
-                      void updateItem(t, { clearDueAt: true })
+                      void updateItem(row, { clearDueAt: true })
                       setDueEditingId(null)
                     }}
                     className="text-white/40 hover:text-white/70"
-                    title="Clear due date"
+                    title={t('tasks.row.clearDueDate')}
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -590,25 +586,25 @@ export function Tasks(): React.JSX.Element {
             ) : (
               <button
                 onClick={() => {
-                  if (!isBusy) setDueEditingId(t.id)
+                  if (!isBusy) setDueEditingId(row.id)
                 }}
                 className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 transition-colors hover:bg-white/5 ${
-                  t.dueAt != null
+                  row.dueAt != null
                     ? overdue
                       ? 'text-rose-300/90'
                       : 'text-white/65'
                     : 'text-white/35'
                 }`}
-                title="Set due date"
+                title={t('tasks.row.setDueDate')}
               >
                 <Calendar className="h-3 w-3" />
-                {t.dueAt != null ? formatDue(t.dueAt) : 'Set date'}
+                {row.dueAt != null ? formatDue(row.dueAt) : t('tasks.row.setDate')}
               </button>
             )}
 
             {conv && (
               <Link
-                to={`/conversations/${t.conversationId}`}
+                to={`/conversations/${row.conversationId}`}
                 className="inline-flex items-center gap-1.5 truncate hover:text-white/70"
               >
                 {conv.emoji && <span>{conv.emoji}</span>}
@@ -619,11 +615,11 @@ export function Tasks(): React.JSX.Element {
         </div>
 
         <button
-          onClick={() => void deleteItem(t)}
+          onClick={() => void deleteItem(row)}
           disabled={isBusy}
           className="mt-0.5 shrink-0 rounded-md p-1 text-white/30 opacity-0 transition-all hover:bg-white/5 hover:text-rose-300/80 group-hover:opacity-100 disabled:opacity-0"
-          title="Delete task"
-          aria-label="Delete task"
+          title={t('tasks.row.delete')}
+          aria-label={t('tasks.row.delete')}
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -634,9 +630,11 @@ export function Tasks(): React.JSX.Element {
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title="Tasks"
+        title={t('tasks.title')}
         titleSlot={<TasksGoalsToggle />}
-        subtitle={loading ? 'Loading…' : `${openCount} open · ${doneCount} done`}
+        subtitle={
+          loading ? t('tasks.loading') : t('tasks.subtitle', { open: openCount, done: doneCount })
+        }
         actions={
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-2xl border border-white/10 bg-black/20 p-1">
@@ -650,23 +648,23 @@ export function Tasks(): React.JSX.Element {
                       : 'text-white/55 hover:bg-white/5 hover:text-white/80'
                   }`}
                 >
-                  {f}
+                  {t(`tasks.filters.${f}`)}
                 </button>
               ))}
             </div>
             <button
               onClick={() => setComposing((c) => !c)}
               className="btn-primary px-3 py-2"
-              title="Add a task"
+              title={t('tasks.newTitle')}
             >
               <Plus className="h-4 w-4" />
-              New
+              {t('tasks.new')}
             </button>
             <button
               onClick={onRefresh}
               disabled={refreshing || loading}
               className="btn-ghost px-3 py-2 disabled:opacity-50"
-              title="Refresh"
+              title={t('tasks.refreshTitle')}
             >
               <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </button>
@@ -691,7 +689,7 @@ export function Tasks(): React.JSX.Element {
                     setDraftDue('')
                   }
                 }}
-                placeholder="What needs to get done?"
+                placeholder={t('tasks.compose.placeholder')}
                 className="input-field"
               />
               <div className="mt-3 flex items-center gap-2">
@@ -713,14 +711,18 @@ export function Tasks(): React.JSX.Element {
                   className="btn-ghost ml-auto px-3 py-2"
                   disabled={saving}
                 >
-                  Cancel
+                  {t('tasks.compose.cancel')}
                 </button>
                 <button
                   onClick={saveNew}
                   disabled={saving || !draft.trim()}
                   className="btn-primary px-4 py-2 disabled:opacity-40"
                 >
-                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Add task'}
+                  {saving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    t('tasks.compose.addTask')
+                  )}
                 </button>
               </div>
             </div>
@@ -743,7 +745,7 @@ export function Tasks(): React.JSX.Element {
 
         {error && (
           <div className="surface-panel mb-5 px-4 py-3 text-sm text-white/60">
-            <p className="text-white/80">Couldn’t load your tasks.</p>
+            <p className="text-white/80">{t('tasks.errorTitle')}</p>
             <div className="mt-2 flex items-center gap-3">
               <button
                 onClick={() => {
@@ -754,7 +756,7 @@ export function Tasks(): React.JSX.Element {
                 className="btn-ghost px-3 py-1.5 text-xs"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
-                Try again
+                {t('tasks.tryAgain')}
               </button>
               <span className="text-xs text-white/35">{error}</span>
             </div>
@@ -764,15 +766,15 @@ export function Tasks(): React.JSX.Element {
         {!loading && !error && items.length === 0 && !composing && (
           <EmptyState
             icon={ListChecks}
-            title="No tasks yet"
-            description="Action items from your conversations show up here, alongside any tasks you add. Click New to create one."
+            title={t('tasks.empty.title')}
+            description={t('tasks.empty.description')}
           />
         )}
 
         {!loading && items.length > 0 && visible.length === 0 && (
           <div className="flex flex-col items-center justify-center pt-16 text-center text-white/55">
             <Check className="mb-3 h-10 w-10 opacity-40" />
-            <p className="text-sm">All caught up.</p>
+            <p className="text-sm">{t('tasks.allCaughtUp')}</p>
           </div>
         )}
 
@@ -781,7 +783,7 @@ export function Tasks(): React.JSX.Element {
             {openGroups.map((g) => (
               <section key={g.bucket}>
                 <h2 className="mb-2 flex items-center gap-2 px-1 text-xs font-semibold uppercase tracking-wide text-white/40">
-                  {BUCKET_LABEL[g.bucket]}
+                  {t(`tasks.buckets.${g.bucket}`)}
                   <span className="text-white/25">{g.items.length}</span>
                 </h2>
                 <ul className="space-y-2">{g.items.map(renderRow)}</ul>
@@ -790,7 +792,7 @@ export function Tasks(): React.JSX.Element {
             {doneItems.length > 0 && (
               <section>
                 <h2 className="mb-2 flex items-center gap-2 px-1 text-xs font-semibold uppercase tracking-wide text-white/40">
-                  Completed
+                  {t('tasks.buckets.completed')}
                   <span className="text-white/25">{doneItems.length}</span>
                 </h2>
                 <ul className="space-y-2">{doneItems.map(renderRow)}</ul>

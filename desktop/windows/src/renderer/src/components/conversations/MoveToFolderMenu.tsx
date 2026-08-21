@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { FolderInput } from 'lucide-react'
 import type { ConversationFolder } from '../../../../shared/types'
 import { FolderPickerList } from './FolderPickerList'
+import { useTranslation } from '../../i18n'
 
 const MENU_WIDTH = 208 // px — must match the w-52 below
 const GAP = 6 // px between the trigger and the panel
@@ -19,6 +20,7 @@ const EDGE = 8 // px minimum distance from the viewport edge
 // behind it. A portal has no such ancestor: it is always fully opaque, never
 // clipped by a row, and always on top.
 export function MoveToFolderMenu({
+  // i18n
   folders,
   currentFolderId,
   onMove
@@ -27,6 +29,7 @@ export function MoveToFolderMenu({
   currentFolderId: string | null | undefined
   onMove: (folderId: string | null) => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -85,7 +88,7 @@ export function MoveToFolderMenu({
           setPos(null)
           setOpen((o) => !o)
         }}
-        aria-label="Move to folder"
+        aria-label={t('conversations.row.moveToFolder')}
         aria-expanded={open}
         className="rounded-md p-1.5 text-white/45 transition-colors hover:bg-white/10 hover:text-white"
       >
@@ -106,7 +109,7 @@ export function MoveToFolderMenu({
             <div
               ref={panelRef}
               role="menu"
-              aria-label="Move to folder"
+              aria-label={t('conversations.row.moveToFolder')}
               // Opaque raised panel (surface-panel = --bg-tertiary, no alpha) so
               // nothing behind it shows through.
               className="surface-panel fixed z-[200] max-h-72 w-52 overflow-y-auto p-1.5"

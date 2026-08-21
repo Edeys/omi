@@ -3,11 +3,11 @@ import { Search, X, Check, ChevronDown, SlidersHorizontal, Clock } from 'lucide-
 import {
   CATEGORY_LABEL,
   LAYER_FILTER_DESC,
-  LAYER_FILTER_LABEL,
   MEMORY_CATEGORIES,
   type MemoryCategory,
   type MemoryLayerFilter
 } from '../../lib/memoryFilters'
+import { useTranslation } from '../../i18n'
 
 // The layer filter renders Default / Short-term / Long-term only. "Archive" is a
 // server-side explicit-archive scope on Mac; the default /v3/memories read never
@@ -29,8 +29,8 @@ type MemoryFilterBarProps = {
   onLayerChange: (l: MemoryLayerFilter) => void
 }
 
-function categoryButtonLabel(categories: Set<MemoryCategory>): string {
-  if (categories.size === 0) return 'All categories'
+function categoryButtonLabel(categories: Set<MemoryCategory>, t: (k: string) => string): string {
+  if (categories.size === 0) return t('memories.filter.allCategories')
   if (categories.size === 1) return CATEGORY_LABEL[[...categories][0]]
   return `${categories.size} selected`
 }
@@ -46,6 +46,7 @@ export function MemoryFilterBar({
   layer,
   onLayerChange
 }: MemoryFilterBarProps): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-wrap items-center gap-2">
       {/* Search */}
@@ -54,14 +55,14 @@ export function MemoryFilterBar({
         <input
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search memories…"
+          placeholder={t('memories.filter.searchPlaceholder')}
           className="input-field w-full py-2 pl-9 pr-9 text-sm"
         />
         {search && (
           <button
             onClick={() => onSearchChange('')}
             className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-md p-0.5 text-white/40 hover:text-white/80"
-            aria-label="Clear search"
+            aria-label={t('memories.filter.clear')}
           >
             <X className="h-4 w-4" />
           </button>
@@ -80,7 +81,7 @@ export function MemoryFilterBar({
             }`}
           >
             <SlidersHorizontal className="h-3.5 w-3.5" />
-            {categoryButtonLabel(categories)}
+            {categoryButtonLabel(categories, t)}
             <ChevronDown className="h-3.5 w-3.5 opacity-60" />
           </button>
         </DropdownMenu.Trigger>
@@ -115,7 +116,7 @@ export function MemoryFilterBar({
                   onSelect={onClearCategories}
                   className="cursor-pointer rounded-lg px-2.5 py-1.5 text-[13px] text-white/60 outline-none data-[highlighted]:bg-white/5"
                 >
-                  Clear
+                  {t('memories.filter.clear')}
                 </DropdownMenu.Item>
               </>
             )}
@@ -136,7 +137,9 @@ export function MemoryFilterBar({
               }`}
             >
               <Clock className="h-3.5 w-3.5" />
-              {LAYER_FILTER_LABEL[layer]}
+              {t(
+                `memories.filter.${layer === 'default' ? 'layerDefault' : layer === 'short_term' ? 'layerShortTerm' : layer === 'long_term' ? 'layerLongTerm' : 'layerArchive'}`
+              )}
               <ChevronDown className="h-3.5 w-3.5 opacity-60" />
             </button>
           </DropdownMenu.Trigger>
@@ -160,7 +163,11 @@ export function MemoryFilterBar({
                       {layer === l && <span className="h-2 w-2 rounded-full bg-white" />}
                     </span>
                     <span className="flex-1">
-                      <span className="block text-white/90">{LAYER_FILTER_LABEL[l]}</span>
+                      <span className="block text-white/90">
+                        {t(
+                          `memories.filter.${l === 'default' ? 'layerDefault' : l === 'short_term' ? 'layerShortTerm' : l === 'long_term' ? 'layerLongTerm' : 'layerArchive'}`
+                        )}
+                      </span>
                       <span className="block text-[11px] text-white/40">
                         {LAYER_FILTER_DESC[l]}
                       </span>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from '../../i18n'
 import { CalendarDays } from 'lucide-react'
 import {
   startOfLocalDay,
@@ -26,12 +27,14 @@ function parseInputDate(v: string): Date | null {
 // A "Date" filter control: a button that opens a popover with native start/end
 // date pickers. Emits an inclusive [startOfDay, endOfDay] range in epoch ms.
 export function DateFilterButton({
+  // i18n
   dateRange,
   onChange
 }: {
   dateRange: DateRange
   onChange: (range: DateRange) => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const active = dateRange.start != null || dateRange.end != null
   const fromValue = toInputValue(dateRange.start)
@@ -53,10 +56,10 @@ export function DateFilterButton({
         className={`surface-panel flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-200 ${
           active ? 'text-white' : 'text-white/55 hover:text-white/80'
         }`}
-        title="Filter by date"
+        title={t('conversations.dateFilter.title')}
       >
         <CalendarDays className="h-4 w-4" />
-        <span className="hidden sm:inline">Date</span>
+        <span className="hidden sm:inline">{t('conversations.dateFilter.label')}</span>
         {active && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
       </button>
 
@@ -66,14 +69,16 @@ export function DateFilterButton({
           <div className="fixed inset-0 z-[90]" onClick={() => setOpen(false)} />
           <div className="surface-panel absolute right-0 z-[100] mt-2 w-64 p-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-white/50">Date range</span>
+              <span className="text-xs font-medium text-white/50">
+                {t('conversations.dateFilter.dateRange')}
+              </span>
               {/* Always offered while a range is set — the only way to undo one. */}
               {active && (
                 <button
                   onClick={() => onChange(NO_DATE_RANGE)}
                   className="rounded-md px-1.5 py-0.5 text-xs font-medium text-white/55 transition-colors hover:bg-white/10 hover:text-white"
                 >
-                  Clear
+                  {t('conversations.dateFilter.clear')}
                 </button>
               )}
             </div>

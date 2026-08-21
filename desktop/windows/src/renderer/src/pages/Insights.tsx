@@ -3,6 +3,7 @@ import { Lightbulb, RefreshCw, Search, Trash2, CheckCheck, ChevronDown } from 'l
 import { PageHeader } from '../components/layout/PageHeader'
 import { EmptyState } from '../components/ui/EmptyState'
 import { toast } from '../lib/toast'
+import { useTranslation } from '../i18n'
 import type { InsightCategory, InsightRecord } from '../../../shared/types'
 
 // Module-level cache so navigating away and back is instant (reads are local-first
@@ -10,34 +11,34 @@ import type { InsightCategory, InsightRecord } from '../../../shared/types'
 const cache = { items: null as InsightRecord[] | null, loaded: false }
 
 // Fixed filter set — the five InsightCategory values plus an "all" pseudo-tab.
-const CATEGORY_TABS: { id: 'all' | InsightCategory; label: string }[] = [
-  { id: 'all', label: 'All' },
-  { id: 'productivity', label: 'Productivity' },
-  { id: 'communication', label: 'Communication' },
-  { id: 'learning', label: 'Learning' },
-  { id: 'health', label: 'Health' },
-  { id: 'other', label: 'Other' }
+const CATEGORY_TABS: { id: 'all' | InsightCategory; labelKey: string }[] = [
+  { id: 'all', labelKey: 'insights.tabs.all' },
+  { id: 'productivity', labelKey: 'insights.tabs.productivity' },
+  { id: 'communication', labelKey: 'insights.tabs.communication' },
+  { id: 'learning', labelKey: 'insights.tabs.learning' },
+  { id: 'health', labelKey: 'insights.tabs.health' },
+  { id: 'other', labelKey: 'insights.tabs.other' }
 ]
 
-const CATEGORY_LABEL: Record<InsightCategory, string> = {
-  productivity: 'Productivity',
-  communication: 'Communication',
-  learning: 'Learning',
-  health: 'Health',
-  other: 'Other'
+const CATEGORY_LABEL_KEY: Record<InsightCategory, string> = {
+  productivity: 'insights.row.categoryProductivity',
+  communication: 'insights.row.categoryCommunication',
+  learning: 'insights.row.categoryLearning',
+  health: 'insights.row.categoryHealth',
+  other: 'insights.row.categoryOther'
 }
 
 // Compact relative date ("just now", "5m ago", "3h ago", "2d ago"), falling back
 // to an absolute date past a week.
-function formatWhen(ts: number): string {
+function formatWhen(ts: number, t: (k: string, o?: Record<string, unknown>) => string): string {
   const diff = Date.now() - ts
-  if (diff < 60_000) return 'just now'
+  if (diff < 60_000) return t('insights.time.justNow')
   const mins = Math.floor(diff / 60_000)
-  if (mins < 60) return `${mins}m ago`
+  if (mins < 60) return t('insights.time.minutesAgo', { count: mins })
   const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours}h ago`
+  if (hours < 24) return t('insights.time.hoursAgo', { count: hours })
   const days = Math.floor(hours / 24)
-  if (days < 7) return `${days}d ago`
+  if (days < 7) return t('insights.time.daysAgo', { count: days })
   const d = new Date(ts)
   const sameYear = d.getFullYear() === new Date().getFullYear()
   return d.toLocaleDateString(undefined, {
@@ -48,6 +49,7 @@ function formatWhen(ts: number): string {
 }
 
 export function Insights(): React.JSX.Element {
+  const { t } = useTranslation()
   const [items, setItems] = useState<InsightRecord[]>(cache.items ?? [])
   const [loading, setLoading] = useState(!cache.loaded)
   const [refreshing, setRefreshing] = useState(false)
@@ -78,6 +80,11 @@ export function Insights(): React.JSX.Element {
   }
 
   const unreadCount = useMemo(() => items.filter((i) => !i.dismissed).length, [items])
+  const subtitle = loading
+    ? t('insights.loading')
+    : unreadCount > 0
+      ? t('insights.subtitleWithUnread', { total: items.length, unread: unreadCount })
+      : t('insights.subtitle', { total: items.length })
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -98,7 +105,7 @@ export function Insights(): React.JSX.Element {
     try {
       await window.omi.insightDismissRecord(id)
     } catch {
-      toast('Could not dismiss insight', { tone: 'error' })
+      toast(t('insights.toasts.dismissFailed'), { tone: 'error' })
       await read()
     }
   }
@@ -109,20 +116,20 @@ export function Insights(): React.JSX.Element {
     try {
       await window.omi.insightDismissAll()
     } catch {
-      toast('Could not mark all read', { tone: 'error' })
+      toast(t('insights.toasts.markAllFailed'), { tone: 'error' })
       await read()
     }
   }
 
   const clearHistory = async (): Promise<void> => {
     if (items.length === 0) return
-    if (!window.confirm('Clear all insight history? This cannot be undone.')) return
+    if (!window.confirm(t('insights.confirmClear'))) return
     setItems([])
     setExpandedId(null)
     try {
       await window.omi.insightClearAll()
     } catch {
-      toast('Could not clear history', { tone: 'error' })
+      toast(t('insights.toasts.clearFailed'), { tone: 'error' })
       await read()
     }
   }
@@ -138,7 +145,7 @@ export function Insights(): React.JSX.Element {
           {!i.dismissed && (
             <span
               className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-white/70"
-              aria-label="Unread"
+              aria-label={t('insights.row.unreadLabel')}
             />
           )}
           <div className={`min-w-0 flex-1 ${i.dismissed ? 'pl-5' : ''}`}>
@@ -154,11 +161,11 @@ export function Insights(): React.JSX.Element {
             <p className="mt-1 text-sm leading-relaxed text-white/60">{i.advice}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-white/40">
               <span className="rounded-md bg-white/5 px-1.5 py-0.5 text-white/55">
-                {CATEGORY_LABEL[i.category]}
+                {t(CATEGORY_LABEL_KEY[i.category])}
               </span>
               {i.sourceApp && <span className="truncate">{i.sourceApp}</span>}
               <span>·</span>
-              <span>{formatWhen(i.ts)}</span>
+              <span>{formatWhen(i.ts, t)}</span>
             </div>
           </div>
           <ChevronDown
@@ -173,13 +180,15 @@ export function Insights(): React.JSX.Element {
             {i.reasoning && (
               <div className="mb-3">
                 <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-white/35">
-                  Why
+                  {t('insights.row.why')}
                 </p>
                 <p className="text-sm leading-relaxed text-white/70">{i.reasoning}</p>
               </div>
             )}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-white/40">
-              <span>Confidence: {Math.round(i.confidence * 100)}%</span>
+              <span>
+                {t('insights.row.confidence', { percent: Math.round(i.confidence * 100) })}
+              </span>
               <span>{new Date(i.ts).toLocaleString()}</span>
             </div>
             {!i.dismissed && (
@@ -188,7 +197,7 @@ export function Insights(): React.JSX.Element {
                   onClick={() => void dismissOne(i.id)}
                   className="btn-ghost px-3 py-1.5 text-xs"
                 >
-                  Dismiss
+                  {t('insights.row.dismiss')}
                 </button>
               </div>
             )}
@@ -201,37 +210,33 @@ export function Insights(): React.JSX.Element {
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title="Insights"
-        subtitle={
-          loading
-            ? 'Loading…'
-            : `${items.length} total${unreadCount > 0 ? ` · ${unreadCount} unread` : ''}`
-        }
+        title={t('insights.title')}
+        subtitle={subtitle}
         actions={
           <div className="flex items-center gap-2">
             <button
               onClick={markAllRead}
               disabled={unreadCount === 0}
               className="btn-ghost px-3 py-2 disabled:opacity-40"
-              title="Mark all read"
+              title={t('insights.actions.markAllReadTitle')}
             >
               <CheckCheck className="h-4 w-4" />
-              Mark all read
+              {t('insights.actions.markAllRead')}
             </button>
             <button
               onClick={clearHistory}
               disabled={items.length === 0}
               className="btn-ghost px-3 py-2 disabled:opacity-40"
-              title="Clear history"
+              title={t('insights.actions.clearTitle')}
             >
               <Trash2 className="h-4 w-4" />
-              Clear
+              {t('insights.actions.clear')}
             </button>
             <button
               onClick={onRefresh}
               disabled={refreshing || loading}
               className="btn-ghost px-3 py-2 disabled:opacity-50"
-              title="Refresh"
+              title={t('insights.actions.refreshTitle')}
             >
               <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </button>
@@ -246,22 +251,22 @@ export function Insights(): React.JSX.Element {
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search insights…"
+                placeholder={t('insights.searchPlaceholder')}
                 className="input-field pl-9"
               />
             </div>
             <div className="flex flex-wrap items-center gap-1 rounded-2xl border border-white/10 bg-black/20 p-1">
-              {CATEGORY_TABS.map((t) => (
+              {CATEGORY_TABS.map((tab) => (
                 <button
-                  key={t.id}
-                  onClick={() => setCategory(t.id)}
+                  key={tab.id}
+                  onClick={() => setCategory(tab.id)}
                   className={`rounded-xl px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
-                    category === t.id
+                    category === tab.id
                       ? 'bg-white/15 text-white'
                       : 'text-white/55 hover:bg-white/5 hover:text-white/80'
                   }`}
                 >
-                  {t.label}
+                  {t(tab.labelKey)}
                 </button>
               ))}
             </div>
@@ -285,15 +290,15 @@ export function Insights(): React.JSX.Element {
         {!loading && items.length === 0 && (
           <EmptyState
             icon={Lightbulb}
-            title="No insights yet"
-            description="Omi surfaces timely, private suggestions as you work. They'll collect here so you can revisit them anytime."
+            title={t('insights.empty.title')}
+            description={t('insights.empty.description')}
           />
         )}
 
         {!loading && items.length > 0 && visible.length === 0 && (
           <div className="flex flex-col items-center justify-center pt-16 text-center text-white/55">
             <Search className="mb-3 h-10 w-10 opacity-40" />
-            <p className="text-sm">No insights match your filters.</p>
+            <p className="text-sm">{t('insights.noMatch')}</p>
           </div>
         )}
 

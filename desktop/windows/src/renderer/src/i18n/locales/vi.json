@@ -448,5 +448,481 @@
     "common": {
         "english": "English",
         "vietnamese": "Tiếng Việt"
+    },
+    "home": {
+        "greeting": "Chào, {{name}}",
+        "legacyChat": {
+            "placeholder": "Hỏi Omi…",
+            "voiceHide": "Ẩn phiên thoại",
+            "voiceTalk": "Nói với Omi",
+            "send": "Gửi",
+            "latest": "Mới nhất"
+        },
+        "hub": {
+            "placeholder": "Hỏi omi bất cứ gì",
+            "askAriaLabel": "Hỏi omi bất cứ gì",
+            "emptyTitle": "Hỏi omi bất cứ gì",
+            "emptySubtitle": "Omi thấy cuộc trò chuyện, công việc, ký ức và lịch sử màn hình của bạn.",
+            "closeChat": "Đóng chat",
+            "closeChatTitle": "Đóng chat (Esc)",
+            "connect": "Kết nối",
+            "attachFiles": "Đính kèm tệp",
+            "attachLimitReached": "Đã đạt giới hạn đính kèm ({{max}} tệp)",
+            "sendingLabel": "Omi đang trả lời",
+            "rejections": {
+                "tooLarge": "Một số tệp vượt quá 25 MB.",
+                "capExceeded": "Bạn có thể đính kèm tối đa {{max}} tệp.",
+                "generic": "Không thể thêm một số tệp."
+            },
+            "header": {
+                "capture": "Ghi màn hình",
+                "listening": "Đang nghe",
+                "captureTurnOff": "Tắt ghi màn hình",
+                "captureTurnOn": "Bật ghi màn hình",
+                "listeningStop": "Dừng nghe",
+                "listeningStart": "Bắt đầu nghe",
+                "referFriend": "Giới thiệu bạn bè",
+                "discord": "Discord",
+                "settings": "Cài đặt",
+                "menuLabel": "Menu trang chính"
+            },
+            "chatHistory": {
+                "title": "Trò chuyện",
+                "searchPlaceholder": "Tìm trò chuyện",
+                "newChat": "Chat mới",
+                "starredOnly": "Chỉ hiển thị đã ghim",
+                "showAll": "Hiển thị tất cả",
+                "noMatching": "Không có trò chuyện phù hợp",
+                "noChats": "Chưa có cuộc trò chuyện",
+                "syncedChat": "Chat đồng bộ",
+                "syncedTooltip": "Đồng bộ với ứng dụng di động",
+                "synced": "Đã đồng bộ",
+                "backToSynced": "Quay lại Chat đồng bộ",
+                "dismiss": "Bỏ qua",
+                "retry": "Thử lại",
+                "selectAssistant": "Chọn trợ lý",
+                "defaultAssistant": "omi",
+                "defaultAssistantSub": "Trợ lý mặc định"
+            }
+        },
+        "stats": {
+            "conversations": "Cuộc trò chuyện",
+            "tasks": "Công việc",
+            "memories": "Ký ức",
+            "screenshots": "Ảnh chụp"
+        },
+        "quickTasks": {
+            "title": "Công việc",
+            "more": "+{{count}} nữa",
+            "overdue": "Quá hạn",
+            "today": "Hôm nay",
+            "tomorrow": "Ngày mai"
+        },
+        "quickGoals": {
+            "title": "Mục tiêu",
+            "more": "+{{count}} nữa"
+        }
+    },
+    "memories": {
+        "title": "Ký ức",
+        "loading": "Đang tải…",
+        "headerCount": "{{count}} ký ức",
+        "headerCountSingle": "{{count}} ký ức",
+        "headerCountPlural": "{{count}} ký ức",
+        "loadingAll": "Đang tải tất cả…",
+        "shownCount": "Hiển thị {{count}}",
+        "selectedCount": "Đã chọn {{count}}",
+        "actions": {
+            "select": "Chọn",
+            "selectTitle": "Chọn & xóa ký ức",
+            "new": "Mới",
+            "newTitle": "Thêm ký ức",
+            "done": "Xong",
+            "filterPlaceholder": "Lọc theo văn bản (ví dụ dự án cục bộ)…",
+            "selectJunk": "Chọn rác chỉ mục tệp",
+            "selectAll": "Chọn tất cả ({{count}})",
+            "selectAllMatching": "Chọn tất cả phù hợp ({{count}})",
+            "clear": "Xóa",
+            "deleting": "Đang xóa {{deleted}}/{{total}}…",
+            "stop": "Dừng",
+            "deleteSelected": "Xóa đã chọn ({{count}})"
+        },
+        "graph": {
+            "building": "Đang dựng bản đồ ký ức…",
+            "open": "Mở bản đồ ký ức toàn màn hình"
+        },
+        "compose": {
+            "placeholder": "Điều Omi nên nhớ về bạn…",
+            "hint": "⌘/Ctrl + Enter để lưu",
+            "cancel": "Hủy",
+            "save": "Lưu"
+        },
+        "empty": {
+            "title": "Chưa có ký ức",
+            "description": "Ký ức là những hiểu biết chắt lọc từ cuộc trò chuyện. Chúng sẽ xuất hiện ở đây khi Omi hiểu bạn hơn."
+        },
+        "noResults": {
+            "title": "Không có kết quả",
+            "description": "Thử tìm kiếm hoặc bộ lọc khác.",
+            "clearFilters": "Xóa bộ lọc"
+        },
+        "showingFirst": "Hiển thị {{cap}} đầu trong {{count}}.",
+        "showingFirstManage": "Hiển thị {{cap}} đầu trong {{count}}. Chọn và xóa vẫn áp dụng cho tất cả {{filtered}} {{matching}}.",
+        "showingFirstManageSuffix": "{{count}}",
+        "matching": "phù hợp",
+        "allMatching": "phù hợp",
+        "error": "Không tải được ký ức: {{error}}",
+        "toasts": {
+            "created": "Đã tạo ký ức",
+            "createFailed": "Không thể tạo ký ức",
+            "updateFailed": "Không thể cập nhật ký ức",
+            "visibilityFailed": "Không thể đổi chế độ hiển thị",
+            "deleteFailed": "Không thể xóa ký ức",
+            "loadAllFailed": "Không thể tải tất cả ký ức",
+            "deletedCount": "Đã xóa {{deleted}} / {{total}}",
+            "deleteFailedSuffix": " — {{error}}."
+        },
+        "confirmDeleteSelected": "Xóa {{count}} ký ức đã chọn? Máy chủ cho phép ~60 lần xóa/giờ, nên quá trình sẽ tạm dừng khi đạt giới hạn (bạn có thể dừng và tiếp tục bất cứ lúc nào). Không thể hoàn tác.",
+        "filter": {
+            "searchPlaceholder": "Tìm ký ức…",
+            "allCategories": "Tất cả danh mục",
+            "clear": "Xóa",
+            "layerDefault": "Mặc định",
+            "layerShortTerm": "Ngắn hạn",
+            "layerLongTerm": "Dài hạn",
+            "layerArchive": "Lưu trữ"
+        },
+        "card": {
+            "protected": "Ký ức được bảo vệ",
+            "newBadge": "Mới",
+            "memoryDetails": "Chi tiết ký ức",
+            "source": "Nguồn",
+            "category": "Danh mục",
+            "layer": "Lớp",
+            "device": "Thiết bị",
+            "confidence": "Độ tin cậy",
+            "app": "Ứng dụng",
+            "created": "Đã tạo",
+            "tags": "Thẻ"
+        },
+        "detail": {
+            "title": "Chi tiết ký ức",
+            "public": "Công khai",
+            "private": "Riêng tư",
+            "toggleVisibility": "Bật/tắt công khai",
+            "delete": "Xóa ký ức",
+            "close": "Đóng",
+            "learnedFrom": "Học từ",
+            "confidence": "Độ tin cậy",
+            "sourceApp": "Ứng dụng nguồn",
+            "device": "Thiết bị",
+            "created": "Đã tạo",
+            "tags": "Thẻ",
+            "viewSource": "Xem cuộc trò chuyện nguồn",
+            "clickToEdit": "Nhấn để chỉnh sửa",
+            "save": "Lưu",
+            "cancel": "Hủy",
+            "protected": "Ký ức được bảo vệ"
+        },
+        "undo": {
+            "deleted": "Đã xóa ký ức",
+            "undo": "Hoàn tác",
+            "dismiss": "Đóng và xóa ngay"
+        }
+    },
+    "tasks": {
+        "title": "Công việc",
+        "loading": "Đang tải…",
+        "subtitle": "{{open}} mở · {{done}} xong",
+        "filters": {
+            "open": "Mở",
+            "done": "Xong",
+            "all": "Tất cả"
+        },
+        "new": "Mới",
+        "newTitle": "Thêm công việc",
+        "refreshTitle": "Làm mới",
+        "compose": {
+            "placeholder": "Việc gì cần làm?",
+            "dueLabel": "Hạn",
+            "cancel": "Hủy",
+            "addTask": "Thêm công việc"
+        },
+        "errorTitle": "Không thể tải công việc.",
+        "tryAgain": "Thử lại",
+        "empty": {
+            "title": "Chưa có công việc",
+            "description": "Việc cần làm từ cuộc trò chuyện sẽ hiện ở đây, cùng với việc bạn tự thêm. Nhấn Mới để tạo."
+        },
+        "allCaughtUp": "Đã xong hết.",
+        "buckets": {
+            "today": "Hôm nay",
+            "tomorrow": "Ngày mai",
+            "later": "Sau này",
+            "nodate": "Không hạn",
+            "completed": "Đã xong",
+            "yesterday": "Hôm qua"
+        },
+        "row": {
+            "markDone": "Đánh dấu đã xong",
+            "markNotDone": "Đánh dấu chưa xong",
+            "clickToEdit": "Nhấn để chỉnh sửa",
+            "setDueDate": "Đặt hạn",
+            "clearDueDate": "Xóa hạn",
+            "setDate": "Đặt ngày",
+            "delete": "Xóa công việc"
+        },
+        "toasts": {
+            "updateFailed": "Không thể cập nhật công việc",
+            "deleteFailed": "Không thể xóa công việc",
+            "createFailed": "Không thể tạo công việc"
+        },
+        "deleteFailed": "Không thể xóa công việc"
+    },
+    "insights": {
+        "title": "Gợi ý",
+        "loading": "Đang tải…",
+        "subtitle": "{{total}} tổng",
+        "subtitleWithUnread": "{{total}} tổng · {{unread}} chưa đọc",
+        "actions": {
+            "markAllRead": "Đánh dấu đã đọc",
+            "markAllReadTitle": "Đánh dấu đã đọc",
+            "clear": "Xóa",
+            "clearTitle": "Xóa lịch sử",
+            "refreshTitle": "Làm mới"
+        },
+        "searchPlaceholder": "Tìm gợi ý…",
+        "tabs": {
+            "all": "Tất cả",
+            "productivity": "Năng suất",
+            "communication": "Giao tiếp",
+            "learning": "Học tập",
+            "health": "Sức khỏe",
+            "other": "Khác"
+        },
+        "row": {
+            "unreadLabel": "Chưa đọc",
+            "why": "Vì sao",
+            "confidence": "Độ tin cậy: {{percent}}%",
+            "dismiss": "Bỏ qua",
+            "categoryProductivity": "Năng suất",
+            "categoryCommunication": "Giao tiếp",
+            "categoryLearning": "Học tập",
+            "categoryHealth": "Sức khỏe",
+            "categoryOther": "Khác"
+        },
+        "time": {
+            "justNow": "vừa xong",
+            "minutesAgo": "{{count}} phút trước",
+            "hoursAgo": "{{count}} giờ trước",
+            "daysAgo": "{{count}} ngày trước"
+        },
+        "empty": {
+            "title": "Chưa có gợi ý",
+            "description": "Omi đưa ra gợi ý kịp thời, riêng tư khi bạn làm việc. Chúng sẽ tập hợp ở đây để bạn xem lại bất cứ lúc nào."
+        },
+        "noMatch": "Không có gợi ý phù hợp bộ lọc.",
+        "toasts": {
+            "dismissFailed": "Không thể bỏ qua gợi ý",
+            "markAllFailed": "Không thể đánh dấu đã đọc",
+            "clearFailed": "Không thể xóa lịch sử"
+        },
+        "confirmClear": "Xóa toàn bộ lịch sử gợi ý? Không thể hoàn tác."
+    },
+    "goals": {
+        "title": "Mục tiêu",
+        "loading": "Đang tải…",
+        "subtitle": "{{active}} đang hoạt động · {{done}} đã xong",
+        "filters": {
+            "active": "Đang hoạt động",
+            "completed": "Đã xong",
+            "all": "Tất cả"
+        },
+        "actions": {
+            "suggest": "Gợi ý",
+            "new": "Mới",
+            "newTitle": "Thêm mục tiêu",
+            "refreshTitle": "Làm mới"
+        },
+        "candidate": {
+            "suggested": "Mục tiêu gợi ý",
+            "target": "Mục tiêu {{target}}",
+            "add": "Thêm mục tiêu này",
+            "another": "Gợi ý khác",
+            "dismissTitle": "Bỏ qua",
+            "dismissLabel": "Bỏ qua gợi ý"
+        },
+        "compose": {
+            "placeholder": "Bạn muốn đạt được gì?",
+            "targetPlaceholder": "Mục tiêu (1)",
+            "unitPlaceholder": "Đơn vị (ví dụ quyển sách)",
+            "cancel": "Hủy",
+            "addGoal": "Thêm mục tiêu"
+        },
+        "errorTitle": "Không thể tải mục tiêu.",
+        "tryAgain": "Thử lại",
+        "empty": {
+            "title": "Chưa có mục tiêu",
+            "description": "Đặt mục tiêu để theo dõi tiến độ theo thời gian. Nhấn Mới để tạo."
+        },
+        "nothingHere": "Chưa có gì ở đây.",
+        "card": {
+            "reopen": "Mở lại mục tiêu",
+            "markComplete": "Đánh dấu hoàn thành",
+            "clickToEdit": "Nhấn để chỉnh sửa",
+            "updateProgress": "Cập nhật tiến độ",
+            "getInsight": "Xem gợi ý mục tiêu",
+            "delete": "Xóa mục tiêu",
+            "targetFirst": "Đặt mục tiêu trước",
+            "targetFirstBody": "Mục tiêu hoàn thành khi tiến độ đạt mục tiêu."
+        },
+        "toasts": {
+            "updateFailed": "Không thể cập nhật mục tiêu",
+            "progressFailed": "Không thể cập nhật tiến độ",
+            "deleteFailed": "Không thể xóa mục tiêu",
+            "createFailed": "Không thể tạo mục tiêu",
+            "suggestFailed": "Không thể gợi ý mục tiêu",
+            "suggestRetry": "Thử lại sau một lát.",
+            "notEnoughContext": "Chưa đủ dữ liệu",
+            "notEnoughContextBody": "Omi cần vài ký ức, cuộc trò chuyện hoặc công việc trước khi gợi ý mục tiêu.",
+            "signIn": "Đăng nhập để gợi ý mục tiêu",
+            "addFailed": "Không thể thêm mục tiêu",
+            "goalAdded": "Đã thêm mục tiêu ✨"
+        },
+        "sections": {
+            "active": "Đang hoạt động",
+            "completed": "Đã xong"
+        },
+        "insightPanel": {
+            "title": "Gợi ý mục tiêu",
+            "close": "Đóng",
+            "thisWeeksAction": "Việc cần làm tuần này",
+            "noInsight": "Chưa có gợi ý. Thêm vài cuộc trò chuyện và quay lại sau.",
+            "loading": "Đang lấy gợi ý cá nhân…",
+            "notFound": "Mục tiêu này không còn tồn tại. Có thể đã bị xóa.",
+            "ratelimit": "Bạn đang yêu cầu gợi ý hơi nhanh. Thử lại sau một lát.",
+            "retry": "Thử lại",
+            "refresh": "Làm mới",
+            "refreshTitle": "Lấy gợi ý mới",
+            "done": "Xong"
+        },
+        "generateButton": {
+            "defaultLabel": "Tạo mục tiêu bằng AI"
+        }
+    },
+    "conversations": {
+        "title": "Cuộc trò chuyện",
+        "loading": "Đang tải…",
+        "subtitle": "{{count}} cuộc trò chuyện",
+        "subtitleOne": "{{count}} cuộc trò chuyện",
+        "new": "Mới",
+        "newTitle": "Bắt đầu cuộc trò chuyện trực tiếp",
+        "searchPlaceholder": "Tìm cuộc trò chuyện…",
+        "searchClear": "Xóa",
+        "typeTabs": {
+            "all": "Tất cả",
+            "chats": "Chat",
+            "recordings": "Bản ghi"
+        },
+        "dateFilter": {
+            "title": "Lọc theo ngày",
+            "label": "Ngày",
+            "clear": "Xóa",
+            "dateRange": "Khoảng ngày",
+            "from": "Từ",
+            "to": "Đến"
+        },
+        "select": {
+            "select": "Chọn",
+            "done": "Xong",
+            "title": "Chọn cuộc trò chuyện"
+        },
+        "folders": {
+            "all": "Tất cả",
+            "starred": "Đã ghim",
+            "newFolder": "Thư mục mới",
+            "editFolder": "Chỉnh sửa {{name}}",
+            "editTitle": "Chỉnh sửa thư mục",
+            "newTitle": "Thư mục mới",
+            "nameLabel": "Tên",
+            "namePlaceholder": "Tên thư mục",
+            "colorLabel": "Màu",
+            "colorValue": "Màu {{color}}",
+            "delete": "Xóa",
+            "cancel": "Hủy",
+            "create": "Tạo",
+            "save": "Lưu",
+            "deleteFolder": "Xóa thư mục",
+            "deleteConfirmTitle": "Xóa “{{name}}”?",
+            "deleteConfirmDesc": "Thư mục sẽ bị xóa. Các cuộc trò chuyện trong đó không bị xóa — chỉ bỏ khỏi thư mục.",
+            "couldNotSave": "Không thể lưu thư mục",
+            "couldNotDelete": "Không thể xóa thư mục"
+        },
+        "backfill": {
+            "syncing": "Đang đồng bộ bản ghi cũ… {{done}}/{{total}}",
+            "onlyOnDevice": "{{count}} bản ghi cũ chỉ có trên thiết bị này",
+            "onlyOnDeviceOne": "{{count}} bản ghi cũ chỉ có trên thiết bị này",
+            "hourlyLimit": "đã đạt giới hạn đồng bộ theo giờ, thử lại sau",
+            "action": "Đồng bộ bản ghi cũ"
+        },
+        "error": "Cuộc trò chuyện trên đám mây: {{error}}",
+        "empty": {
+            "noMatchTitle": "Không có cuộc trò chuyện phù hợp",
+            "noConversationsTitle": "Chưa có cuộc trò chuyện",
+            "noMatchDesc": "Thử tìm kiếm hoặc bộ lọc khác.",
+            "noConversationsDesc": "Bắt đầu ghi để ghi âm và bối cảnh màn hình. Cuộc trò chuyện sẽ xuất hiện ở đây.",
+            "clearFilters": "Xóa bộ lọc",
+            "startRecording": "Bắt đầu ghi",
+            "startRecordingTitle": "Bắt đầu cuộc trò chuyện trực tiếp"
+        },
+        "sections": {
+            "today": "Hôm nay",
+            "yesterday": "Hôm qua"
+        },
+        "undo": {
+            "willDelete": "{{count}} cuộc trò chuyện sẽ bị xóa trong 5s",
+            "willDeleteOne": "{{count}} cuộc trò chuyện sẽ bị xóa trong 5s",
+            "undo": "Hoàn tác"
+        },
+        "selectionBar": {
+            "selected": "Đã chọn {{count}}",
+            "selectAll": "Chọn tất cả",
+            "deselectAll": "Bỏ chọn tất cả",
+            "merge": "Gộp",
+            "mergeTitle": "Gộp thành một cuộc trò chuyện",
+            "mergeDisabled": "Chọn 2+ cuộc trò chuyện đã đồng bộ để gộp",
+            "delete": "Xóa"
+        },
+        "mergeDialog": {
+            "title": "Gộp {{count}} cuộc trò chuyện?",
+            "description": "Thao tác này sẽ gộp chúng thành một cuộc trò chuyện và xóa bản gốc. Không thể hoàn tác.",
+            "cancel": "Hủy",
+            "merge": "Gộp",
+            "couldNotMerge": "Không thể gộp cuộc trò chuyện"
+        },
+        "row": {
+            "moveToFolder": "Chuyển tới thư mục",
+            "rename": "Đổi tên",
+            "delete": "Xóa",
+            "star": "Ghim",
+            "unstar": "Bỏ ghim",
+            "chatBadge": "Chat",
+            "syncPending": "Đang đồng bộ",
+            "syncFailed": "Đồng bộ thất bại",
+            "notSynced": "Chưa đồng bộ",
+            "retry": "Thử lại",
+            "processing": "Đang xử lý",
+            "loading": "đang tải…"
+        },
+        "contextMenu": {
+            "editTitle": "Chỉnh tiêu đề",
+            "moveToFolder": "Chuyển tới thư mục",
+            "delete": "Xóa"
+        },
+        "chat": {
+            "copyMessage": "Sao chép tin nhắn",
+            "copied": "Đã sao chép",
+            "processing": "Đang xử lý"
+        }
     }
 }

@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 import { ChatMessages } from '../../chat/ChatMessages'
 import { useLiveEdgeFollow } from '../../../hooks/useLiveEdgeFollow'
 import type { ChatMsg } from '../../../hooks/useChat'
+import { useTranslation } from '../../../i18n'
 
 // The chat stage. It renders the app's ONE chat engine (useAppState().chat) through
 // the SAME shared ChatMessages the legacy Home and the bar use — no second thread
@@ -25,6 +26,7 @@ export function HubChatPanel(props: {
   children: React.ReactNode
 }): React.JSX.Element {
   const { messages, sending, header, onDismiss, children } = props
+  const { t } = useTranslation()
   const scrollRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -50,8 +52,8 @@ export function HubChatPanel(props: {
         <button
           type="button"
           className="focus-ring mb-3 shrink-0 rounded-md p-1.5 text-white/55 transition-colors hover:bg-white/10 hover:text-white"
-          aria-label="Close chat"
-          title="Close chat (Esc)"
+          aria-label={t('home.hub.closeChat')}
+          title={t('home.hub.closeChatTitle')}
           onClick={onDismiss}
         >
           <X className="h-4 w-4" />
@@ -67,10 +69,8 @@ export function HubChatPanel(props: {
             // otherwise reveal a large, empty, glowing box. Give the empty thread
             // something to say instead of rendering a void.
             <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
-              <p className="text-[15px] font-medium text-home-ink">Ask omi anything</p>
-              <p className="max-w-sm text-[13px] text-home-muted">
-                It can see your conversations, tasks, memories, and screen history.
-              </p>
+              <p className="text-[15px] font-medium text-home-ink">{t('home.hub.emptyTitle')}</p>
+              <p className="max-w-sm text-[13px] text-home-muted">{t('home.hub.emptySubtitle')}</p>
             </div>
           ) : (
             <ChatMessages messages={messages} sending={sending} variant="main" />

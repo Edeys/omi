@@ -6,6 +6,7 @@ import { ChatAttachmentStrip } from './ChatAttachmentStrip'
 import { OmiThinkingSpinner } from './OmiThinkingSpinner'
 import { AgentThreadCard } from './AgentThreadCard'
 import type { AgentThreadCardBlock } from '../../../../shared/types'
+import { useTranslation } from '../../i18n'
 
 const BUBBLE: Record<'main' | 'overlay', { user: string; assistant: string }> = {
   main: {
@@ -40,6 +41,7 @@ function CopyMessageButton({
   role: 'user' | 'assistant'
   compact: boolean
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   const copy = (): void => {
     void navigator.clipboard
@@ -63,8 +65,8 @@ function CopyMessageButton({
     <button
       type="button"
       onClick={copy}
-      aria-label={copied ? 'Copied' : 'Copy message'}
-      title="Copy message"
+      aria-label={copied ? t('conversations.chat.copied') : t('conversations.chat.copyMessage')}
+      title={t('conversations.chat.copyMessage')}
       className={`focus-ring pointer-events-none absolute bottom-1 ${side} ${
         compact ? 'h-5 w-5' : 'h-6 w-6'
       } flex items-center justify-center rounded-md text-white/50 opacity-0 transition-[opacity,color,background-color] hover:bg-white/10 hover:text-white/90 focus-visible:opacity-100 group-hover/msg:pointer-events-auto group-hover/msg:opacity-100`}

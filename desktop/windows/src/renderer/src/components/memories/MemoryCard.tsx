@@ -2,6 +2,7 @@ import { memo } from 'react'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { Info, ArrowUpRight, Monitor } from 'lucide-react'
 import type { Memory } from '../../hooks/useMemories'
+import { useTranslation } from '../../i18n'
 import {
   CATEGORY_LABEL,
   categoryOf,
@@ -18,16 +19,18 @@ import { NewBadge } from './NewBadge'
 // A compact "whichever apply" metadata row list for the hover info tooltip —
 // the quick-peek surface, distinct from the full detail sheet a card tap opens.
 function InfoRows({ memory }: { memory: Memory }): React.JSX.Element {
+  const { t } = useTranslation()
   const rows: Array<[string, string]> = []
-  rows.push(['Category', CATEGORY_LABEL[categoryOf(memory)]])
+  rows.push([t('memories.card.category'), CATEGORY_LABEL[categoryOf(memory)]])
   const layer = layerLabel(memory)
-  if (layer) rows.push(['Layer', layer])
-  if (memory.primary_capture_device) rows.push(['Device', memory.primary_capture_device])
+  if (layer) rows.push([t('memories.card.layer'), layer])
+  if (memory.primary_capture_device)
+    rows.push([t('memories.card.device'), memory.primary_capture_device])
   if (typeof memory.capture_confidence === 'number')
-    rows.push(['Confidence', `${Math.round(memory.capture_confidence * 100)}%`])
-  if (memory.app_id) rows.push(['App', memory.app_id])
-  rows.push(['Source', memorySourceLabel(memory)])
-  rows.push(['Created', formatMemoryDate(memory.created_at)])
+    rows.push([t('memories.card.confidence'), `${Math.round(memory.capture_confidence * 100)}%`])
+  if (memory.app_id) rows.push([t('memories.card.app'), memory.app_id])
+  rows.push([t('memories.card.source'), memorySourceLabel(memory)])
+  rows.push([t('memories.card.created'), formatMemoryDate(memory.created_at)])
   const tags = displayTags(memory)
   return (
     <div className="space-y-1.5">
@@ -69,6 +72,7 @@ type MemoryCardProps = {
 // are referentially stable (memory rows and the setDetailMemory setter), so the
 // shallow-prop memo skips the whole list on navigation.
 function MemoryCardImpl({ memory, onOpen, now }: MemoryCardProps): React.JSX.Element {
+  const { t } = useTranslation()
   const isNew = isNewMemory(memory, now)
   const protectedMem = isProtectedContent(memory.content)
   const layer = layerLabel(memory)
@@ -92,7 +96,7 @@ function MemoryCardImpl({ memory, onOpen, now }: MemoryCardProps): React.JSX.Ele
     >
       <div className="flex items-start justify-between gap-3">
         {protectedMem ? (
-          <p className="italic text-white/40">Protected memory</p>
+          <p className="italic text-white/40">{t('memories.card.protected')}</p>
         ) : (
           <p className="line-clamp-2 text-sm leading-relaxed text-text-primary">{memory.content}</p>
         )}
@@ -135,7 +139,7 @@ function MemoryCardImpl({ memory, onOpen, now }: MemoryCardProps): React.JSX.Ele
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   className="rounded-md p-1 text-white/30 transition-colors hover:bg-white/5 hover:text-white/70"
-                  aria-label="Memory details"
+                  aria-label={t('memories.card.memoryDetails')}
                 >
                   <Info className="h-3.5 w-3.5" />
                 </button>
