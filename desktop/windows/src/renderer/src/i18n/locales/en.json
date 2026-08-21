@@ -449,7 +449,19 @@
             "upgradeToPro": "Upgrade to Omi Pro"
         },
         "dbRecovery": {
-            "title": "Omi hit a problem with its local database"
+            "title": "Omi hit a problem with its local database",
+            "unrepairableTitle": "Omi found a problem with its local database",
+            "unrepairableBody": "Omi could not repair it safely, so it left your data exactly as it was. Some items may not load. Nothing has been deleted.",
+            "resetTitle": "Omi reset its local database",
+            "resetBody": "It was damaged beyond repair, so Omi started a fresh one. A copy of the old file was saved, and anything synced to your account will load again.",
+            "repairedTitle": "Omi repaired its local database",
+            "repairedBody": "A problem was found at startup and fixed automatically — {{count}} items recovered. A copy of the old file was saved.",
+            "restartBody": "Restart Omi and it will repair the database automatically. Your data is still on disk.",
+            "restartButton": "Restart Omi",
+            "rebuilding": "Rebuilding Rewind index…",
+            "rebuilt": "Rebuilt Rewind index ({{count}} recovered)",
+            "upToDate": "Rewind index up to date",
+            "rebuildButton": "Rebuild Rewind Index"
         }
     },
     "common": {
@@ -602,7 +614,21 @@
             "rebuildFailed": "Could not rebuild the brain map",
             "stickyTitle": "Sticky Notes",
             "emailTitle": "Email",
-            "comingSoon": "Connections are coming soon."
+            "comingSoon": "Connections are coming soon.",
+            "export": "Export",
+            "exporting": "Exporting…",
+            "exportToNotion": "Export to Notion",
+            "syncNow": "Sync now",
+            "syncing": "Syncing…",
+            "connect": "Connect",
+            "connecting": "Connecting…",
+            "disconnect": "Disconnect",
+            "waiting": "Waiting…",
+            "reading": "Reading…",
+            "readNotes": "Read notes",
+            "importing": "Importing…",
+            "synced": "Synced — {{memories}} memories, {{tasks}} tasks",
+            "import": "Import"
         }
     },
     "memories": {
@@ -1587,7 +1613,14 @@
         "defaultOutput": "Default output",
         "outputDeviceLabel": "Voice output device",
         "tryAgain": "Try again",
-        "dismissSession": "Dismiss voice session"
+        "dismissSession": "Dismiss voice session",
+        "talkPrompt": "Talk with Omi, hands-free",
+        "startChat": "Start voice chat",
+        "muted": "Muted",
+        "listening": "Listening",
+        "end": "End",
+        "connecting": "Connecting · {{provider}}…",
+        "cancel": "Cancel"
     },
     "chat": {
         "agentRunning": "Running",

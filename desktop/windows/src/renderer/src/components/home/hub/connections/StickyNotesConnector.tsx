@@ -65,11 +65,13 @@ export function StickyNotesConnector(): React.JSX.Element {
       action={
         count > 0 ? (
           <PillButton tone="primary" onClick={runImport} disabled={importing}>
-            {importing ? 'Importing…' : `Import ${count}`}
+            {importing
+              ? t('home.connections.importing')
+              : `${t('home.connections.import')} ${count}`}
           </PillButton>
         ) : (
           <PillButton tone="primary" onClick={read} disabled={reading}>
-            {reading ? 'Reading…' : 'Read notes'}
+            {reading ? t('home.connections.reading') : t('home.connections.readNotes')}
           </PillButton>
         )
       }

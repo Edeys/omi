@@ -87,12 +87,12 @@ export function VoiceSessionSurface(props: { onClose?: () => void }): React.JSX.
       {/* Status text + controls */}
       {state.status === 'idle' && (
         <>
-          <div className="flex-1 text-sm text-white/70">Talk with Omi, hands-free</div>
+          <div className="flex-1 text-sm text-white/70">{t('voice.talkPrompt')}</div>
           <button
             onClick={() => void startVoiceSession()}
             className="rounded-xl bg-white/[0.08] px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.14]"
           >
-            Start voice chat
+            {t('voice.startChat')}
           </button>
         </>
       )}
@@ -100,13 +100,13 @@ export function VoiceSessionSurface(props: { onClose?: () => void }): React.JSX.
       {state.status === 'connecting' && (
         <>
           <div className="flex-1 text-sm text-white/70">
-            Connecting · {PROVIDER_LABEL[state.provider]}…
+            {t('voice.connecting', { provider: PROVIDER_LABEL[state.provider] })}
           </div>
           <button
             onClick={close}
             className="rounded-xl px-3 py-1.5 text-sm text-white/60 transition-colors hover:bg-white/[0.08] hover:text-white"
           >
-            Cancel
+            {t('common.cancel')}
           </button>
         </>
       )}
@@ -114,7 +114,7 @@ export function VoiceSessionSurface(props: { onClose?: () => void }): React.JSX.
       {state.status === 'live' && (
         <>
           <div className="min-w-0 flex-1 text-sm text-white">
-            {state.muted ? 'Muted' : 'Listening'}
+            {state.muted ? t('voice.muted') : t('voice.listening')}
             <span className="ml-2 text-xs text-white/40">{PROVIDER_LABEL[state.provider]}</span>
           </div>
           {devices.length > 1 && (
@@ -146,7 +146,7 @@ export function VoiceSessionSurface(props: { onClose?: () => void }): React.JSX.
             onClick={close}
             className="rounded-xl bg-white/[0.08] px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.14]"
           >
-            End
+            {t('voice.end')}
           </button>
         </>
       )}

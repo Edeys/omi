@@ -157,7 +157,10 @@ export function useGoogleConnection(): {
         toast(i18n.t('home.connections.syncErrors'), { tone: 'warn', body: out.errors.join('; ') })
       } else {
         toast(
-          `Synced — ${out.memoriesAdded} memor${out.memoriesAdded === 1 ? 'y' : 'ies'}, ${out.tasksAdded} task${out.tasksAdded === 1 ? '' : 's'}`,
+          i18n.t('home.connections.synced', {
+            memories: out.memoriesAdded,
+            tasks: out.tasksAdded
+          }),
           { tone: 'success' }
         )
       }

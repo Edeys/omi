@@ -449,7 +449,19 @@
             "upgradeToPro": "Nâng cấp lên Omi Pro"
         },
         "dbRecovery": {
-            "title": "Omi gặp sự cố với cơ sở dữ liệu cục bộ"
+            "title": "Omi gặp sự cố với cơ sở dữ liệu cục bộ",
+            "unrepairableTitle": "Omi phát hiện sự cố với cơ sở dữ liệu cục bộ",
+            "unrepairableBody": "Omi không thể sửa an toàn nên đã giữ nguyên dữ liệu. Một số mục có thể không tải. Không có gì bị xóa.",
+            "resetTitle": "Omi đã đặt lại cơ sở dữ liệu cục bộ",
+            "resetBody": "Nó đã hỏng không thể sửa nên Omi đã tạo mới. Bản sao tệp cũ đã được lưu và dữ liệu đã đồng bộ sẽ tải lại.",
+            "repairedTitle": "Omi đã sửa cơ sở dữ liệu cục bộ",
+            "repairedBody": "Đã phát hiện sự cố khi khởi động và tự động sửa — đã khôi phục {{count}} mục. Bản sao tệp cũ đã được lưu.",
+            "restartBody": "Khởi động lại Omi và nó sẽ tự động sửa cơ sở dữ liệu. Dữ liệu vẫn còn trên đĩa.",
+            "restartButton": "Khởi động lại Omi",
+            "rebuilding": "Đang xây dựng lại chỉ mục Rewind…",
+            "rebuilt": "Đã xây dựng lại chỉ mục Rewind ({{count}} đã khôi phục)",
+            "upToDate": "Chỉ mục Rewind đã cập nhật",
+            "rebuildButton": "Xây dựng lại chỉ mục Rewind"
         }
     },
     "common": {
@@ -602,7 +614,21 @@
             "rebuildFailed": "Không thể xây dựng lại bản đồ não",
             "stickyTitle": "Ghi chú dán",
             "emailTitle": "Thư điện tử",
-            "comingSoon": "Các kết nối sắp ra mắt."
+            "comingSoon": "Các kết nối sắp ra mắt.",
+            "export": "Xuất",
+            "exporting": "Đang xuất…",
+            "exportToNotion": "Xuất sang Notion",
+            "syncNow": "Đồng bộ ngay",
+            "syncing": "Đang đồng bộ…",
+            "connect": "Kết nối",
+            "connecting": "Đang kết nối…",
+            "disconnect": "Ngắt kết nối",
+            "waiting": "Đang chờ…",
+            "reading": "Đang đọc…",
+            "readNotes": "Đọc ghi chú",
+            "importing": "Đang nhập…",
+            "synced": "Đã đồng bộ — {{memories}} ký ức, {{tasks}} công việc",
+            "import": "Nhập"
         }
     },
     "memories": {
@@ -1587,7 +1613,14 @@
         "defaultOutput": "Đầu ra mặc định",
         "outputDeviceLabel": "Thiết bị đầu ra giọng nói",
         "tryAgain": "Thử lại",
-        "dismissSession": "Đóng phiên thoại"
+        "dismissSession": "Đóng phiên thoại",
+        "talkPrompt": "Nói chuyện với Omi, rảnh tay",
+        "startChat": "Bắt đầu trò chuyện bằng giọng nói",
+        "muted": "Đã tắt tiếng",
+        "listening": "Đang nghe",
+        "end": "Kết thúc",
+        "connecting": "Đang kết nối · {{provider}}…",
+        "cancel": "Hủy"
     },
     "chat": {
         "agentRunning": "Đang chạy",

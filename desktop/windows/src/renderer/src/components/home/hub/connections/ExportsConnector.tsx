@@ -73,7 +73,7 @@ export function ExportsConnector(): React.JSX.Element {
             tone={notionOpen ? 'ghost' : 'primary'}
             onClick={() => setNotionOpen((v) => !v)}
           >
-            {notionOpen ? 'Close' : 'Export'}
+            {notionOpen ? t('common.close') : t('home.connections.export')}
           </PillButton>
         }
       >
@@ -95,7 +95,7 @@ export function ExportsConnector(): React.JSX.Element {
               className="input-field text-[13px]"
             />
             <PillButton tone="primary" onClick={() => runExport('notion')} disabled={exporting}>
-              {exporting ? 'Exporting…' : 'Export to Notion'}
+              {exporting ? t('home.connections.exporting') : t('home.connections.exportToNotion')}
             </PillButton>
           </div>
         )}
@@ -107,7 +107,7 @@ export function ExportsConnector(): React.JSX.Element {
         description="Write your memories into your Obsidian vault."
         action={
           <PillButton tone="primary" onClick={() => runExport('obsidian')} disabled={exporting}>
-            Export
+            {t('home.connections.export')}
           </PillButton>
         }
       />
@@ -118,7 +118,7 @@ export function ExportsConnector(): React.JSX.Element {
         description="Save your memories as a single Markdown file."
         action={
           <PillButton tone="primary" onClick={() => runExport('file')} disabled={exporting}>
-            Export
+            {t('home.connections.export')}
           </PillButton>
         }
       />

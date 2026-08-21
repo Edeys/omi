@@ -99,11 +99,11 @@ export function CalendarConnector(): React.JSX.Element {
       action={
         status.connected ? (
           <PillButton tone="ghost" onClick={disconnect} disabled={busy}>
-            Disconnect
+            {t('home.connections.disconnect')}
           </PillButton>
         ) : (
           <PillButton tone="primary" onClick={connect} disabled={connecting}>
-            {connecting ? 'Waiting…' : 'Connect'}
+            {connecting ? t('home.connections.waiting') : t('home.connections.connect')}
           </PillButton>
         )
       }

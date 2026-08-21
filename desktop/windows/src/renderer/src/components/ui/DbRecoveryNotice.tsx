@@ -13,32 +13,28 @@ import type { DbRecoveryStatus } from '../../../../shared/types'
 // the old file was archived. Neutral/white styling only — no purple (INV-UI-1),
 // no alarm-red for what is a successful heal.
 
-function describe(s: DbRecoveryStatus): { title: string; body: string } {
-  // Corruption was CONFIRMED but deliberately not repaired — either the repair
-  // budget ran out or a rebuild would have lost rows that still read fine. Say so
-  // plainly: nothing was touched, and nothing was thrown away.
+function describe(
+  s: DbRecoveryStatus,
+  t: (key: string, opts?: Record<string, unknown>) => string
+): { title: string; body: string } {
   if (s.unrepairable) {
     return {
-      title: 'Omi found a problem with its local database',
-      body:
-        'Omi could not repair it safely, so it left your data exactly as it was. ' +
-        'Some items may not load. Nothing has been deleted.'
+      title: t('settings.dbRecovery.unrepairableTitle'),
+      body: t('settings.dbRecovery.unrepairableBody')
     }
   }
   if (s.reset) {
     return {
-      title: 'Omi reset its local database',
-      body:
-        'It was damaged beyond repair, so Omi started a fresh one. ' +
-        'A copy of the old file was saved, and anything synced to your account will load again.'
+      title: t('settings.dbRecovery.resetTitle'),
+      body: t('settings.dbRecovery.resetBody')
     }
   }
   const n = s.rowsRecovered
   return {
-    title: `Omi repaired its local database`,
-    body:
-      `A problem was found at startup and fixed automatically — ${n.toLocaleString('en-US')} ` +
-      `item${n === 1 ? '' : 's'} recovered. A copy of the old file was saved.`
+    title: t('settings.dbRecovery.repairedTitle'),
+    body: t('settings.dbRecovery.repairedBody', {
+      count: n.toLocaleString('en-US')
+    })
   }
 }
 
@@ -137,16 +133,20 @@ export function DbRecoveryNotice(): React.JSX.Element | null {
     return (
       <Notice
         title={t('settings.dbRecovery.title')}
-        // Honest: nothing is lost yet, and the restart is a repair, not a wipe.
-        body="Restart Omi and it will repair the database automatically. Your data is still on disk."
+        body={t('settings.dbRecovery.restartBody')}
         onDismiss={() => setDismissed(true)}
-        actions={[{ label: 'Restart Omi', onClick: () => window.omi.relaunchApp() }]}
+        actions={[
+          { label: t('settings.dbRecovery.restartButton'), onClick: () => window.omi.relaunchApp() }
+        ]}
       />
     )
   }
 
   if (!status || dismissed) return null
-  const { title, body } = describe(status)
+  const { title, body } = describe(
+    status,
+    t as (key: string, opts?: Record<string, unknown>) => string
+  )
 
   // Offer the Rewind rebuild only when rows may actually have been lost — i.e. the
   // DB was reset or repaired. On the 'unrepairable' path nothing was touched, so
@@ -166,12 +166,14 @@ export function DbRecoveryNotice(): React.JSX.Element | null {
     }
     const label =
       rebuild.phase === 'running'
-        ? 'Rebuilding Rewind index…'
+        ? t('settings.dbRecovery.rebuilding')
         : rebuild.phase === 'done'
           ? rebuild.count > 0
-            ? `Rebuilt Rewind index (${rebuild.count.toLocaleString('en-US')} recovered)`
-            : 'Rewind index up to date'
-          : 'Rebuild Rewind Index'
+            ? t('settings.dbRecovery.rebuilt', {
+                count: rebuild.count.toLocaleString('en-US')
+              })
+            : t('settings.dbRecovery.upToDate')
+          : t('settings.dbRecovery.rebuildButton')
     actions.push({
       label,
       onClick: runRebuild,

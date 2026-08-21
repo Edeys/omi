@@ -43,15 +43,15 @@ export function GmailConnector(): React.JSX.Element {
         status.connected ? (
           <>
             <PillButton tone="neutral" onClick={syncNow} disabled={syncing}>
-              {syncing ? 'Syncing…' : 'Sync now'}
+              {syncing ? t('home.connections.syncing') : t('home.connections.syncNow')}
             </PillButton>
             <PillButton tone="ghost" onClick={disconnect} disabled={busy}>
-              Disconnect
+              {t('home.connections.disconnect')}
             </PillButton>
           </>
         ) : (
           <PillButton tone="primary" onClick={connect} disabled={busy}>
-            {busy ? 'Connecting…' : 'Connect'}
+            {busy ? t('home.connections.connecting') : t('home.connections.connect')}
           </PillButton>
         )
       }
