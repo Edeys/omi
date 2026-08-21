@@ -26,6 +26,8 @@ function normalizeFontScale(p: Preferences): void {
   p.fontScale = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, p.fontScale))
 }
 
+// UI language is user-tunable free-form (e.g. 'en' | 'vi'); drop non-string junk so
+// the 'en' fallback applies and a hand-edited localStorage blob can't break i18n.
 function normalizeUiLanguage(p: Preferences): void {
   if (p.uiLanguage !== undefined && typeof p.uiLanguage !== 'string') {
     delete p.uiLanguage
@@ -214,6 +216,7 @@ export function setPreferences(patch: Partial<Preferences>): void {
   // patch onto a fresh load makes writes field-granular.
   current = { ...load(), ...patch }
   normalizeFontScale(current)
+  normalizeUiLanguage(current)
   try {
     localStorage.setItem(KEY, JSON.stringify(current))
   } catch {
