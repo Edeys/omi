@@ -70,9 +70,15 @@ export function buildListenEndpoint(
   clientConversationId?: string
 ): string {
   const lang = encodeURIComponent(language || 'en')
+  // Self-host: derive the WS base from VITE_OMI_API_BASE (https→wss) so the
+  // listen lane follows the same backend the rest of the app talks to.
+  // Falls back to Omi's cloud when the env is unset (upstream behavior).
+  const apiBase =
+    (import.meta.env.VITE_OMI_API_BASE as string | undefined) || 'https://api.omi.me'
+  const wsBase = apiBase.replace(/^https:\/\//i, 'wss://').replace(/\/+$/, '')
   if (mode === 'ptt' || mode === 'transcribe') {
     return (
-      'wss://api.omi.me/v2/voice-message/transcribe-stream' +
+      `${wsBase}/v2/voice-message/transcribe-stream` +
       `?language=${lang}` +
       '&sample_rate=16000' +
       '&codec=linear16' +
@@ -80,7 +86,7 @@ export function buildListenEndpoint(
     )
   }
   return (
-    'wss://api.omi.me/v4/listen' +
+    `${wsBase}/v4/listen` +
     `?language=${lang}` +
     '&sample_rate=16000' +
     '&codec=pcm16' +
