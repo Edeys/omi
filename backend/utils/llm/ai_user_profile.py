@@ -10,6 +10,7 @@ Inspired by the ContextAgent paper (arXiv:2505.14668): a once-daily, LLM-synthes
 pipelines — not a raw memories list.
 """
 
+import re
 from typing import Any, List, Optional, cast
 
 from pydantic import BaseModel, Field
@@ -68,7 +69,9 @@ CRITICAL RULES:
 - NEVER fabricate email addresses, phone numbers, URLs, or contact information
 - If you cannot find a piece of information verbatim in the data, do not include it
 
-The output MUST be under 2000 characters total."""
+The output MUST be under 2000 characters total.
+
+OUTPUT FORMAT (strict): Respond with ONLY valid JSON - no markdown, no code fences, no commentary. Write JSON string values in the same language as the source data."""
 
 _STAGE2_SYSTEM_PROMPT = """You are merging a newly generated user profile with historical profiles to create one holistic, up-to-date user profile. This profile is injected as context into AI pipelines (task extraction, goal extraction, memory extraction) that analyze the user's screen and audio activity.
 
@@ -89,7 +92,9 @@ MERGE RULES:
 - Do NOT hallucinate — only include facts present in the provided profiles
 - Do NOT add commentary about changes or evolution over time
 
-The output MUST be under 2000 characters total."""
+The output MUST be under 2000 characters total.
+
+OUTPUT FORMAT (strict): Respond with ONLY valid JSON - no markdown, no code fences, no commentary. Write JSON string values in the same language as the source data."""
 
 _STAGE1_USER_PREAMBLE = """Generate a factual user profile from the following data. Output a flat list of concrete facts (one per line, prefixed with "- "). This profile will be used as context for AI pipelines that analyze the user's screen and audio activity to extract tasks, goals, and memories. Focus on facts that help identify who is who, what projects are active, and what the user's current priorities are. Under 2000 characters."""
 
@@ -151,10 +156,17 @@ def _stage2_user_prompt(fresh_profile: str, past_profiles: List[str]) -> str:
     )
 
 
+def _strip_code_fences(text: str) -> str:
+    """Reasoning models often wrap JSON in ```json fences; strip them."""
+    m = re.search(r'```(?:json)?\s*(.+?)\s*```', text, re.DOTALL)
+    return m.group(1).strip() if m else text
+
+
 def _invoke(uid: str, system_prompt: str, user_prompt: str) -> str:
     with track_usage(uid, Features.MEMORIES):
         response = get_llm('memories').invoke([("system", system_prompt), ("human", user_prompt)])
-    return cast(str, cast(Any, response).content or "").strip()
+    content = cast(str, cast(Any, response).content or "").strip()
+    return _strip_code_fences(content)
 
 
 def enforce_char_cap(text: str, cap: int = MAX_PROFILE_CHARS) -> str:

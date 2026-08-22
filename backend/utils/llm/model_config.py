@@ -317,3 +317,29 @@ def get_anthropic_only_features() -> set[str]:
 
 def get_perplexity_only_features() -> set[str]:
     return _PERPLEXITY_ONLY_FEATURES
+
+
+# --- Self-host: env-driven OpenAI model overrides ---
+_MAIN_MODEL_OVERRIDE = os.getenv('OMI_MAIN_MODEL', '').strip()
+_NANO_MODEL_OVERRIDE = os.getenv('OMI_LIGHT_MODEL', '').strip()
+
+
+def _apply_openai_model_overrides() -> None:
+    if not (_MAIN_MODEL_OVERRIDE or _NANO_MODEL_OVERRIDE):
+        return
+    for _profile in MODEL_QOS_PROFILES.values():
+        for _feature, spec in list(_profile.items()):
+            _model, _provider = spec
+            if _provider != 'openai':
+                continue
+            if _MAIN_MODEL_OVERRIDE and _model == 'gpt-5.6-luna':
+                _profile[_feature] = (_MAIN_MODEL_OVERRIDE, 'openai')
+            elif _NANO_MODEL_OVERRIDE and _model == 'gpt-5-nano':
+                _profile[_feature] = (_NANO_MODEL_OVERRIDE, 'openai')
+    for _feature, spec in list(_PINNED_FEATURES.items()):
+        _model, _provider = spec
+        if _provider == 'openai' and _MAIN_MODEL_OVERRIDE and _model == 'gpt-5.6-luna':
+            _PINNED_FEATURES[_feature] = (_MAIN_MODEL_OVERRIDE, 'openai')
+
+
+_apply_openai_model_overrides()
