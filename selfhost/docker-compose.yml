@@ -51,6 +51,7 @@ services:
     image: omi-stt-adapter
     restart: always
     mem_limit: 500m
+    env_file: /opt/omi/.env
     ports: ["127.0.0.1:8092:8092"]
     volumes: ["stt_models:/models"]
     networks: [omi]

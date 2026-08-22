@@ -1,4 +1,4 @@
-"""sherpa-onnx Vietnamese streaming recognizer behind the ViRecognizer interface.
+﻿"""sherpa-onnx Vietnamese streaming recognizer behind the ViRecognizer interface.
 
 Model: zipformer-vi-30M-int8 (pinned tarball, downloaded once into the
 ``stt_models`` compose volume). Heavy imports (numpy, sherpa_onnx) are deferred
@@ -23,11 +23,21 @@ MODEL_DIR_NAME = "sherpa-onnx-streaming-zipformer-ar_en_id_ja_ru_th_vi_zh-2025-0
 # NOTE on the originally pinned asset: task-6's brief pointed at
 # sherpa-onnx-zipformer-vi-30M-int8-2026-02-09.tar.bz2, but its encoder.int8.onnx
 # carries metadata `comment = non-streaming zipformer2` (inputs x/x_lens, no
-# encoder_dims), so sherpa-onnx OnlineRecognizer cannot load it — verified by
+# encoder_dims), so sherpa-onnx OnlineRecognizer cannot load it Ã¢â‚¬â€ verified by
 # crash ('encoder_dims' does not exist in the metadata) and ONNX metadata
 # inspection. The streaming multilingual vi-capable zipformer from the same
-# release tag is the default; the offline 30M model stays selectable via
-# STT_MODEL_SOURCE if an OfflineRecognizer path is ever added.
+# release tag is the streaming default; the offline VietASR model (70k hours,
+# WER ~10% avg, Interspeech 2025) is served through the VAD-segmented offline path
+# below (STT_ENGINE=offline) Ã¢â‚¬â€ "simulated streaming" per the sherpa-onnx
+# vad-microphone-simulated-streaming-asr recipe.
+OFFLINE_MODEL_URL = (
+    "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/"
+    "sherpa-onnx-zipformer-vi-int8-2025-04-20.tar.bz2"
+)
+OFFLINE_MODEL_DIR_NAME = "sherpa-onnx-zipformer-vi-int8-2025-04-20"
+SILERO_VAD_URL = (
+    "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/silero_vad.onnx"
+)
 DEFAULT_MODELS_ROOT = "/models"
 MODEL_DOWNLOAD_TIMEOUT_S = 30  # per-socket-op (connect/read); slow-but-active downloads are fine
 SAMPLE_RATE = 16000
@@ -66,26 +76,29 @@ def load_model(url_or_dir: str = DEFAULT_MODEL_URL, models_root: str | None = No
     If ``url_or_dir`` names an existing directory it is used as-is. Otherwise it is
     treated as the pinned tarball URL and downloaded+extracted exactly once into
     ``models_root`` (default $STT_MODELS_DIR or /models); later calls short-circuit.
+    Local names derive from the URL's basename so two different sources (streaming
+    vs offline) never collide in the shared volume.
     """
     local = Path(url_or_dir)
     if local.is_dir():
         return str(_resolve_model_dir(local))
 
+    from urllib.parse import urlparse
+
+    source_name = Path(urlparse(url_or_dir).path).name or MODEL_DIR_NAME
+    stem = source_name.replace(".tar.bz2", "")
+
     root = Path(models_root or _models_root())
-    marker = root / ".model-ready"
-    if marker.is_file():
-        try:
-            resolved = _resolve_model_dir(root)
-            if (resolved / "tokens.txt").is_file():
-                return str(resolved)
-        except FileNotFoundError:
-            logger.warning("model marker present but files missing; re-downloading")
+    marker = root / f".{stem}.ready"
+    final = root / stem
+    if marker.is_file() and (final / "tokens.txt").is_file():
+        return str(final)
 
     root.mkdir(parents=True, exist_ok=True)
-    staging = root / ".extract"
+    staging = root / f".extract-{stem}"
     if staging.exists():
         shutil.rmtree(staging)
-    archive = root / f"{MODEL_DIR_NAME}.tar.bz2"
+    archive = root / source_name
     if not archive.is_file():
         logger.info("downloading model %s", url_or_dir)
         part = archive.with_suffix(".part")
@@ -96,7 +109,6 @@ def load_model(url_or_dir: str = DEFAULT_MODEL_URL, models_root: str | None = No
     _safe_extract(archive, staging)
 
     extracted = _resolve_model_dir(staging)
-    final = root / MODEL_DIR_NAME
     if final.exists():
         shutil.rmtree(final)
     shutil.move(str(extracted), str(final))
@@ -235,7 +247,7 @@ class ViRecognizer:
         """Force-finalize buffered audio without dropping connection context.
 
         sherpa-onnx has no mid-stream partial flush, so this emits the current
-        hypothesis and resets the stream — trading a little acoustic context to
+        hypothesis and resets the stream Ã¢â‚¬â€ trading a little acoustic context to
         guarantee no words are ever duplicated across the Finalize boundary.
         """
         stream = self._current_stream()
@@ -248,3 +260,150 @@ class ViRecognizer:
         if self._stream is None:
             return ""
         return _result_text(self._engine.recognizer.get_result(self._stream))
+
+class _OfflineEngine:
+    """Shared OfflineRecognizer (SOTA Vietnamese 30M) + Silero VAD.
+
+    "Simulated streaming": audio is buffered through the VAD; when the VAD
+    closes an utterance, the whole segment is decoded at once (RTF ~0.1, so a
+    10 s utterance decodes in ~1 s on one core). Final transcripts therefore
+    arrive at utterance boundaries - which matches how the backend consumes
+    them anyway (interim_results=False in streaming.py:841).
+    """
+
+    def __init__(self, model_dir: str, num_threads: int):
+        import sherpa_onnx
+
+        d = Path(model_dir)
+        self.recognizer = sherpa_onnx.OfflineRecognizer.from_transducer(
+            tokens=str(d / "tokens.txt"),
+            encoder=_pick_component(d, "encoder"),
+            decoder=str(d / "decoder.onnx") if (d / "decoder.onnx").is_file() else _pick_component(d, "decoder"),
+            joiner=_pick_component(d, "joiner"),
+            num_threads=num_threads,
+            sample_rate=SAMPLE_RATE,
+            feature_dim=80,
+            decoding_method="greedy_search",
+        )
+        vad_model = _models_root() / "silero_vad.onnx"
+        if not vad_model.is_file():
+            vad_model.parent.mkdir(parents=True, exist_ok=True)
+            logger.info("downloading Silero VAD model")
+            urllib.request.urlretrieve(SILERO_VAD_URL, vad_model)
+        vad_config = sherpa_onnx.VadModelConfig()
+        vad_config.silero_vad.model = str(vad_model)
+        vad_config.silero_vad.threshold = float(os.getenv("STT_VAD_THRESHOLD", "0.5"))
+        vad_config.silero_vad.min_speech_duration = 0.25
+        vad_config.silero_vad.min_silence_duration = 0.45
+        vad_config.sample_rate = SAMPLE_RATE
+        # Per-connection VAD instances are cheap; keep one template config here.
+        self.vad_config = vad_config
+        logger.info("OfflineRecognizer ready (model=%s threads=%d)", d.name, num_threads)
+
+
+class ViOfflineRecognizer:
+    """Per-connection VAD-segmented offline recognizer (same interface as
+    ViRecognizer: transcribe_chunk / flush / interim_text).
+
+    Buffer design: every accepted sample is appended to ``_buffer``; when the
+    VAD closes an utterance [abs_start, abs_start+n) the consumed prefix is
+    dropped from the buffer and a final segment is emitted. flush() decodes
+    whatever remains (no reliance on VAD.front, whose reference is only valid
+    until the next VAD call).
+    """
+
+    def __init__(self, engine: "_OfflineEngine", total_budget_seconds: float = 120.0):
+        import sherpa_onnx
+
+        self._engine = engine
+        # Wheel 1.13.x exposes the VAD wrapper as VoiceActivityDetector
+        # (accept_waveform/empty/front/pop/flush/is_speech_detected).
+        self._vad = sherpa_onnx.VoiceActivityDetector(
+            engine.vad_config, buffer_size_in_seconds=total_budget_seconds
+        )
+        self._total_samples = 0
+        self._buffer: list = []
+        self._buf_start = 0  # absolute sample index of _buffer[0]
+
+    def transcribe_chunk(self, pcm: bytes) -> list[dict]:
+        if not pcm:
+            return []
+        samples = pcm16_to_float32(pcm)
+        self._buffer.extend(samples)
+        self._vad.accept_waveform(samples)
+        self._total_samples += len(samples)
+        return self._decode_ready_segments()
+
+    def flush(self) -> list[dict]:
+        """Emit whatever speech remains buffered as one final segment."""
+        out = self._decode_ready_segments()
+        remaining = len(self._buffer)
+        if remaining > int(SAMPLE_RATE * 0.15):
+            text = self._decode_samples(self._buffer)
+            if text:
+                out.append({
+                    "text": text,
+                    "is_final": True,
+                    "start": round(self._buf_start / SAMPLE_RATE, 3),
+                    "duration": round(remaining / SAMPLE_RATE, 3),
+                })
+        self._vad.flush()
+        self._buffer = []
+        self._buf_start = self._total_samples
+        return [s for s in out if s["text"]]
+
+    def interim_text(self) -> str:
+        # Offline decoding has no interim hypothesis by definition.
+        return ""
+
+    def _decode_ready_segments(self) -> list[dict]:
+        out: list[dict] = []
+        while not self._vad.empty():
+            segment = self._vad.front
+            # front's reference is only valid until the next VAD method call:
+            # copy what we need BEFORE pop() (doc: sherpa .front note).
+            seg_samples = list(segment.samples)
+            abs_start, n_samples = segment.start, len(segment.samples)
+            self._vad.pop()
+            text = self._decode_samples(seg_samples)
+            if not text:
+                continue
+            start = abs_start / SAMPLE_RATE
+            duration = n_samples / SAMPLE_RATE
+            # Drop the decoded prefix from our buffer.
+            drop = abs_start + n_samples - self._buf_start
+            if drop > 0:
+                del self._buffer[:drop]
+                self._buf_start = abs_start + n_samples
+            out.append({
+                "text": text,
+                "is_final": True,
+                "start": round(start, 3),
+                "duration": round(duration, 3),
+            })
+        return out
+
+    def _decode_samples(self, samples) -> str:
+        rec = self._engine.recognizer
+        stream = rec.create_stream()
+        stream.accept_waveform(SAMPLE_RATE, samples)
+        rec.decode_stream(stream)
+        text = (_result_text(stream.result.text)).strip()
+        # The VietASR 70k-hour model emits ALL-UPPERCASE tokens. Normalize to
+        # sentence case so transcripts stay readable (proper nouns lose their
+        # capitals — acceptable next to a wall of shouting text).
+        if text.isupper():
+            text = text.capitalize()
+        return text
+
+
+_OFFLINE_ENGINE: "_OfflineEngine | None" = None
+
+
+def load_offline_engine(model_url_or_dir: str | None = None, num_threads: int = 2) -> "_OfflineEngine":
+    """Build the shared offline engine from STT_MODEL_SOURCE or the pinned SOTA URL."""
+    global _OFFLINE_ENGINE
+    source = model_url_or_dir or os.getenv("STT_MODEL_SOURCE", OFFLINE_MODEL_URL)
+    model_dir = load_model(source)
+    _OFFLINE_ENGINE = _OfflineEngine(model_dir=model_dir, num_threads=num_threads)
+    return _OFFLINE_ENGINE

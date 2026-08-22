@@ -32,8 +32,15 @@ def set_recognizer_factory(factory) -> None:
 def create_recognizer():
     if _recognizer_factory is not None:
         return _recognizer_factory()
-    model_dir = recognizer_mod.load_model(os.getenv("STT_MODEL_SOURCE", recognizer_mod.DEFAULT_MODEL_URL))
+    engine = os.getenv("STT_ENGINE", "streaming").strip().lower()
     num_threads = int(os.getenv("STT_NUM_THREADS", "2"))
+    if engine == "offline":
+        # SOTA Vietnamese accuracy: offline 30M model (6000h) + Silero VAD
+        # segmentation ("simulated streaming" — finals arrive at utterance
+        # boundaries, which matches interim_results=False in the backend).
+        engine_obj = recognizer_mod.load_offline_engine(num_threads=num_threads)
+        return recognizer_mod.ViOfflineRecognizer(engine_obj)
+    model_dir = recognizer_mod.load_model(os.getenv("STT_MODEL_SOURCE", recognizer_mod.DEFAULT_MODEL_URL))
     return recognizer_mod.ViRecognizer(model_dir=model_dir, num_threads=num_threads)
 
 
@@ -60,12 +67,19 @@ app = FastAPI(title="omi-stt-adapter", version="0.1.0", lifespan=lifespan)
 
 @app.get("/health")
 async def health():
+    engine = os.getenv("STT_ENGINE", "streaming").strip().lower()
+    loaded = bool(recognizer_mod._ENGINES) or recognizer_mod._OFFLINE_ENGINE is not None
     return {
         "status": "ok",
-        "model": recognizer_mod.MODEL_DIR_NAME,
+        "engine": engine,
+        "model": (
+            recognizer_mod.OFFLINE_MODEL_DIR_NAME
+            if engine == "offline"
+            else recognizer_mod.MODEL_DIR_NAME
+        ),
         "sample_rate": protocol.SAMPLE_RATE,
         "encoding": protocol.ENCODING,
-        "engine_loaded": bool(recognizer_mod._ENGINES),
+        "engine_loaded": loaded,
     }
 
 
