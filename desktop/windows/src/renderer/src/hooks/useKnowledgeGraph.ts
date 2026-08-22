@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { i18n } from '../i18n'
 import { fetchKnowledgeGraph, rebuildKnowledgeGraph } from '../lib/knowledgeGraphClient'
 import type { KnowledgeGraph } from '../../../shared/types'
 import { toast } from '../lib/toast'
@@ -116,7 +117,7 @@ export function useKnowledgeGraph(): {
         cache.error = null
         setGraph(g)
       } else {
-        toast('Rebuild is still running', {
+        toast(i18n.t('home.connections.rebuildRunning'), {
           body: 'Your brain map will update once the rebuild finishes.'
         })
       }
@@ -124,7 +125,7 @@ export function useKnowledgeGraph(): {
       const msg = errMessage(e)
       cache.error = msg
       setError(msg)
-      toast('Could not rebuild the brain map', { tone: 'error', body: msg })
+      toast(i18n.t('home.connections.rebuildFailed'), { tone: 'error', body: msg })
     } finally {
       setRebuilding(false)
     }

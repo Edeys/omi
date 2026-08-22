@@ -26,6 +26,14 @@ function normalizeFontScale(p: Preferences): void {
   p.fontScale = Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, p.fontScale))
 }
 
+// UI language is user-tunable free-form (e.g. 'en' | 'vi'); drop non-string junk so
+// the 'en' fallback applies and a hand-edited localStorage blob can't break i18n.
+function normalizeUiLanguage(p: Preferences): void {
+  if (p.uiLanguage !== undefined && typeof p.uiLanguage !== 'string') {
+    delete p.uiLanguage
+  }
+}
+
 export type Preferences = {
   captionIntervalMs: number
   showRecordingBadge: boolean
@@ -33,6 +41,9 @@ export type Preferences = {
   // Set during the startup wizard.
   displayName?: string
   language: string
+  // UI display language (i18n), e.g. 'en' | 'vi'. Separate from `language`
+  // (STT spoken language). Undefined -> 'en'.
+  uiLanguage?: string
   // Spoken-language candidates for push-to-talk (A3). Empty/undefined (default)
   // ⇒ INERT: PTT transcribes with the static `language` above, exactly as
   // before. Non-empty ⇒ per-turn feed-forward — the last provider-detected
@@ -168,6 +179,7 @@ function load(): Preferences {
     const parsed = JSON.parse(raw) as Partial<Preferences>
     const merged = { ...defaults, ...parsed }
     normalizeFontScale(merged)
+    normalizeUiLanguage(merged)
     return merged
   } catch {
     return { ...defaults }
@@ -204,6 +216,7 @@ export function setPreferences(patch: Partial<Preferences>): void {
   // patch onto a fresh load makes writes field-granular.
   current = { ...load(), ...patch }
   normalizeFontScale(current)
+  normalizeUiLanguage(current)
   try {
     localStorage.setItem(KEY, JSON.stringify(current))
   } catch {

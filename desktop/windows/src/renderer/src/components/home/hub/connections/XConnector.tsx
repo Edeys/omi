@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { toast } from '../../../../lib/toast'
+import { useTranslation } from '../../../../i18n'
 import { useMemories } from '../../../../hooks/useMemories'
 import { getXSession } from '../../../../lib/xSession'
 import { ConnectorRow, PillButton } from './ConnectorRow'
@@ -15,6 +16,7 @@ import type { XStatus, XRunState } from '../../../../../../shared/types'
 const IDLE_RUN: XRunState = { phase: 'idle', postCount: 0, memoryCount: 0 }
 
 export function XConnector(): React.JSX.Element {
+  const { t } = useTranslation()
   const { refresh } = useMemories()
   const [status, setStatus] = useState<XStatus | null>(null)
   const [run, setRun] = useState<XRunState>(IDLE_RUN)
@@ -52,7 +54,7 @@ export function XConnector(): React.JSX.Element {
   const connect = async (): Promise<void> => {
     const session = await getXSession()
     if (!session) {
-      toast('Sign in to connect X', { tone: 'warn' })
+      toast(t('home.connections.xSignIn'), { tone: 'warn' })
       return
     }
     setRun(await window.omi.xConnect(session)) // seeds 'connecting'; progress streams in
@@ -64,14 +66,14 @@ export function XConnector(): React.JSX.Element {
     try {
       const r = await window.omi.xSync(session)
       if (r.success)
-        toast(`Synced X — ${r.newPosts} new post${r.newPosts === 1 ? '' : 's'}`, {
+        toast(t('home.connections.xSynced', { count: r.newPosts }), {
           tone: 'success'
         })
-      else toast('X sync failed', { tone: 'error', body: friendlyError(r.error) })
+      else toast(t('home.connections.xSyncFailed'), { tone: 'error', body: friendlyError(r.error) })
       await refreshStatus()
       if (r.memoriesCreated > 0) await refresh()
     } catch (e) {
-      toast('X sync failed', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.xSyncFailed'), { tone: 'error', body: (e as Error).message })
     }
   }
 
@@ -82,9 +84,9 @@ export function XConnector(): React.JSX.Element {
       await window.omi.xDisconnect(session)
       setStatus({ connected: false, postCount: 0, memoryCount: 0, syncing: false })
       setRun(IDLE_RUN)
-      toast('X disconnected', { tone: 'success' })
+      toast(t('home.connections.xDisconnected'), { tone: 'success' })
     } catch (e) {
-      toast('Could not disconnect', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.xDisconnectFailed'), { tone: 'error', body: (e as Error).message })
     }
   }
 

@@ -4,6 +4,7 @@ import type { RewindSearchGroup } from '../../../../shared/types'
 import { parseWindowTitle } from '../../lib/windowTitle'
 import { highlightTerms } from '../../lib/rewindOverlay'
 import { highlightSegments } from '../../lib/rewindHighlight'
+import { useTranslation } from '../../i18n'
 
 // macOS parity: search results are a vertical list of grouped hits
 // (RewindPage.fullScreenResultsView) — representative thumbnail, app + window, the
@@ -92,11 +93,14 @@ export function SearchResultsFilmstrip({
   /** True while the keyword round-trip is still in flight (shows the searching state). */
   loading?: boolean
 }): React.JSX.Element {
+  const { t } = useTranslation()
   if (groups.length === 0) {
     return (
       <div className="py-10 text-center">
-        <p className="text-sm text-white/60">{loading ? 'Searching…' : 'No results found'}</p>
-        {!loading && <p className="mt-1 text-xs text-white/35">Try a different search term</p>}
+        <p className="text-sm text-white/60">
+          {loading ? t('rewind.searching') : t('rewind.noResults')}
+        </p>
+        {!loading && <p className="mt-1 text-xs text-white/35">{t('rewind.tryDifferentTerm')}</p>}
       </div>
     )
   }
@@ -122,10 +126,10 @@ export function SearchResultsFilmstrip({
                     // a literal keyword match. Mac renders no purple here, so neither do we.
                     <span
                       className="inline-flex shrink-0 items-center gap-1 rounded-full border border-white/15 px-1.5 py-0.5 text-[10px] text-white/55"
-                      title="Matched by meaning, not an exact keyword"
+                      title={t('rewind.semanticMatchTitle')}
                     >
                       <Sparkles className="h-2.5 w-2.5" />
-                      Related
+                      {t('rewind.related')}
                     </span>
                   )}
                 </span>
@@ -138,7 +142,7 @@ export function SearchResultsFilmstrip({
               {g.frames.length > 1 && (
                 <span className="mt-0.5 inline-flex w-fit items-center gap-1 rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] text-white/50">
                   <Images className="h-3 w-3" />
-                  {g.frames.length} screenshots
+                  {t('rewind.screenshots', { count: g.frames.length })}
                 </span>
               )}
             </div>

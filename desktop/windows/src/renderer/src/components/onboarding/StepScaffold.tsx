@@ -1,3 +1,5 @@
+import { useTranslation } from '../../i18n'
+
 // The body of a single onboarding step: a column holding a progress bar, an
 // optional eyebrow, title, body, Back, and primary Continue button. Steps render
 // their own body as children. The page frame (omi logo, background, and the
@@ -36,7 +38,7 @@ export function StepScaffold({
   subtitle,
   subtitleClassName,
   widthClassName = 'max-w-[400px]',
-  continueLabel = 'Continue',
+  continueLabel,
   continueDisabled = false,
   onContinue,
   onBack,
@@ -44,6 +46,8 @@ export function StepScaffold({
   align = 'center',
   children
 }: StepScaffoldProps): React.JSX.Element {
+  const { t } = useTranslation()
+  const effectiveContinueLabel = continueLabel ?? t('onboarding.scaffold.continue')
   const left = align === 'left'
   const progressJustify = onSkip ? 'justify-between' : left ? 'justify-start' : 'justify-center'
   return (
@@ -77,7 +81,7 @@ export function StepScaffold({
             onClick={onSkip}
             className="text-xs text-white/40 transition-colors hover:text-white/70"
           >
-            Skip
+            {t('onboarding.scaffold.skip')}
           </button>
         )}
       </div>
@@ -113,7 +117,7 @@ export function StepScaffold({
               onClick={onBack}
               className="rounded-xl bg-white/[0.06] px-6 py-3 font-medium text-white/80 transition-colors hover:bg-white/[0.1]"
             >
-              Back
+              {t('onboarding.scaffold.back')}
             </button>
           )}
           {onContinue && (
@@ -123,7 +127,7 @@ export function StepScaffold({
               disabled={continueDisabled}
               className="rounded-xl bg-white px-8 py-3 font-medium text-black transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {continueLabel}
+              {effectiveContinueLabel}
             </button>
           )}
         </div>

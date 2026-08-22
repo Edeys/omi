@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { i18n } from '../i18n'
 import { GOOGLE_ENABLED } from '../lib/googleFeatureFlag'
 import { runGoogleSync } from '../lib/googleSync'
 import { toast } from '../lib/toast'
@@ -119,9 +120,13 @@ export function useGoogleConnection(): {
       // sync-on-connect is handled by the singleton (connected effect), so we don't
       // kick a sync here — that's what kept the two surfaces from double-syncing.
       publishStatus(next)
-      if (next.connected) toast('Google connected', { tone: 'success', body: next.email })
+      if (next.connected)
+        toast(i18n.t('home.connections.googleConnected'), { tone: 'success', body: next.email })
     } catch (e) {
-      toast('Could not connect Google', { tone: 'error', body: (e as Error).message })
+      toast(i18n.t('home.connections.googleConnectFailed'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setBusy(false)
     }
@@ -132,9 +137,12 @@ export function useGoogleConnection(): {
     setBusy(true)
     try {
       publishStatus(await window.omi.googleDisconnect())
-      toast('Google disconnected', { tone: 'success' })
+      toast(i18n.t('home.connections.googleDisconnected'), { tone: 'success' })
     } catch (e) {
-      toast('Could not disconnect', { tone: 'error', body: (e as Error).message })
+      toast(i18n.t('home.connections.googleDisconnectFailed'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setBusy(false)
     }
@@ -146,17 +154,23 @@ export function useGoogleConnection(): {
     try {
       const out = await runGoogleSync(memories.map((m) => m.content))
       if (out.errors.length > 0) {
-        toast('Sync finished with errors', { tone: 'warn', body: out.errors.join('; ') })
+        toast(i18n.t('home.connections.syncErrors'), { tone: 'warn', body: out.errors.join('; ') })
       } else {
         toast(
-          `Synced — ${out.memoriesAdded} memor${out.memoriesAdded === 1 ? 'y' : 'ies'}, ${out.tasksAdded} task${out.tasksAdded === 1 ? '' : 's'}`,
+          i18n.t('home.connections.synced', {
+            memories: out.memoriesAdded,
+            tasks: out.tasksAdded
+          }),
           { tone: 'success' }
         )
       }
       if (out.memoriesAdded > 0) await refresh()
       publishStatus(await window.omi.googleStatus())
     } catch (e) {
-      toast('Google sync failed', { tone: 'error', body: (e as Error).message })
+      toast(i18n.t('home.connections.googleSyncFailed'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setSyncing(false)
     }

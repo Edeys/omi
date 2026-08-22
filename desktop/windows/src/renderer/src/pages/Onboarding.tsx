@@ -10,6 +10,7 @@ import { syncLanguage, setDisplayName } from '../lib/userProfile'
 import { resolveLanguageCode, languageLabel } from '../lib/languages'
 import { trackHowDidYouHear } from '../lib/analytics'
 import { toast } from '../lib/toast'
+import { useTranslation } from '../i18n'
 import { NameStep } from '../components/onboarding/NameStep'
 import { LanguageStep } from '../components/onboarding/LanguageStep'
 import { HowDidYouHearStep } from '../components/onboarding/HowDidYouHearStep'
@@ -41,6 +42,7 @@ import {
 const TOTAL_STEPS = 14
 
 export function Onboarding(): React.JSX.Element {
+  const { t } = useTranslation()
   // Resume where the user left off if they quit mid-onboarding. Clamped in case
   // the step list changed between app versions.
   const [step, setStep] = useState(() =>
@@ -78,7 +80,7 @@ export function Onboarding(): React.JSX.Element {
     void addUserNode(name)
     // Best-effort: also set the Firebase displayName (no backend name endpoint).
     void setDisplayName(name).catch(() => {
-      toast('Could not sync your name', { tone: 'warn' })
+      toast(t('onboarding.toasts.couldNotSyncName'), { tone: 'warn' })
     })
     next()
   }
@@ -90,7 +92,7 @@ export function Onboarding(): React.JSX.Element {
     setPreferences({ language: code })
     void addLanguageNode(code, languageLabel(code))
     void syncLanguage(code).catch(() => {
-      toast('Saved locally — language sync will retry later', { tone: 'warn' })
+      toast(t('onboarding.toasts.savedLocallyLanguage'), { tone: 'warn' })
     })
     next()
   }
@@ -110,7 +112,7 @@ export function Onboarding(): React.JSX.Element {
     // Best-effort sync to the Omi goals backend — never block onboarding on the
     // network or delay the transition into Chat.
     void createGoal(goal).catch(() => {
-      toast('Saved locally — goal sync will retry later', { tone: 'warn' })
+      toast(t('onboarding.toasts.savedLocallyGoal'), { tone: 'warn' })
     })
     finishToChat()
   }

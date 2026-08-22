@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Brain, GanttChartSquare, History, ListChecks } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { cn } from '../../../lib/utils'
+import { useTranslation } from '../../../i18n'
 
 // The Hub's four-cell stat ribbon (macOS DashboardPage). Purely presentational —
 // the counts are passed in, so the ribbon has no opinion about where they come
@@ -28,14 +29,20 @@ type Cell = {
 }
 
 const CELLS: Cell[] = [
-  { key: 'conversations', label: 'Conversations', Icon: GanttChartSquare, to: '/conversations' },
-  { key: 'tasks', label: 'Tasks', Icon: ListChecks, to: '/tasks' },
-  { key: 'memories', label: 'Memories', Icon: Brain, to: '/memories' },
-  { key: 'screenshots', label: 'Screenshots', Icon: History, to: '/rewind' }
+  {
+    key: 'conversations',
+    label: 'home.stats.conversations',
+    Icon: GanttChartSquare,
+    to: '/conversations'
+  },
+  { key: 'tasks', label: 'home.stats.tasks', Icon: ListChecks, to: '/tasks' },
+  { key: 'memories', label: 'home.stats.memories', Icon: Brain, to: '/memories' },
+  { key: 'screenshots', label: 'home.stats.screenshots', Icon: History, to: '/rewind' }
 ]
 
 export function HubStatRibbon({ counts }: { counts: HubStatCounts }): React.JSX.Element {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   return (
     <div
@@ -73,7 +80,7 @@ export function HubStatRibbon({ counts }: { counts: HubStatCounts }): React.JSX.
                 {display}
               </span>
             </span>
-            <span className="mt-1.5 text-[11px] font-medium leading-none">{label}</span>
+            <span className="mt-1.5 text-[11px] font-medium leading-none">{t(label)}</span>
           </button>
         )
       })}

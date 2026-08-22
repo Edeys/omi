@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { X, Star, Loader2 } from 'lucide-react'
 import { omiApi } from '../../lib/apiClient'
 import type { AppReview } from '../../lib/omiApi.generated'
+import { useTranslation } from '../../i18n'
 
 const MAX_REVIEW_LEN = 500
 
@@ -60,6 +61,7 @@ export function AddReviewDialog({
   onClose,
   onSubmitted
 }: AddReviewDialogProps): React.JSX.Element {
+  const { t } = useTranslation()
   const [score, setScore] = useState(existingReview?.score ?? 0)
   const [text, setText] = useState(existingReview?.review ?? '')
   const [submitting, setSubmitting] = useState(false)
@@ -96,11 +98,11 @@ export function AddReviewDialog({
           >
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <Dialog.Title className="font-display font-semibold text-white/95">
-                {isEdit ? 'Edit your review' : 'Add a review'}
+                {isEdit ? t('apps.review.editTitle') : t('apps.review.addTitle')}
               </Dialog.Title>
               <Dialog.Close
                 className="rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/5 hover:text-white/80"
-                aria-label="Close"
+                aria-label={t('apps.review.close')}
               >
                 <X className="h-4 w-4" />
               </Dialog.Close>
@@ -108,12 +110,16 @@ export function AddReviewDialog({
 
             <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 py-4">
               <div className="space-y-2">
-                <label className="text-xs font-medium text-white/60">Your rating</label>
+                <label className="text-xs font-medium text-white/60">
+                  {t('apps.review.yourRating')}
+                </label>
                 <StarPicker score={score} onPick={setScore} />
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-medium text-white/60">Your review</label>
+                <label className="text-xs font-medium text-white/60">
+                  {t('apps.review.yourReview')}
+                </label>
                 <textarea
                   autoFocus
                   value={text}
@@ -125,7 +131,7 @@ export function AddReviewDialog({
                     }
                   }}
                   rows={4}
-                  placeholder="Share what you think about this app…"
+                  placeholder={t('apps.review.placeholder')}
                   className="input-field resize-none text-sm"
                 />
                 <div className="text-right text-[11px] text-white/35">
@@ -142,7 +148,7 @@ export function AddReviewDialog({
                 disabled={submitting}
                 className="btn-ghost px-3 py-1.5 text-sm"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 onClick={() => void submit()}
@@ -152,9 +158,9 @@ export function AddReviewDialog({
                 {submitting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : isEdit ? (
-                  'Update review'
+                  t('apps.review.updateReview')
                 ) : (
-                  'Submit review'
+                  t('apps.review.submitReview')
                 )}
               </button>
             </div>

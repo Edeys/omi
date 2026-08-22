@@ -8,6 +8,7 @@ import { ChatUsageCard } from '../billing/ChatUsageCard'
 import { OverageCard } from '../billing/OverageCard'
 import { TrialCard } from '../billing/TrialCard'
 import { PlanGrid } from '../billing/PlanGrid'
+import { useTranslation } from '../../../i18n'
 import {
   fetchSubscription,
   fetchChatQuota,
@@ -36,15 +37,13 @@ function apiError(e: unknown): string {
 
 const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
-const REFRESH_LAGGING_MSG =
-  'Payment completed, but plan refresh is still catching up. Please try reloading this page in a moment.'
-
 export function PlanUsageTab(): React.JSX.Element {
   // Register the tab for cross-tab Settings search (billing content is card-based,
   // not SettingRows, so this one hidden entry surfaces the panel on a match).
   useSearchableRow(
     'plan usage billing subscription upgrade quota trial overage payment neo operator architect'
   )
+  const { t } = useTranslation()
 
   const [sub, setSub] = useState<UserSubscriptionResponse | null>(null)
   const [quota, setQuota] = useState<ChatUsageQuota | null>(null)
@@ -105,7 +104,7 @@ export function PlanUsageTab(): React.JSX.Element {
     try {
       await openCustomerPortal()
     } catch (e) {
-      toast('Could not open the billing portal', { tone: 'error', body: apiError(e) })
+      toast(t('settings.planUsage.billingPortalOpenFailed'), { tone: 'error', body: apiError(e) })
     } finally {
       setPortalBusy(false)
     }
@@ -134,21 +133,24 @@ export function PlanUsageTab(): React.JSX.Element {
           void load()
           return
         case 'refresh_lagging':
-          toast('Payment received', { tone: 'warn', body: REFRESH_LAGGING_MSG })
+          toast(t('settings.planUsage.paymentReceived'), {
+            tone: 'warn',
+            body: t('settings.planUsage.refreshLagging')
+          })
           break
         case 'upgraded':
-          toast('Plan updated', { tone: 'success' })
+          toast(t('settings.planUsage.planUpdated'), { tone: 'success' })
           break
         case 'reactivated':
-          toast('Subscription reactivated', { tone: 'success' })
+          toast(t('settings.planUsage.subscriptionReactivated'), { tone: 'success' })
           break
         default:
-          toast("You're all set", { tone: 'success' })
+          toast(t('settings.planUsage.allSet'), { tone: 'success' })
       }
       setSelectedPlanId(null)
       await load()
     } catch (e) {
-      toast('Checkout failed', { tone: 'error', body: apiError(e) })
+      toast(t('settings.planUsage.checkoutFailed'), { tone: 'error', body: apiError(e) })
     } finally {
       setActivePriceId(null)
     }
@@ -182,7 +184,7 @@ export function PlanUsageTab(): React.JSX.Element {
         <div className="glass-subtle mb-4 px-4 py-3 text-sm text-white/60">{error}</div>
         <button onClick={onRefresh} disabled={refreshing} className="btn-ghost">
           <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-          Try again
+          {t('settings.planUsage.tryAgain')}
         </button>
       </div>
     )
@@ -195,11 +197,11 @@ export function PlanUsageTab(): React.JSX.Element {
     return (
       <div>
         <div className="glass-subtle mb-4 px-4 py-3 text-sm text-white/60">
-          Couldn’t load your plan details.
+          {t('settings.planUsage.couldNotLoad')}
         </div>
         <button onClick={onRefresh} disabled={refreshing} className="btn-ghost">
           <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-          Try again
+          {t('settings.planUsage.tryAgain')}
         </button>
       </div>
     )
@@ -222,15 +224,14 @@ export function PlanUsageTab(): React.JSX.Element {
           icon={AlertTriangle}
           iconTone="amber"
           className="border border-amber-400/25"
-          title="Plan Retiring"
+          title={t('settings.planUsage.planRetiringTitle')}
           subtitle={
-            subscription.deprecation_message ??
-            'Your Unlimited plan is being retired. Try the new Operator plan — same great features at $49/mo.'
+            subscription.deprecation_message ?? t('settings.planUsage.planRetiringFallback')
           }
           trailing={
             showCatalog ? (
               <button onClick={jumpToOperator} className="btn-ghost">
-                Try Operator
+                {t('settings.planUsage.tryOperator')}
               </button>
             ) : undefined
           }

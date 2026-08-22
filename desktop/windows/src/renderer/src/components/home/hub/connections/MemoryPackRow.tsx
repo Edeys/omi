@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { toast } from '../../../../lib/toast'
+import { useTranslation } from '../../../../i18n'
 import { useMemories } from '../../../../hooks/useMemories'
 import { runMemoryPack } from '../../../../lib/mcpConnect'
 import type { ExportMemory } from '../../../../../../shared/types'
@@ -25,6 +26,7 @@ export function MemoryPackRow({
 }: {
   provider: 'gemini' | 'chatgpt' | 'claude'
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const { memories } = useMemories()
   const [busy, setBusy] = useState(false)
   const { title, brand } = LABEL[provider]
@@ -32,7 +34,7 @@ export function MemoryPackRow({
   const run = async (): Promise<void> => {
     if (busy) return
     if (memories.length === 0) {
-      toast('No memories to export yet', { tone: 'warn' })
+      toast(t('home.connections.noMemoriesToExport'), { tone: 'warn' })
       return
     }
     setBusy(true)
@@ -43,9 +45,9 @@ export function MemoryPackRow({
         createdAt: m.created_at
       }))
       await runMemoryPack(provider, toExport)
-      toast(`Copied — paste into ${title}`, { tone: 'success' })
+      toast(t('home.connections.copiedPack', { title }), { tone: 'success' })
     } catch (e) {
-      toast('Could not build the pack', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.couldNotBuildPack'), { tone: 'error', body: (e as Error).message })
     } finally {
       setBusy(false)
     }

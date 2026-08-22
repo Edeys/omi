@@ -10,6 +10,7 @@ import {
 import { toast } from '../../lib/toast'
 import { ModalShell } from './ModalShell'
 import { AVATAR_UNNAMED } from '../../lib/macPalette'
+import { useTranslation } from '../../i18n'
 
 // Mac's NameSpeakerSheet (NameSpeakerSheet.swift), rendered as a centered Windows
 // modal per the Track 4 ruling. Mac's sheet is a fixed 400x450 whose height is
@@ -55,6 +56,7 @@ export function NameSpeakerModal({
   /** Called with a newly created person so the page can add them to the roster. */
   onPersonCreated: (person: Person) => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const [selection, setSelection] = useState<Selection>({ kind: 'none' })
   const [newName, setNewName] = useState('')
   const [applyToAll, setApplyToAll] = useState(true) // Mac default: ON
@@ -98,7 +100,10 @@ export function NameSpeakerModal({
       onSaved()
       onClose()
     } catch (e) {
-      toast('Could not name speaker', { tone: 'error', body: (e as Error).message })
+      toast(t('conversationDetail.nameSpeaker.couldNotName'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
       setSaving(false)
     }
   }
@@ -131,7 +136,12 @@ export function NameSpeakerModal({
           <h2 id="name-speaker-title" className="font-display text-base font-semibold text-white">
             Name Speaker
           </h2>
-          <button onClick={onClose} className="btn-ghost p-1" title="Close" aria-label="Close">
+          <button
+            onClick={onClose}
+            className="btn-ghost p-1"
+            title={t('conversationDetail.nameSpeaker.close')}
+            aria-label={t('conversationDetail.nameSpeaker.close')}
+          >
             <X className="h-4 w-4" />
           </button>
         </header>
@@ -185,8 +195,8 @@ export function NameSpeakerModal({
                 autoFocus
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                placeholder="Person name"
-                aria-label="New person name"
+                placeholder={t('conversationDetail.nameSpeaker.personPlaceholder')}
+                aria-label={t('conversationDetail.nameSpeaker.newPersonAria')}
                 disabled={saving}
                 className="mt-3 w-full rounded-lg border border-white/15 bg-bg-secondary px-2.5 py-2 text-[13px] text-white placeholder:text-text-quaternary focus:border-white/40 focus:outline-none"
               />

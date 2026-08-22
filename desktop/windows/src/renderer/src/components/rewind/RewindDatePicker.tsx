@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react'
 import { startOfLocalDay } from '../../lib/conversations/filtering'
 import { MAC_PURPLE } from '../../lib/macPalette'
+import { useTranslation } from '../../i18n'
 
 // The date-picker for the Rewind timeline: a button labelled `MMM d, yyyy` that
 // opens a graphical month-grid calendar popover (macOS RewindPage.datePickerControls
@@ -52,6 +53,7 @@ export function RewindDatePicker({
   selectedDate: number
   onSelect: (dayMs: number) => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const sel = new Date(selectedDate)
   const [viewYear, setViewYear] = useState(sel.getFullYear())
@@ -82,7 +84,7 @@ export function RewindDatePicker({
       <button
         onClick={toggle}
         className="inline-flex items-center gap-1.5 rounded-control border border-line bg-white/[0.06] px-3 py-1.5 text-sm text-white/80 transition-colors hover:border-line-strong hover:bg-white/[0.10] hover:text-white"
-        title="Pick a day"
+        title={t('rewind.datePicker.pickDay')}
       >
         <CalendarDays className="h-4 w-4" />
         {buttonLabel(selectedDate)}
@@ -100,7 +102,7 @@ export function RewindDatePicker({
               <button
                 onClick={() => step(-1)}
                 className="rounded p-1 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
-                title="Previous month"
+                title={t('rewind.datePicker.prevMonth')}
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -110,7 +112,7 @@ export function RewindDatePicker({
               <button
                 onClick={() => step(1)}
                 className="rounded p-1 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
-                title="Next month"
+                title={t('rewind.datePicker.nextMonth')}
               >
                 <ChevronRight className="h-4 w-4" />
               </button>

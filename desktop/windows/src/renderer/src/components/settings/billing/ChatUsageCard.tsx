@@ -2,6 +2,7 @@ import { MessageSquare } from 'lucide-react'
 import { BillingCard } from './BillingCard'
 import { UsageBar } from './UsageBar'
 import { chatQuotaView, quotaResetText } from '../../../lib/billing'
+import { useTranslation } from '../../../i18n'
 import type { ChatUsageQuota } from '../../../lib/omiApi.generated'
 
 /**
@@ -15,12 +16,13 @@ export function ChatUsageCard(props: {
 }): React.JSX.Element {
   const vm = chatQuotaView(props.quota, props.isOveragePlan)
   const reset = quotaResetText(vm.resetAt)
+  const { t } = useTranslation()
 
   return (
     <BillingCard
       icon={MessageSquare}
       iconTone={vm.warning ? 'amber' : 'neutral'}
-      title="Usage this month"
+      title={t('settings.planUsage.usageTitle')}
       subtitle={vm.description}
       trailing={
         <span className="tnum text-sm font-semibold text-text-primary">{vm.valueText}</span>

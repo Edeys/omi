@@ -1,6 +1,12 @@
 import { useState } from 'react'
+import { useTranslation } from '../../i18n'
 
-export function RewindSearchBar({ onSearch }: { onSearch: (q: string) => void }): React.JSX.Element {
+export function RewindSearchBar({
+  onSearch
+}: {
+  onSearch: (q: string) => void
+}): React.JSX.Element {
+  const { t } = useTranslation()
   const [q, setQ] = useState('')
   return (
     <form
@@ -13,7 +19,7 @@ export function RewindSearchBar({ onSearch }: { onSearch: (q: string) => void })
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Search what was on screen…"
+        placeholder={t('rewind.searchBar.placeholder')}
         autoFocus
         className="flex-1 rounded-control border border-line bg-white/[0.07] px-3.5 py-2 text-sm text-white outline-none transition-colors placeholder:text-white/35 focus:border-line-strong"
       />
@@ -21,7 +27,7 @@ export function RewindSearchBar({ onSearch }: { onSearch: (q: string) => void })
         type="submit"
         className="rounded-control bg-[color:var(--accent)] px-4 py-2 text-sm font-medium text-[color:var(--accent-contrast)] transition-opacity hover:opacity-90"
       >
-        Search
+        {t('rewind.searchBar.search')}
       </button>
     </form>
   )

@@ -7,6 +7,7 @@ import { deleteAndRethread } from './chatSessionDelete'
 import { Pill } from '../ui/Pill'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/Popover'
 import { ChatHistoryPopover } from './ChatHistoryPopover'
+import { useTranslation } from '../../i18n'
 
 // The multi-chat header row above the Hub chat panel: a Synced-Chat indicator, a
 // new-chat "+", and a history clock that opens the ChatHistoryPopover. Ported
@@ -49,6 +50,7 @@ export function HubChatHeader(): React.JSX.Element | null {
 }
 
 function HubChatHeaderInner(): React.JSX.Element {
+  const { t } = useTranslation()
   const { chat } = useAppState()
   // Scope the session list/create to the selected app/persona (Mac threads app_id
   // into getChatSessions/createChatSession); null → the plain main-chat list.
@@ -73,13 +75,17 @@ function HubChatHeaderInner(): React.JSX.Element {
     <div className="mb-3 flex items-center gap-2">
       {onDefault ? (
         // On the default shared thread: a static synced indicator.
-        <Pill dot="var(--success)" title="Synced with the mobile app">
-          Synced Chat
+        <Pill dot="var(--success)" title={t('home.hub.chatHistory.syncedTooltip')}>
+          {t('home.hub.chatHistory.syncedChat')}
         </Pill>
       ) : (
         // On a session: a clickable pill to return to the default shared thread.
-        <Pill dot="var(--success)" onClick={() => handleSelect(null)} title="Back to Synced Chat">
-          Synced
+        <Pill
+          dot="var(--success)"
+          onClick={() => handleSelect(null)}
+          title={t('home.hub.chatHistory.backToSynced')}
+        >
+          {t('home.hub.chatHistory.synced')}
         </Pill>
       )}
 
@@ -88,7 +94,7 @@ function HubChatHeaderInner(): React.JSX.Element {
       <button
         type="button"
         className="focus-ring rounded-md p-1.5 text-white/55 transition-colors hover:bg-white/10 hover:text-white"
-        title="New chat"
+        title={t('home.hub.chatHistory.newChat')}
         onClick={handleCreate}
       >
         <Plus className="h-4 w-4" />
@@ -99,7 +105,7 @@ function HubChatHeaderInner(): React.JSX.Element {
           <button
             type="button"
             className="focus-ring rounded-md p-1.5 text-white/55 transition-colors hover:bg-white/10 hover:text-white"
-            title="Chat history"
+            title={t('home.hub.chatHistory.title')}
           >
             <History className="h-4 w-4" />
           </button>

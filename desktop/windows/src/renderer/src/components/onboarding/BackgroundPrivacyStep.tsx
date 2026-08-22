@@ -3,6 +3,7 @@ import { StepScaffold } from './StepScaffold'
 import { getPreferences } from '../../lib/preferences'
 import { persistBackgroundConsent } from '../../lib/backgroundConsent'
 import { BackgroundConsentControls } from '../consent/BackgroundConsentControls'
+import { useTranslation } from '../../i18n'
 
 type BackgroundPrivacyStepProps = {
   stepIndex: number
@@ -24,6 +25,7 @@ export function BackgroundPrivacyStep({
   onContinue,
   onBack
 }: BackgroundPrivacyStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   const [listening, setListening] = useState(() => getPreferences().continuousRecording ?? true)
   const [launchAtLogin, setLaunchAtLogin] = useState(true)
 
@@ -36,15 +38,14 @@ export function BackgroundPrivacyStep({
     <StepScaffold
       stepIndex={stepIndex}
       totalSteps={totalSteps}
-      eyebrow="BACKGROUND & PRIVACY"
-      title="How Omi runs on your PC"
+      eyebrow={t('onboarding.backgroundPrivacy.eyebrow')}
+      title={t('onboarding.backgroundPrivacy.title')}
       widthClassName="max-w-[440px]"
       onContinue={handleContinue}
       onBack={onBack}
     >
       <p className="text-center text-sm leading-relaxed text-white">
-        Omi works best as a quiet companion running in the background. You’re in control — change
-        any of this now or later in Settings.
+        {t('onboarding.backgroundPrivacy.intro')}
       </p>
       <div className="mt-6 w-full">
         <BackgroundConsentControls

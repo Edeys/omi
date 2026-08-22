@@ -35,7 +35,7 @@ describe('AppCrashScreen (root error boundary fallback)', () => {
     )
 
     expect(screen.getByText('Something went wrong')).toBeTruthy()
-    expect(screen.getByText(/unexpected error/i)).toBeTruthy()
+    expect(screen.getByText(/couldn't load/i)).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Reload' })).toBeTruthy()
 
     err.mockRestore()

@@ -7,6 +7,7 @@
 // teardown is reserved for a user-initiated Sign Out (firebase.signOutUser →
 // authTeardown).
 import { signOut } from 'firebase/auth'
+import { i18n } from '../i18n'
 import { auth, onAuthStateChanged } from './firebase'
 import { toast } from './toast'
 
@@ -59,7 +60,7 @@ export async function refreshIdToken(): Promise<RefreshOutcome> {
 export async function forceReauth(): Promise<void> {
   if (reauthInFlight) return
   reauthInFlight = true
-  toast('Your session expired — please sign in again', { tone: 'warn' })
+  toast(i18n.t('auth.sessionExpired'), { tone: 'warn' })
   try {
     await signOut(auth)
   } catch {

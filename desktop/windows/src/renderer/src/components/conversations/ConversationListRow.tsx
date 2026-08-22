@@ -6,6 +6,8 @@ import type { ConversationFolder } from '../../../../shared/types'
 import { isCloudBacked } from '../../lib/conversations/filtering'
 import { macPurple } from '../../lib/macPalette'
 import { MoveToFolderMenu } from './MoveToFolderMenu'
+import { useTranslation } from '../../i18n'
+import { i18n } from '../../i18n'
 import { ConversationRowContextMenu } from './ConversationRowContextMenu'
 
 // Selected-row tint (Track 4 ruling — purple ports as-is). Applied inline so it
@@ -44,13 +46,15 @@ function SyncBadge({
   r: ConversationRow
   onRetry?: (id: string) => void
 }): React.JSX.Element | null {
-  if (r.localKind === 'chat') return <span className="badge shrink-0">Chat</span>
+  if (r.localKind === 'chat')
+    return <span className="badge shrink-0">{i18n.t('conversations.row.chatBadge')}</span>
   if (r.source !== 'local') return null
-  if (r.sync === 'pending') return <span className="badge shrink-0">Sync pending</span>
+  if (r.sync === 'pending')
+    return <span className="badge shrink-0">{i18n.t('conversations.row.syncPending')}</span>
   if (r.sync === 'failed') {
     return (
       <span className="flex shrink-0 items-center gap-1.5">
-        <span className="badge-warning">Sync failed</span>
+        <span className="badge-warning">{i18n.t('conversations.row.syncFailed')}</span>
         {onRetry && (
           <button
             onClick={(e) => {
@@ -60,13 +64,13 @@ function SyncBadge({
             }}
             className="text-xs font-medium text-white/70 transition-colors hover:text-white"
           >
-            Retry
+            {i18n.t('conversations.row.retry')}
           </button>
         )}
       </span>
     )
   }
-  return <span className="badge-warning shrink-0">Not synced</span>
+  return <span className="badge-warning shrink-0">{i18n.t('conversations.row.notSynced')}</span>
 }
 
 /** Title, single-line overview snippet (when the conversation has one), timestamp. */
@@ -75,7 +79,9 @@ function RowBody({ row }: { row: ConversationRow }): React.JSX.Element {
   return (
     <div className="min-w-0 flex-1">
       <div className="truncate text-sm font-medium text-text-primary">
-        {row.title || <span className="italic text-text-tertiary">loading…</span>}
+        {row.title || (
+          <span className="italic text-text-tertiary">{i18n.t('conversations.row.loading')}</span>
+        )}
       </div>
       {preview && <div className="mt-0.5 truncate text-xs text-text-tertiary">{preview}</div>}
       {row.subtitle && <div className="mt-0.5 text-xs text-text-quaternary">{row.subtitle}</div>}
@@ -84,6 +90,7 @@ function RowBody({ row }: { row: ConversationRow }): React.JSX.Element {
 }
 
 export function ConversationListRow({
+  // i18n
   row,
   folders,
   selectMode,
@@ -106,6 +113,7 @@ export function ConversationListRow({
   onDelete: (row: ConversationRow) => void
   onRetrySync?: (id: string) => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(row.title)
   // Cursor position of an open right-click context menu (null = closed). Only the
@@ -129,7 +137,11 @@ export function ConversationListRow({
         <EmojiTile emoji={row.emoji} />
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm font-medium text-text-primary">
-            {row.title || <span className="italic text-text-tertiary">loading…</span>}
+            {row.title || (
+              <span className="italic text-text-tertiary">
+                {i18n.t('conversations.row.loading')}
+              </span>
+            )}
           </div>
           {row.subtitle && (
             <div className="mt-0.5 text-xs text-text-quaternary">{row.subtitle}</div>
@@ -137,7 +149,7 @@ export function ConversationListRow({
         </div>
         <span className="badge flex shrink-0 items-center gap-1.5">
           <Loader2 className="h-3 w-3 animate-spin" aria-hidden />
-          Processing
+          {t('conversations.row.processing')}
         </span>
       </div>
     )
@@ -230,7 +242,7 @@ export function ConversationListRow({
             e.stopPropagation()
             beginRename()
           }}
-          aria-label="Rename"
+          aria-label={t('conversations.row.rename')}
           className="rounded-md p-1.5 text-white/45 transition-colors hover:bg-white/10 hover:text-white"
         >
           <Pencil className="h-4 w-4" />
@@ -248,7 +260,7 @@ export function ConversationListRow({
             e.stopPropagation()
             onDelete(row)
           }}
-          aria-label="Delete"
+          aria-label={t('conversations.row.delete')}
           className="rounded-md p-1.5 text-white/45 transition-colors hover:bg-white/10 hover:text-red-300"
         >
           <Trash2 className="h-4 w-4" />
@@ -265,7 +277,7 @@ export function ConversationListRow({
             e.stopPropagation()
             onStar(row, !row.starred)
           }}
-          aria-label={row.starred ? 'Unstar' : 'Star'}
+          aria-label={row.starred ? t('conversations.row.unstar') : t('conversations.row.star')}
           className="shrink-0 rounded-md p-1.5 transition-colors hover:bg-white/10"
         >
           <Star

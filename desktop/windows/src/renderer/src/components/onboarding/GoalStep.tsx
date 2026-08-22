@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Sparkles } from 'lucide-react'
 import { StepScaffold } from './StepScaffold'
 import { generateGoal } from '../../lib/goals'
+import { useTranslation } from '../../i18n'
 
 type GoalStepProps = {
   stepIndex: number
@@ -17,7 +18,9 @@ type GoalStepProps = {
 
 // The two starter goals offered on the desktop app. They have no number, so the
 // backend sync falls back to a target_value of 1 (see parseTargetValue).
-const SUGGESTED = [
+// Keys are translated via i18n; keep English values for analytics/exact match.
+const SUGGESTED_KEYS = ['onboarding.goal.suggested1', 'onboarding.goal.suggested2'] as const
+const SUGGESTED_EN = [
   'Be more productive and focused every day',
   'Make meaningful progress on my projects'
 ]
@@ -59,6 +62,7 @@ export function GoalStep({
   onContinue,
   onSkip
 }: GoalStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   // 'choose'   — the four buttons.
   // 'typing'   — the editable textarea (Type my own / review an AI draft).
   // The AI button toggles `generating` while it waits on the LLM.
@@ -102,9 +106,9 @@ export function GoalStep({
     <StepScaffold
       stepIndex={stepIndex}
       totalSteps={totalSteps}
-      eyebrow="GOAL"
-      title="Pick one goal."
-      subtitle="Selecting a correct and detailed goal is very important - Omi will optimize all advice to achieve that goal. Make sure your goal contains a number to measure progress."
+      eyebrow={t('onboarding.goal.eyebrow')}
+      title={t('onboarding.goal.title')}
+      subtitle={t('onboarding.goal.subtitle')}
       align="left"
       aside={aside}
       onSkip={onSkip}
@@ -112,17 +116,17 @@ export function GoalStep({
       {mode === 'choose' ? (
         <div className="flex w-full flex-col gap-2.5">
           <div className="grid grid-cols-2 gap-2.5">
-            {SUGGESTED.map((goal) => (
+            {SUGGESTED_KEYS.map((key, idx) => (
               <GoalCard
-                key={goal}
-                label={goal}
-                selected={picked === goal}
-                onClick={() => pickSuggested(goal)}
+                key={key}
+                label={t(key)}
+                selected={picked === SUGGESTED_EN[idx]}
+                onClick={() => pickSuggested(SUGGESTED_EN[idx])}
               />
             ))}
           </div>
           <GoalCard
-            label="Type my own"
+            label={t('onboarding.goal.typeMyOwn')}
             selected={false}
             onClick={() => {
               setDraft('')
@@ -142,7 +146,7 @@ export function GoalStep({
             }
           >
             <Sparkles className="h-4 w-4" />
-            {generating ? 'Generating…' : 'Let AI generate it'}
+            {generating ? t('onboarding.goal.generating') : t('onboarding.goal.generate')}
           </button>
         </div>
       ) : (
@@ -152,7 +156,7 @@ export function GoalStep({
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             rows={3}
-            placeholder="e.g. Ship 2 product features every week"
+            placeholder={t('onboarding.goal.placeholder')}
             className="w-full resize-none rounded-xl bg-white/[0.06] px-5 py-4 text-sm text-white/90 placeholder:text-white/30 focus:bg-white/[0.1] focus:outline-none"
           />
           <div className="flex items-center gap-3">
@@ -161,7 +165,7 @@ export function GoalStep({
               onClick={() => setMode('choose')}
               className="rounded-xl bg-white/[0.06] px-5 py-3 text-sm font-medium text-white/70 transition-colors hover:bg-white/[0.1]"
             >
-              Back
+              {t('onboarding.goal.back')}
             </button>
             <button
               type="button"
@@ -169,7 +173,7 @@ export function GoalStep({
               disabled={!draft.trim()}
               className="rounded-xl bg-white px-8 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Continue
+              {t('onboarding.goal.continue')}
             </button>
           </div>
         </div>

@@ -6,6 +6,7 @@ import {
   currentPlanPeriodText,
   hasPaidSubscription
 } from '../../../lib/billing'
+import { useTranslation } from '../../../i18n'
 import type { UserSubscriptionResponse } from '../../../lib/omiApi.generated'
 
 /**
@@ -24,6 +25,7 @@ export function CurrentPlanCard(props: {
   const subscription = sub.subscription
   const paid = hasPaidSubscription(subscription)
   const periodText = currentPlanPeriodText(subscription)
+  const { t } = useTranslation()
 
   return (
     <BillingCard
@@ -38,7 +40,7 @@ export function CurrentPlanCard(props: {
             className="btn-ghost disabled:opacity-50"
           >
             {portalBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            Manage
+            {t('settings.planUsage.manage')}
           </button>
         ) : (
           <button
@@ -47,7 +49,7 @@ export function CurrentPlanCard(props: {
             className="btn-ghost disabled:opacity-50"
           >
             <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-            Refresh
+            {t('settings.planUsage.refresh')}
           </button>
         )
       }

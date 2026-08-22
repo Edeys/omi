@@ -1,6 +1,7 @@
 import { RefreshCw } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from '../../../../lib/toast'
+import { useTranslation } from '../../../../i18n'
 import { rotateMcpKey } from '../../../../lib/mcpConnect'
 import { useMcpExports } from '../../../../hooks/useMcpExports'
 import {
@@ -41,6 +42,7 @@ const PACK_FOR: Record<string, 'chatgpt' | 'claude' | undefined> = {
 }
 
 export function McpExportDetail({ exportId }: { exportId: string }): React.JSX.Element {
+  const { t } = useTranslation()
   const { snapshot, statusFor, refresh } = useMcpExports()
   const [rotating, setRotating] = useState(false)
 
@@ -56,9 +58,9 @@ export function McpExportDetail({ exportId }: { exportId: string }): React.JSX.E
     try {
       await rotateMcpKey()
       await refresh()
-      toast('Rotated your Omi memory key', { tone: 'success' })
+      toast(t('home.connections.rotatedKey'), { tone: 'success' })
     } catch (e) {
-      toast('Could not rotate key', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.couldNotRotate'), { tone: 'error', body: (e as Error).message })
     } finally {
       setRotating(false)
     }

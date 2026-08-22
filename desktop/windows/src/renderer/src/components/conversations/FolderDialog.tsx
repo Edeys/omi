@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Check, Loader2, Trash2 } from 'lucide-react'
 import type { ConversationFolder } from '../../../../shared/types'
 import { createFolder, updateFolder, deleteFolder } from '../../lib/conversations/folders'
+import { useTranslation } from '../../i18n'
 import { ModalShell } from './ModalShell'
 import { FOLDER_COLORS, DEFAULT_FOLDER_COLOR } from './folderColors'
 
@@ -10,6 +11,7 @@ import { FOLDER_COLORS, DEFAULT_FOLDER_COLOR } from './folderColors'
 // action that confirms in-place; deleting leaves the folder's conversations
 // unfiled (no move target).
 export function FolderDialog({
+  // i18n inside
   folder,
   onClose,
   onSaved,
@@ -21,6 +23,7 @@ export function FolderDialog({
   onSaved: (folder: ConversationFolder) => void
   onDeleted: (id: string) => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const editing = !!folder
   const [name, setName] = useState(folder?.name ?? '')
   const [color, setColor] = useState(folder?.color ?? DEFAULT_FOLDER_COLOR)
@@ -40,7 +43,7 @@ export function FolderDialog({
           : await createFolder({ name: trimmed, color })
       onSaved(saved)
     } catch (e) {
-      setError((e as Error).message || 'Could not save folder')
+      setError((e as Error).message || t('conversations.folders.couldNotSave'))
       setBusy(false)
     }
   }
@@ -53,7 +56,7 @@ export function FolderDialog({
       await deleteFolder(folder.id)
       onDeleted(folder.id)
     } catch (e) {
-      setError((e as Error).message || 'Could not delete folder')
+      setError((e as Error).message || t('conversations.folders.couldNotDelete'))
       setBusy(false)
     }
   }
@@ -62,19 +65,19 @@ export function FolderDialog({
     return (
       <ModalShell onClose={onClose} labelledBy="folder-delete-title">
         <h2 id="folder-delete-title" className="text-lg font-semibold text-text-primary">
-          Delete “{folder.name}”?
+          {t('conversations.folders.deleteConfirmTitle', { name: folder.name })}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-text-tertiary">
-          The folder will be removed. Its conversations won’t be deleted — they’ll just be unfiled.
+          {t('conversations.folders.deleteConfirmDesc')}
         </p>
         {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
         <div className="mt-6 flex justify-end gap-2">
           <button onClick={() => setConfirmingDelete(false)} disabled={busy} className="btn-ghost">
-            Cancel
+            {t('conversations.folders.cancel')}
           </button>
           <button onClick={() => void remove()} disabled={busy} className="btn-danger">
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-            Delete folder
+            {t('conversations.folders.deleteFolder')}
           </button>
         </div>
       </ModalShell>
@@ -84,10 +87,12 @@ export function FolderDialog({
   return (
     <ModalShell onClose={onClose} labelledBy="folder-dialog-title">
       <h2 id="folder-dialog-title" className="text-lg font-semibold text-text-primary">
-        {editing ? 'Edit folder' : 'New folder'}
+        {editing ? t('conversations.folders.editTitle') : t('conversations.folders.newTitle')}
       </h2>
 
-      <label className="mt-4 block text-xs font-medium text-white/50">Name</label>
+      <label className="mt-4 block text-xs font-medium text-white/50">
+        {t('conversations.folders.nameLabel')}
+      </label>
       <input
         autoFocus
         value={name}
@@ -95,19 +100,21 @@ export function FolderDialog({
         onKeyDown={(e) => {
           if (e.key === 'Enter') void save()
         }}
-        placeholder="Folder name"
+        placeholder={t('conversations.folders.namePlaceholder')}
         maxLength={60}
         className="input-field mt-1.5"
       />
 
-      <div className="mt-4 text-xs font-medium text-white/50">Color</div>
+      <div className="mt-4 text-xs font-medium text-white/50">
+        {t('conversations.folders.colorLabel')}
+      </div>
       <div className="mt-2 flex flex-wrap gap-2">
         {FOLDER_COLORS.map((c) => (
           <button
             key={c}
             type="button"
             onClick={() => setColor(c)}
-            aria-label={`Color ${c}`}
+            aria-label={t('conversations.folders.colorValue', { color: c })}
             className={`flex h-8 w-8 items-center justify-center rounded-full transition-transform hover:scale-110 ${
               color === c ? 'ring-2 ring-white ring-offset-2 ring-offset-black/40' : ''
             }`}
@@ -127,14 +134,14 @@ export function FolderDialog({
             disabled={busy}
             className="text-sm font-medium text-red-400 transition-colors hover:text-red-300"
           >
-            Delete
+            {t('conversations.folders.delete')}
           </button>
         ) : (
           <span />
         )}
         <div className="flex gap-2">
           <button onClick={onClose} disabled={busy} className="btn-ghost">
-            Cancel
+            {t('conversations.folders.cancel')}
           </button>
           <button
             onClick={() => void save()}
@@ -142,7 +149,7 @@ export function FolderDialog({
             className="btn-primary"
           >
             {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-            {editing ? 'Save' : 'Create'}
+            {editing ? t('conversations.folders.save') : t('conversations.folders.create')}
           </button>
         </div>
       </div>

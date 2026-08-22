@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ListChecks, ChevronRight } from 'lucide-react'
 import type { ActionItemRecord } from '../../../../shared/types'
+import { useTranslation } from '../../i18n'
 
 // Compact dashboard surface for the idle Home screen: a preview of the next
 // couple of open tasks (soonest due first), mirroring the Goals widget. Reads the
@@ -19,14 +20,17 @@ function startOfDay(ms: number): number {
 
 // Right-side due chip, mirroring the Goals widget's progress label. Returns null
 // for tasks with no due date (no chip shown). Overdue gets a rose tint.
-function dueChip(t: ActionItemRecord): { label: string; overdue: boolean } | null {
+function dueChip(
+  t: ActionItemRecord,
+  tFn: (key: string) => string
+): { label: string; overdue: boolean } | null {
   if (t.dueAt == null) return null
   const due = startOfDay(t.dueAt)
   const today = startOfDay(Date.now())
   const days = Math.round((due - today) / 86_400_000)
-  if (days < 0) return { label: 'Overdue', overdue: true }
-  if (days === 0) return { label: 'Today', overdue: false }
-  if (days === 1) return { label: 'Tomorrow', overdue: false }
+  if (days < 0) return { label: tFn('home.quickTasks.overdue'), overdue: true }
+  if (days === 0) return { label: tFn('home.quickTasks.today'), overdue: false }
+  if (days === 1) return { label: tFn('home.quickTasks.tomorrow'), overdue: false }
   return {
     label: new Date(t.dueAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
     overdue: false
@@ -43,6 +47,7 @@ function byDueDate(a: ActionItemRecord, b: ActionItemRecord): number {
 const MAX_SHOWN = 2
 
 export function QuickTaskWidget({ onReady }: { onReady?: () => void }): React.JSX.Element | null {
+  const { t } = useTranslation()
   const [items, setItems] = useState<ActionItemRecord[] | null>(null)
   // Tell the parent once our data has loaded (whether or not we have tasks), so
   // it can reveal both widgets together instead of letting them pop in / reshuffle.
@@ -93,17 +98,17 @@ export function QuickTaskWidget({ onReady }: { onReady?: () => void }): React.JS
           <ListChecks className="h-4 w-4 text-white/70" />
         </div>
         <div className="flex flex-1 items-center gap-1.5 text-sm font-medium text-white/85">
-          Tasks
+          {t('home.quickTasks.title')}
           <span className="text-white/35">{items.length}</span>
         </div>
         <ChevronRight className="h-4 w-4 shrink-0 text-white/25 transition-colors group-hover:text-white/50" />
       </div>
       <div className="mt-3 space-y-2">
-        {shown.map((t) => {
-          const chip = dueChip(t)
+        {shown.map((task) => {
+          const chip = dueChip(task, t)
           return (
-            <div key={t.id} className="flex items-center justify-between gap-2 text-[11px]">
-              <span className="truncate text-white/65">{t.description}</span>
+            <div key={task.id} className="flex items-center justify-between gap-2 text-[11px]">
+              <span className="truncate text-white/65">{task.description}</span>
               {chip && (
                 <span
                   className={chip.overdue ? 'shrink-0 text-rose-300/80' : 'shrink-0 text-white/35'}
@@ -115,7 +120,9 @@ export function QuickTaskWidget({ onReady }: { onReady?: () => void }): React.JS
           )
         })}
         {items.length > MAX_SHOWN && (
-          <p className="text-[11px] text-white/35">+{items.length - MAX_SHOWN} more</p>
+          <p className="text-[11px] text-white/35">
+            {t('home.quickTasks.more', { count: items.length - MAX_SHOWN })}
+          </p>
         )}
       </div>
     </Link>

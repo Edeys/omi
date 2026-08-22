@@ -55,7 +55,7 @@ describe('DegradedModeNotice', () => {
     await act(async () => fireDegraded?.(true))
     const notice = screen.getByRole('status')
     expect(notice.textContent).toContain('Omi is catching up')
-    expect(notice.textContent).toContain('Syncing will resume automatically')
+    expect(notice.textContent).toContain('Some features may be temporarily unavailable')
 
     await act(async () => fireDegraded?.(false))
     expect(screen.queryByRole('status')).toBeNull()

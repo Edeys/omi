@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FileText } from 'lucide-react'
 import { toast } from '../../../../lib/toast'
+import { useTranslation } from '../../../../i18n'
 import { useMemories } from '../../../../hooks/useMemories'
 import { runMemoryExport } from '../../../../lib/memoryExport'
 import type { ExportMemory } from '../../../../../../shared/types'
@@ -15,6 +16,7 @@ import { MemoryPackRow } from './MemoryPackRow'
 // destinations are a separate, later phase — out of scope here.)
 
 export function ExportsConnector(): React.JSX.Element {
+  const { t } = useTranslation()
   const { memories } = useMemories()
   const [exporting, setExporting] = useState(false)
   const [notionOpen, setNotionOpen] = useState(false)
@@ -31,11 +33,11 @@ export function ExportsConnector(): React.JSX.Element {
   const runExport = async (target: 'obsidian' | 'file' | 'notion'): Promise<void> => {
     if (exporting) return
     if (memories.length === 0) {
-      toast('No memories to export yet', { tone: 'warn' })
+      toast(t('home.connections.noMemoriesToExport'), { tone: 'warn' })
       return
     }
     if (target === 'notion' && (!notionToken.trim() || !notionPage.trim())) {
-      toast('Enter your Notion token and parent page ID', { tone: 'warn' })
+      toast(t('home.connections.notionMissing'), { tone: 'warn' })
       return
     }
     setExporting(true)
@@ -48,13 +50,13 @@ export function ExportsConnector(): React.JSX.Element {
           : undefined
       )
       if (!r.canceled) {
-        toast(`Exported ${r.count} memor${r.count === 1 ? 'y' : 'ies'}`, {
+        toast(t('home.connections.exportedCount', { count: r.count }), {
           tone: 'success',
           body: r.location
         })
       }
     } catch (e) {
-      toast('Export failed', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.exportFailed'), { tone: 'error', body: (e as Error).message })
     } finally {
       setExporting(false)
     }
@@ -71,7 +73,7 @@ export function ExportsConnector(): React.JSX.Element {
             tone={notionOpen ? 'ghost' : 'primary'}
             onClick={() => setNotionOpen((v) => !v)}
           >
-            {notionOpen ? 'Close' : 'Export'}
+            {notionOpen ? t('common.close') : t('home.connections.export')}
           </PillButton>
         }
       >
@@ -83,17 +85,17 @@ export function ExportsConnector(): React.JSX.Element {
             <input
               value={notionToken}
               onChange={(e) => setNotionToken(e.target.value)}
-              placeholder="Notion integration token (secret_…)"
+              placeholder={t('home.connections.notionTokenPlaceholder')}
               className="input-field text-[13px]"
             />
             <input
               value={notionPage}
               onChange={(e) => setNotionPage(e.target.value)}
-              placeholder="Parent page ID"
+              placeholder={t('home.connections.parentPageId')}
               className="input-field text-[13px]"
             />
             <PillButton tone="primary" onClick={() => runExport('notion')} disabled={exporting}>
-              {exporting ? 'Exporting…' : 'Export to Notion'}
+              {exporting ? t('home.connections.exporting') : t('home.connections.exportToNotion')}
             </PillButton>
           </div>
         )}
@@ -105,18 +107,18 @@ export function ExportsConnector(): React.JSX.Element {
         description="Write your memories into your Obsidian vault."
         action={
           <PillButton tone="primary" onClick={() => runExport('obsidian')} disabled={exporting}>
-            Export
+            {t('home.connections.export')}
           </PillButton>
         }
       />
 
       <ConnectorRow
         icon={FileText}
-        title="Markdown file"
+        title={t('home.connections.markdownFile')}
         description="Save your memories as a single Markdown file."
         action={
           <PillButton tone="primary" onClick={() => runExport('file')} disabled={exporting}>
-            Export
+            {t('home.connections.export')}
           </PillButton>
         }
       />

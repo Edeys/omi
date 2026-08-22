@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { toast } from '../../../../lib/toast'
+import { useTranslation } from '../../../../i18n'
 import { connectMcp, disconnectMcp } from '../../../../lib/mcpConnect'
 import type {
   McpConfigConnector,
@@ -88,6 +89,7 @@ export function McpConfigConnectorRow({
   /** Called after a successful connect/disconnect so the parent can refresh. */
   onChanged: () => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const [busy, setBusy] = useState(false)
   const [card, setCard] = useState<McpSetupCard | undefined>()
 
@@ -101,7 +103,7 @@ export function McpConfigConnectorRow({
       else setCard(undefined)
       onChanged()
     } catch (e) {
-      toast('Could not connect', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.couldNotConnect'), { tone: 'error', body: (e as Error).message })
     } finally {
       setBusy(false)
     }
@@ -115,7 +117,7 @@ export function McpConfigConnectorRow({
       setCard(undefined)
       onChanged()
     } catch (e) {
-      toast('Could not disconnect', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.couldNotDisconnect'), { tone: 'error', body: (e as Error).message })
     } finally {
       setBusy(false)
     }

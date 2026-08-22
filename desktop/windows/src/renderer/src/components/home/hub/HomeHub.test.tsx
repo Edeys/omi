@@ -339,7 +339,7 @@ describe('HomeHub — portaled panel UI does not read as a click-outside', () =>
     renderHub()
     fireEvent.focus(askBar())
     expect(mode()).toBe('chat')
-    const trigger = await screen.findByTitle('Chat history')
+    const trigger = await screen.findByTitle('Chats')
     fireEvent.click(trigger)
     return await screen.findByRole('dialog')
   }
@@ -378,7 +378,7 @@ describe('HomeHub — portaled panel UI does not read as a click-outside', () =>
     // landing on top of "+" / history is structural: one flex row owns all three.
     renderHub()
     fireEvent.focus(askBar())
-    const history = await screen.findByTitle('Chat history')
+    const history = await screen.findByTitle('Chats')
     const row = screen.getByLabelText('Close chat').parentElement as HTMLElement
 
     expect(row.className).toContain('flex')

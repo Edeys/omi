@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { StepScaffold } from './StepScaffold'
 import macsImg from '../../assets/macs.png'
+import { useTranslation } from '../../i18n'
 
 type AskDemoStepProps = {
   stepIndex: number
@@ -22,6 +23,7 @@ export function AskDemoStep({
   onContinue,
   onSkip
 }: AskDemoStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   // Drives the enter transition: mount with the "from" classes, then flip to
   // "to" on the next frame so the fade+slide animates.
   const [revealed, setRevealed] = useState(false)
@@ -37,7 +39,7 @@ export function AskDemoStep({
     <StepScaffold
       stepIndex={stepIndex}
       totalSteps={totalSteps}
-      title={'Type in the floating bar “Which computer should I buy?”'}
+      title={t('onboarding.askDemo.title')}
       align="center"
       widthClassName="max-w-[820px]"
       onContinue={onContinue}
@@ -46,7 +48,7 @@ export function AskDemoStep({
       <div className="mt-4 flex min-h-[260px] w-full items-center justify-center">
         <img
           src={macsImg}
-          alt="Omi's answer: a comparison of Mac models"
+          alt={t('onboarding.askDemo.imageAlt')}
           onError={(e) => console.error('[AskDemoStep] macs.png failed to load', e)}
           className={
             'w-full rounded-2xl shadow-2xl ring-1 ring-white/10 transition-all duration-500 ease-out ' +

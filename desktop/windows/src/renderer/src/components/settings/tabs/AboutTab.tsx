@@ -29,26 +29,25 @@ import {
 import type { UpdateCheckResult } from '../../../../../shared/types'
 import { SettingRow } from '../SettingRow'
 import { Toggle } from '../Toggle'
+import { useTranslation } from '../../../i18n'
 
-type Link = { label: string; icon: typeof Globe } & ({ href: string } | { onClick: () => void })
-
-const LINKS: Link[] = [
-  { label: 'Visit website', icon: Globe, href: 'https://omi.me' },
-  { label: 'Help center', icon: LifeBuoy, href: 'https://help.omi.me' },
-  { label: 'Terms of service', icon: FileText, href: 'https://omi.me/terms' },
-  { label: 'Release notes', icon: Newspaper, onClick: () => window.omi?.whatsNewOpenNotes?.() }
-]
-
-function checkResultMessage(r: UpdateCheckResult): string {
+function checkResultMessage(
+  r: UpdateCheckResult,
+  t: (k: string, o?: Record<string, unknown>) => string
+): string {
   switch (r.status) {
     case 'unsupported':
-      return `Updates install automatically. You're on version ${r.version ?? 'this build'}.`
+      return t('settings.about.updateUnsupported', { version: r.version ?? 'this build' })
     case 'up-to-date':
-      return `You're on the latest version (${r.version ?? 'current'}).`
+      return t('settings.about.updateUptoDate', { version: r.version ?? 'current' })
     case 'update-available':
-      return `Update available${r.version ? ` (version ${r.version})` : ''} — downloading in the background. Omi will offer to restart once it's ready.`
+      return t('settings.about.updateAvailable', {
+        version: r.version ? t('settings.about.updateAvailableVersion', { version: r.version }) : ''
+      })
     case 'error':
-      return `Couldn't check for updates${r.message ? `: ${r.message}` : '.'}`
+      return t('settings.about.updateError', {
+        message: r.message ? t('settings.about.updateErrorMessage', { message: r.message }) : '.'
+      })
     default:
       return ''
   }
@@ -61,6 +60,18 @@ export function AboutTab(): React.JSX.Element {
   const [checking, setChecking] = useState(false)
   const [checkMsg, setCheckMsg] = useState<string | null>(null)
   const [beta, setBeta] = useState<boolean | null>(null)
+  const { t } = useTranslation()
+
+  const LINKS = [
+    { label: t('settings.about.visitWebsite'), icon: Globe, href: 'https://omi.me' },
+    { label: t('settings.about.helpCenter'), icon: LifeBuoy, href: 'https://help.omi.me' },
+    { label: t('settings.about.terms'), icon: FileText, href: 'https://omi.me/terms' },
+    {
+      label: t('settings.about.releaseNotes'),
+      icon: Newspaper,
+      onClick: () => window.omi?.whatsNewOpenNotes?.()
+    }
+  ] as const
 
   useEffect(() => {
     void window.omi?.getAppVersion?.().then((v) => {
@@ -87,7 +98,7 @@ export function AboutTab(): React.JSX.Element {
       // "Update ready / Restart to update" affordance made the button quit the
       // app with nothing staged, so it reopened on the same version (#10509).
       // The staged state comes from main alone (getPendingUpdate/onUpdateReady).
-      if (res) setCheckMsg(checkResultMessage(res))
+      if (res) setCheckMsg(checkResultMessage(res, t))
     } finally {
       setChecking(false)
     }
@@ -100,9 +111,7 @@ export function AboutTab(): React.JSX.Element {
     const installing = await window.omi?.installUpdateNow?.().catch(() => false)
     if (installing) return
     setPending(null)
-    setCheckMsg(
-      'That update is no longer staged. Omi will offer to restart once it downloads again.'
-    )
+    setCheckMsg(t('settings.about.updateNoLongerStaged'))
   }
 
   // Opt in/out of pre-release (beta) builds. The pref is persisted in main and the
@@ -119,19 +128,25 @@ export function AboutTab(): React.JSX.Element {
     <>
       <SettingRow
         icon={Info}
-        title="Omi for Windows"
+        title={t('settings.about.title')}
         subtitle={
           version
-            ? `Version ${version}${name && name.toLowerCase() !== 'omi' ? ` · ${name}` : ''}`
-            : 'Loading version…'
+            ? t('settings.about.version', {
+                version,
+                name:
+                  name && name.toLowerCase() !== 'omi'
+                    ? t('settings.about.versionName', { name })
+                    : ''
+              })
+            : t('settings.about.loading')
         }
         keywords="about version build app info omi"
       />
 
       <SettingRow
         icon={Globe}
-        title="Links"
-        subtitle="Learn more about Omi, get help, and read the terms."
+        title={t('settings.about.linksTitle')}
+        subtitle={t('settings.about.linksSubtitle')}
         keywords="website help support terms release notes links docs"
       >
         <div className="divide-y divide-white/[0.06] overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
@@ -152,11 +167,22 @@ export function AboutTab(): React.JSX.Element {
               </>
             )
             return isExternal ? (
-              <a key={l.label} href={l.href} target="_blank" rel="noreferrer" className={className}>
+              <a
+                key={l.label}
+                href={(l as { href: string }).href}
+                target="_blank"
+                rel="noreferrer"
+                className={className}
+              >
                 {inner}
               </a>
             ) : (
-              <button key={l.label} type="button" onClick={l.onClick} className={className}>
+              <button
+                key={l.label}
+                type="button"
+                onClick={(l as { onClick: () => void }).onClick}
+                className={className}
+              >
                 {inner}
               </button>
             )
@@ -166,8 +192,8 @@ export function AboutTab(): React.JSX.Element {
 
       <SettingRow
         icon={RefreshCw}
-        title="Software updates"
-        subtitle="Omi updates itself in the background and installs the next time you restart."
+        title={t('settings.about.softwareTitle')}
+        subtitle={t('settings.about.softwareSubtitle')}
         keywords="update upgrade version check for updates release"
         note={checkMsg && <p className="text-xs text-white/60">{checkMsg}</p>}
         control={
@@ -177,7 +203,7 @@ export function AboutTab(): React.JSX.Element {
             disabled={checking}
             className="rounded-md border border-white/15 px-3 py-1.5 text-xs text-white transition-colors hover:bg-white/10 disabled:opacity-40"
           >
-            {checking ? 'Checking…' : 'Check for updates'}
+            {checking ? t('settings.about.checking') : t('settings.about.checkForUpdates')}
           </button>
         }
       />
@@ -185,15 +211,15 @@ export function AboutTab(): React.JSX.Element {
       <SettingRow
         icon={FlaskConical}
         dot={beta ? 'on' : 'off'}
-        title="Receive beta updates"
-        subtitle="Get pre-release versions early. Beta builds get new features first but may be less stable. Turn off to stay on stable releases."
+        title={t('settings.about.betaTitle')}
+        subtitle={t('settings.about.betaSubtitle')}
         keywords="beta prerelease pre-release channel early access insider unstable updates test"
         control={
           <Toggle
             on={!!beta}
             onChange={(on) => void toggleBeta(on)}
             disabled={beta === null}
-            label="Receive beta updates"
+            label={t('settings.about.betaTitle')}
           />
         }
       />
@@ -202,8 +228,8 @@ export function AboutTab(): React.JSX.Element {
         <SettingRow
           icon={Download}
           dot="on"
-          title="Update ready"
-          subtitle={`Version ${pending} is ready. Restart Omi to apply it.`}
+          title={t('settings.about.updateReadyTitle')}
+          subtitle={t('settings.about.updateReadySubtitle', { version: pending })}
           keywords="update upgrade restart version release ready"
           control={
             <button
@@ -211,7 +237,7 @@ export function AboutTab(): React.JSX.Element {
               onClick={() => void restartToUpdate()}
               className="rounded-md bg-white px-3 py-1.5 text-xs font-medium text-black transition-opacity hover:opacity-90"
             >
-              Restart to update
+              {t('settings.about.restartToUpdate')}
             </button>
           }
         />

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { House } from 'lucide-react'
 import { HOME_PATH } from '../../routes/manifest'
+import { useTranslation } from '../../i18n'
 
 // The chrome every non-Home page wears: one small "Home" pill, top-left. A port of
 // macOS's PageChromeBar / PageChromeButton (DesktopHomeView.swift:1047-1091), which
@@ -18,6 +19,7 @@ import { HOME_PATH } from '../../routes/manifest'
 // line with the page title beneath it — so the inset tracks the Windows content column
 // instead. Keep these in sync if PageHeader's padding changes.
 export function PageChromeBar(): React.JSX.Element {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   return (
@@ -25,8 +27,8 @@ export function PageChromeBar(): React.JSX.Element {
       <button
         type="button"
         onClick={() => navigate(HOME_PATH)}
-        title="Home"
-        aria-label="Home"
+        title={t('layout.pageChrome.home')}
+        aria-label={t('layout.pageChrome.home')}
         className={
           'glass-subtle focus-ring group inline-flex select-none items-center gap-[7px] rounded-full ' +
           'border border-[var(--glass-border)] px-[11px] py-[7px] text-[12px] font-semibold ' +
@@ -35,7 +37,7 @@ export function PageChromeBar(): React.JSX.Element {
         }
       >
         <House className="h-3 w-3 shrink-0" strokeWidth={2.25} />
-        Home
+        {t('layout.pageChrome.home')}
       </button>
     </div>
   )

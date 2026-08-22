@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronLeft, LayoutGrid, ArrowRight, X } from 'lucide-react'
 import type { HubConnectSlotProps } from '../hubConnectSlot'
+import { useTranslation } from '../../../../i18n'
 import { CalendarConnector } from './CalendarConnector'
 import { GmailConnector } from './GmailConnector'
 import { StickyNotesConnector } from './StickyNotesConnector'
@@ -67,6 +68,7 @@ function DetailShell({
   onDismiss: () => void
   children: React.ReactNode
 }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div className="relative flex h-full w-full flex-col" data-testid="connections-detail">
       <div className="flex shrink-0 items-center gap-2.5 px-5 pt-5">
@@ -85,7 +87,7 @@ function DetailShell({
         <button
           type="button"
           onClick={onDismiss}
-          aria-label="Close connect"
+          aria-label={t('home.connections.closeConnect')}
           className="focus-ring ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-home-muted transition-colors hover:bg-white/10 hover:text-home-ink"
         >
           <X className="h-4 w-4" strokeWidth={2} />
@@ -101,11 +103,12 @@ function DetailShell({
 // The App Marketplace link — rendered through ConnectorRow so it shares the exact row
 // layout; kept reachable from the list views (Mac's "More" opens the apps popup).
 function MarketplaceLink({ onOpen }: { onOpen: () => void }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <ConnectorRow
       icon={LayoutGrid}
-      title="Browse the App Marketplace"
-      description="Discover chat personas, notification plugins, and more."
+      title={t('home.connections.browseMarketplace')}
+      description={t('home.connections.browseMarketplaceDesc')}
       onClick={onOpen}
       action={<ArrowRight className="h-4 w-4 text-home-faint" strokeWidth={2} />}
     />
@@ -113,6 +116,7 @@ function MarketplaceLink({ onOpen }: { onOpen: () => void }): React.JSX.Element 
 }
 
 export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.Element {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [view, setView] = useState<View>({ kind: 'tray' })
 
@@ -166,7 +170,7 @@ export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.
         <StickyNotesConnector />
       )
     return (
-      <DetailShell title="Connect data" onBack={back} onDismiss={onDismiss}>
+      <DetailShell title={t('home.connections.connectData')} onBack={back} onDismiss={onDismiss}>
         <div className="flex flex-col">{detail}</div>
       </DetailShell>
     )
@@ -174,8 +178,8 @@ export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.
 
   if (view.kind === 'imports') {
     return (
-      <DetailShell title="Import sources" onBack={back} onDismiss={onDismiss}>
-        <SectionHeader>Imports</SectionHeader>
+      <DetailShell title={t('home.connections.importSources')} onBack={back} onDismiss={onDismiss}>
+        <SectionHeader>{t('home.connections.imports')}</SectionHeader>
         <div className="flex flex-col">
           <CalendarConnector />
           <GmailConnector />
@@ -193,8 +197,8 @@ export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.
 
   if (view.kind === 'exports') {
     return (
-      <DetailShell title="Use omi memory anywhere" onBack={back} onDismiss={onDismiss}>
-        <SectionHeader>Exports</SectionHeader>
+      <DetailShell title={t('home.connections.useAnywhere')} onBack={back} onDismiss={onDismiss}>
+        <SectionHeader>{t('home.connections.exports')}</SectionHeader>
         <div className="flex flex-col">
           <ExportsConnector />
         </div>
@@ -210,7 +214,7 @@ export function ConnectionsPanel({ onDismiss }: HubConnectSlotProps): React.JSX.
   // give an external tool read access to your Omi memory.
   return (
     <DetailShell title={EXPORT_TITLES[view.id]} onBack={back} onDismiss={onDismiss}>
-      <SectionHeader>Use omi memory anywhere</SectionHeader>
+      <SectionHeader>{t('home.connections.useAnywhere')}</SectionHeader>
       <McpExportDetail exportId={view.id} />
       <div className="mt-6">
         <MarketplaceLink onOpen={openApps} />

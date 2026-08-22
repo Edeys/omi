@@ -25,7 +25,9 @@ vi.mock('../autoModelSelector', () => ({
 vi.mock('../aboutUser', () => ({ getAboutUserCard: () => '', refreshAboutUserCard: vi.fn() }))
 // Drive the language line off a controlled pref (voiceLanguages empty → falls back
 // to `language`, the behavior PR-B adds).
-const prefs = { voiceLanguages: [] as string[], language: 'ru' }
+const { prefs } = vi.hoisted(() => ({
+  prefs: { voiceLanguages: [] as string[], language: 'ru' }
+}))
 vi.mock('../../preferences', () => ({ getPreferences: () => prefs }))
 
 import { HubController } from './hubController'

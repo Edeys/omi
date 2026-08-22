@@ -5,47 +5,51 @@ import { getPreferences, setPreferences } from '../../../lib/preferences'
 import { setDisplayName } from '../../../lib/userProfile'
 import { toast } from '../../../lib/toast'
 import { SettingRow } from '../SettingRow'
+import { useTranslation } from '../../../i18n'
 
 export function AccountTab(): React.JSX.Element {
   const prefs = getPreferences()
   const [name, setName] = useState(prefs.displayName ?? '')
+  const { t } = useTranslation()
 
   // Transcription language moved to Settings → Transcription (Mac parity); this
   // row now owns only the display name.
   const saveProfile = (): void => {
     setPreferences({ displayName: name.trim() })
-    void setDisplayName(name.trim()).catch(() => toast('Name sync failed', { tone: 'warn' }))
-    toast('Profile saved', { tone: 'success' })
+    void setDisplayName(name.trim()).catch(() =>
+      toast(t('settings.account.nameSyncFailed'), { tone: 'warn' })
+    )
+    toast(t('settings.account.profileSaved'), { tone: 'success' })
   }
 
   return (
     <>
       <SettingRow
         icon={User}
-        title="Profile"
-        subtitle="Your display name."
+        title={t('settings.account.profileTitle')}
+        subtitle={t('settings.account.profileSubtitle')}
         keywords="name profile display"
       >
         <div className="space-y-3">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Your name"
+            placeholder={t('settings.account.namePlaceholder')}
             className="glass-subtle w-full rounded-lg px-4 py-3 text-sm text-text-secondary focus:outline-none"
           />
           <button onClick={saveProfile} className="btn-ghost">
-            Save
+            {t('settings.account.save')}
           </button>
         </div>
       </SettingRow>
       <SettingRow
         icon={LogOut}
-        title="Signed in"
-        subtitle={auth.currentUser?.email ?? '(not signed in)'}
+        title={t('settings.account.signedInTitle')}
+        subtitle={auth.currentUser?.email ?? t('settings.account.notSignedIn')}
         keywords="account email sign out logout"
         control={
           <button onClick={signOutUser} className="btn-ghost">
-            Sign out
+            {t('settings.account.signOut')}
           </button>
         }
       />

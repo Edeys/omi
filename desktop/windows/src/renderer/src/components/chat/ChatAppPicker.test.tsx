@@ -33,14 +33,12 @@ function stubPopoverDom(): void {
 describe('ChatAppPickerView', () => {
   it('shows the default "omi" label when no app is selected', () => {
     render(<ChatAppPickerView apps={APPS} selectedAppId={null} onSelect={vi.fn()} />)
-    expect(screen.getByRole('button', { name: 'Select chat assistant' }).textContent).toContain(
-      'omi'
-    )
+    expect(screen.getByRole('button', { name: 'Select Assistant' }).textContent).toContain('omi')
   })
 
   it('shows the selected app name when one is selected', () => {
     render(<ChatAppPickerView apps={APPS} selectedAppId="persona-a" onSelect={vi.fn()} />)
-    expect(screen.getByRole('button', { name: 'Select chat assistant' }).textContent).toContain(
+    expect(screen.getByRole('button', { name: 'Select Assistant' }).textContent).toContain(
       'Persona A'
     )
   })
@@ -49,7 +47,7 @@ describe('ChatAppPickerView', () => {
     stubPopoverDom()
     const onSelect = vi.fn()
     render(<ChatAppPickerView apps={APPS} selectedAppId={null} onSelect={onSelect} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Select chat assistant' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Select Assistant' }))
 
     // The default row + both apps render in the popover.
     expect(screen.getByText('Select Assistant')).toBeTruthy()
@@ -66,7 +64,7 @@ describe('ChatAppPickerView', () => {
     stubPopoverDom()
     const onSelect = vi.fn()
     render(<ChatAppPickerView apps={APPS} selectedAppId="persona-a" onSelect={onSelect} />)
-    fireEvent.click(screen.getByRole('button', { name: 'Select chat assistant' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Select Assistant' }))
     // The "Default assistant" subtitle uniquely identifies the default row.
     fireEvent.click(screen.getByText('Default assistant'))
     expect(onSelect).toHaveBeenCalledWith(null)

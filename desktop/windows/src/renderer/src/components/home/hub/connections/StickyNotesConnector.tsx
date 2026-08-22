@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { toast } from '../../../../lib/toast'
+import { useTranslation } from '../../../../i18n'
 import { toastImportTally } from '../../../../lib/importToast'
 import { useMemories } from '../../../../hooks/useMemories'
 import { readAndExtractStickyNotes, importStickyMemories } from '../../../../lib/stickyNotesImport'
@@ -13,6 +14,7 @@ import { MemoryPreviewList } from './MemoryPreviewList'
 // Integrations via lib/stickyNotesImport.ts.
 
 export function StickyNotesConnector(): React.JSX.Element {
+  const { t } = useTranslation()
   const { memories, refresh } = useMemories()
   const [reading, setReading] = useState(false)
   const [importing, setImporting] = useState(false)
@@ -25,19 +27,19 @@ export function StickyNotesConnector(): React.JSX.Element {
     try {
       const outcome = await readAndExtractStickyNotes(memories.map((m) => m.content))
       if (outcome.status === 'unavailable')
-        toast('No Sticky Notes found on this PC', { tone: 'warn' })
+        toast(t('home.connections.noStickyFound'), { tone: 'warn' })
       else if (outcome.status === 'error')
-        toast('Could not read Sticky Notes', { tone: 'error', body: outcome.error })
+        toast(t('home.connections.stickyCouldNotRead'), { tone: 'error', body: outcome.error })
       else if (outcome.status === 'empty')
         toast(
           outcome.reason === 'no-notes'
-            ? 'No note text to import'
-            : 'No new memories found in your notes',
+            ? t('home.connections.noStickyText')
+            : t('home.connections.noNewStickyMemories'),
           { tone: 'warn' }
         )
       else setPreview({ memories: outcome.memories, profile: outcome.profile })
     } catch (e) {
-      toast('Could not read Sticky Notes', { tone: 'error', body: (e as Error).message })
+      toast(t('home.connections.stickyCouldNotRead'), { tone: 'error', body: (e as Error).message })
     } finally {
       setReading(false)
     }
@@ -58,16 +60,18 @@ export function StickyNotesConnector(): React.JSX.Element {
   return (
     <ConnectorRow
       iconNode={<ConnectorBrandMark brand="sticky" />}
-      title="Sticky Notes"
+      title={t('home.connections.stickyTitle')}
       description="Turn your Sticky Notes into durable memories — they never leave your PC."
       action={
         count > 0 ? (
           <PillButton tone="primary" onClick={runImport} disabled={importing}>
-            {importing ? 'Importing…' : `Import ${count}`}
+            {importing
+              ? t('home.connections.importing')
+              : `${t('home.connections.import')} ${count}`}
           </PillButton>
         ) : (
           <PillButton tone="primary" onClick={read} disabled={reading}>
-            {reading ? 'Reading…' : 'Read notes'}
+            {reading ? t('home.connections.reading') : t('home.connections.readNotes')}
           </PillButton>
         )
       }

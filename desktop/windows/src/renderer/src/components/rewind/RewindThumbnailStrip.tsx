@@ -9,6 +9,7 @@ import {
   formatGapDuration
 } from '../../lib/rewindStrip'
 import { useElementWidth } from '../../hooks/useElementWidth'
+import { useTranslation } from '../../i18n'
 
 // Gap spacers are sized by duration so blank time is proportional.
 const GAP_PX_PER_MS = 0.001
@@ -84,6 +85,7 @@ function GapSpacer({
   active: boolean
   onClick: () => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const width = gapWidthPx(to - from, GAP_PX_PER_MS, GAP_MIN_PX, GAP_MAX_PX)
   return (
     <button
@@ -95,7 +97,7 @@ function GapSpacer({
           : 'border-white/10 text-white/30'
       }`}
     >
-      <span className="uppercase tracking-wide">no activity</span>
+      <span className="uppercase tracking-wide">{t('rewind.noActivity')}</span>
       <span>{formatGapDuration(to - from)}</span>
     </button>
   )

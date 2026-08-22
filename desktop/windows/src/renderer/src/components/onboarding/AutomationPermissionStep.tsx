@@ -1,6 +1,7 @@
 import { Zap } from 'lucide-react'
 import { getPreferences, setPreferences } from '../../lib/preferences'
 import { PermissionStep } from './PermissionStep'
+import { useTranslation } from '../../i18n'
 
 type AutomationPermissionStepProps = {
   stepIndex: number
@@ -19,6 +20,7 @@ export function AutomationPermissionStep({
   onBack,
   onSkip
 }: AutomationPermissionStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   // Automation has no OS permission prompt (Windows UIA needs no grant) — enabling it
   // is a local opt-in that records consent, so what `checkGranted` reads below is that
   // consent, not an OS state. useChat's action-planner pre-step gates on this preference
@@ -40,22 +42,22 @@ export function AutomationPermissionStep({
       stepIndex={stepIndex}
       totalSteps={totalSteps}
       aside={aside}
-      eyebrow="PERMISSION"
-      title="Let Omi act when asked"
-      subtitle="Automation lets Omi take actions for you"
+      eyebrow={t('onboarding.automationPermission.eyebrow')}
+      title={t('onboarding.automationPermission.title')}
+      subtitle={t('onboarding.automationPermission.subtitle')}
       icon={<Zap className="h-5 w-5 text-white/60" />}
-      cardLabel="Automation"
+      cardLabel={t('onboarding.automationPermission.cardLabel')}
       statusText={{
-        idle: 'Not enabled yet',
-        waiting: 'Enabling',
-        granted: 'Enabled',
-        denied: "Couldn't enable"
+        idle: t('onboarding.automationPermission.status.idle'),
+        waiting: t('onboarding.automationPermission.status.waiting'),
+        granted: t('onboarding.automationPermission.status.granted'),
+        denied: t('onboarding.automationPermission.status.denied')
       }}
       buttonLabel={{
-        idle: 'Enable',
-        waiting: 'Enabling',
-        granted: 'Enabled',
-        denied: 'Try again'
+        idle: t('onboarding.automationPermission.button.idle'),
+        waiting: t('onboarding.automationPermission.button.waiting'),
+        granted: t('onboarding.automationPermission.button.granted'),
+        denied: t('onboarding.automationPermission.button.denied')
       }}
       onActivate={enableAutomation}
       checkGranted={isConsented}

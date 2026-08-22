@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { StepScaffold } from './StepScaffold'
+import { useTranslation } from '../../i18n'
 
 type NameStepProps = {
   stepIndex: number
@@ -16,6 +17,7 @@ export function NameStep({
   onContinue,
   onBack
 }: NameStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   const [name, setName] = useState(initialValue)
   const trimmed = name.trim()
 
@@ -23,8 +25,8 @@ export function NameStep({
     <StepScaffold
       stepIndex={stepIndex}
       totalSteps={totalSteps}
-      eyebrow="NAME"
-      title="What should Omi call you?"
+      eyebrow={t('onboarding.name.eyebrow')}
+      title={t('onboarding.name.title')}
       continueDisabled={trimmed.length === 0}
       onContinue={() => onContinue(trimmed)}
       onBack={onBack}
@@ -36,7 +38,7 @@ export function NameStep({
         onKeyDown={(e) => {
           if (e.key === 'Enter' && trimmed.length > 0) onContinue(trimmed)
         }}
-        placeholder="Your name"
+        placeholder={t('onboarding.name.placeholder')}
         className="glass-subtle w-64 rounded-lg px-4 py-3 text-center text-sm text-white/90 placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/30"
       />
     </StepScaffold>

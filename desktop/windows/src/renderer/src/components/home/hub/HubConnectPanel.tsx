@@ -2,6 +2,7 @@ import { createElement, Suspense } from 'react'
 import { Loader2 } from 'lucide-react'
 import { getHubConnectContent } from './hubConnectSlot'
 import { ErrorBoundary } from '../../ui/ErrorBoundary'
+import { useTranslation } from '../../../i18n'
 
 // The Connect stage — the slide-down panel the ask bar's "Connect" toggle reveals.
 //
@@ -24,9 +25,10 @@ import { ErrorBoundary } from '../../ui/ErrorBoundary'
 // the ErrorBoundary fallback: a failed chunk load degrades to this resting state
 // rather than white-screening the app.
 function RestingState(): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-1 items-center justify-center">
-      <p className="text-[13px] font-medium text-home-muted">Connections are coming soon.</p>
+      <p className="text-[13px] font-medium text-home-muted">{t('home.connections.comingSoon')}</p>
     </div>
   )
 }
@@ -38,12 +40,13 @@ function RestingState(): React.JSX.Element {
 // practice HomeHub preloads the chunk (preloadHubConnectContent) so this rarely shows
 // at all — the tray renders instantly from the warmed chunk.
 function LoadingState(): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-1 items-center justify-center" data-testid="hub-connect-loading">
       <Loader2
         className="h-5 w-5 animate-spin text-home-faint"
         strokeWidth={2}
-        aria-label="Loading connections"
+        aria-label={t('home.connections.loadingConnections')}
       />
     </div>
   )

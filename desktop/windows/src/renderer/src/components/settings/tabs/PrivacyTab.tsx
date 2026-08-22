@@ -2,18 +2,12 @@ import { useEffect, useState } from 'react'
 import { Activity, EyeOff, Monitor, ShieldCheck } from 'lucide-react'
 import { SettingRow } from '../SettingRow'
 import { Toggle } from '../Toggle'
+import { useTranslation } from '../../../i18n'
 import type { UsageSettings } from '../../../../../shared/types'
-
-const RETENTION_OPTIONS: ReadonlyArray<{ days: number; label: string }> = [
-  { days: 30, label: '30 days' },
-  { days: 45, label: '45 days (recommended)' },
-  { days: 60, label: '60 days' },
-  { days: 90, label: '90 days' },
-  { days: 180, label: '180 days' }
-]
 
 export function PrivacyTab(): React.JSX.Element {
   const [usage, setUsage] = useState<UsageSettings | null>(null)
+  const { t } = useTranslation()
   useEffect(() => {
     window.omi
       .usageGetSettings()
@@ -59,31 +53,41 @@ export function PrivacyTab(): React.JSX.Element {
       <SettingRow
         icon={Activity}
         dot={usage?.enabled ? 'on' : 'off'}
-        title="App-usage tracking"
-        subtitle="Records which apps you actively use (app name only, never window titles) — locally — to improve memory ranking."
+        title={t('settings.privacy.trackingTitle')}
+        subtitle={t('settings.privacy.trackingSubtitle')}
         keywords="usage foreground app tracking privacy"
         control={
           <Toggle
             on={!!usage?.enabled}
             onChange={(on) => usage && void saveUsage({ ...usage, enabled: on })}
             disabled={!usage}
-            label="App-usage tracking"
+            label={t('settings.privacy.trackingTitle')}
           />
         }
       >
         {usage?.enabled && (
           <label className="flex items-center gap-2 text-sm text-text-secondary">
-            <span>Forget apps not used in</span>
+            <span>{t('settings.privacy.retentionLabel')}</span>
             <select
               value={usage.retentionDays}
               onChange={(e) => void saveUsage({ ...usage, retentionDays: Number(e.target.value) })}
               className="rounded-md bg-white/10 px-3 py-1.5 text-sm text-white focus:outline-none"
             >
-              {RETENTION_OPTIONS.map((o) => (
-                <option key={o.days} value={o.days} className="bg-neutral-900">
-                  {o.label}
-                </option>
-              ))}
+              <option value={30} className="bg-neutral-900">
+                {t('settings.privacy.retention30')}
+              </option>
+              <option value={45} className="bg-neutral-900">
+                {t('settings.privacy.retention45')}
+              </option>
+              <option value={60} className="bg-neutral-900">
+                {t('settings.privacy.retention60')}
+              </option>
+              <option value={90} className="bg-neutral-900">
+                {t('settings.privacy.retention90')}
+              </option>
+              <option value={180} className="bg-neutral-900">
+                {t('settings.privacy.retention180')}
+              </option>
             </select>
           </label>
         )}
@@ -91,37 +95,37 @@ export function PrivacyTab(): React.JSX.Element {
       <SettingRow
         icon={EyeOff}
         dot={hudProtected ? 'on' : 'off'}
-        title="Hide the Omi bar from screen sharing"
-        subtitle="Excludes the top-edge bar from screenshots, recordings, and shared screens. Turn off if you want it visible in captures."
+        title={t('settings.privacy.hideBarTitle')}
+        subtitle={t('settings.privacy.hideBarSubtitle')}
         keywords="bar hud screen share capture protection privacy exclude recording"
         control={
           <Toggle
             on={!!hudProtected}
             onChange={toggleHudProtection}
             disabled={hudProtected === null}
-            label="Hide the Omi bar from screen sharing"
+            label={t('settings.privacy.hideBarTitle')}
           />
         }
       />
       <SettingRow
         icon={Monitor}
         dot={screenShareInChat ? 'on' : 'off'}
-        title="Screen Sharing in Chat"
-        subtitle="Let Omi capture your screen when you ask about what's on it. Omi only captures when you ask — turning this on doesn't share anything on its own."
+        title={t('settings.privacy.screenShareTitle')}
+        subtitle={t('settings.privacy.screenShareSubtitle')}
         keywords="screen sharing chat capture screenshot ask omi see my screen vision"
         control={
           <Toggle
             on={!!screenShareInChat}
             onChange={toggleScreenShareInChat}
             disabled={screenShareInChat === null}
-            label="Screen Sharing in Chat"
+            label={t('settings.privacy.screenShareTitle')}
           />
         }
       />
       <SettingRow
         icon={ShieldCheck}
-        title="On-device by default"
-        subtitle="Your screen timeline, file index, and app usage stay on this PC. Only synthesized facts (memories) are sent to your Omi account, and only for features you turn on."
+        title={t('settings.privacy.onDeviceTitle')}
+        subtitle={t('settings.privacy.onDeviceSubtitle')}
         keywords="privacy local data on-device cloud"
       />
     </>

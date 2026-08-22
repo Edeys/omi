@@ -48,8 +48,8 @@ Everything below is blank in `.env.example` and safe to leave unset:
 ## Coding agents (Claude Code, OpenClaw, Hermes, Codex)
 
 Omi can delegate tasks to external coding agents over ACP (Agent Client
-Protocol). Name an agent in chat or push-to-talk — *"ask Codex to fix the
-failing test in my omi repo"*, *"use Claude Code to add a readme"* — and Omi
+Protocol). Name an agent in chat or push-to-talk — _"ask Codex to fix the
+failing test in my omi repo"_, _"use Claude Code to add a readme"_ — and Omi
 hands the task over, streaming the agent's progress into the conversation. If
 the agent you named fails to start, Omi falls back to the next connected one;
 if it isn't connected at all, the reply tells you how to set it up.
@@ -102,3 +102,23 @@ Screen-session (mic + system audio) recordings sync to the Omi cloud via
 retry, duplicate-safe). Design, outbox semantics, and the live E2E harness
 (`pnpm test:e2e:conv-sync`) are documented in
 [docs/conversation-sync.md](docs/conversation-sync.md).
+
+## Language / Ngôn ngữ
+
+The app UI is localized. Change the display language in **Settings → Language**
+— choose between **English** and **Tiếng Việt**. The selection is persisted via
+preferences and restored on the next launch.
+
+### Adding a new language
+
+1. Copy the shape of `src/renderer/src/i18n/locales/en.json` into a new
+   `src/renderer/src/i18n/locales/xx.json` (keep the same key structure and
+   nesting).
+2. Register the locale in `src/renderer/src/i18n/index.ts`: import the JSON,
+   add it to `resources`, and add an entry to `UI_LANGUAGES`.
+3. Run the parity test `src/renderer/src/i18n/locales.parity.test.ts` (e.g.
+   `pnpm exec vitest run src/renderer/src/i18n/locales.parity.test.ts`) — it
+   enforces that every locale has the identical key set as `en.json`.
+
+AI-generated content (transcripts, summaries, chat responses, etc.) stays
+untranslated in its original language.

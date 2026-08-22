@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { StepScaffold } from './StepScaffold'
+import { useTranslation } from '../../i18n'
 
 type LanguageStepProps = {
   stepIndex: number
@@ -18,6 +19,7 @@ export function LanguageStep({
   onBack,
   aside
 }: LanguageStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   const [mode, setMode] = useState<'english' | 'other'>(
     initialValue && initialValue !== 'en' ? 'other' : 'english'
   )
@@ -28,8 +30,8 @@ export function LanguageStep({
     <StepScaffold
       stepIndex={stepIndex}
       totalSteps={totalSteps}
-      eyebrow="LANGUAGE"
-      title="Pick your language."
+      eyebrow={t('onboarding.language.eyebrow')}
+      title={t('onboarding.language.title')}
       align="left"
       onBack={onBack}
       aside={aside}
@@ -45,7 +47,7 @@ export function LanguageStep({
               : 'bg-white/[0.06] text-white/80 hover:bg-white/[0.1]')
           }
         >
-          English
+          {t('onboarding.language.english')}
         </button>
         <button
           type="button"
@@ -57,7 +59,7 @@ export function LanguageStep({
               : 'bg-white/[0.06] text-white/80 hover:bg-white/[0.1]')
           }
         >
-          Other
+          {t('onboarding.language.other')}
         </button>
       </div>
 
@@ -70,7 +72,7 @@ export function LanguageStep({
             onKeyDown={(e) => {
               if (e.key === 'Enter' && trimmed.length > 0) onContinue(trimmed)
             }}
-            placeholder="Spanish, Portuguese, Japanese…"
+            placeholder={t('onboarding.language.otherPlaceholder')}
             className="glass-subtle w-72 rounded-lg px-4 py-3 text-sm text-white/90 placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/30"
           />
           <button
@@ -79,7 +81,7 @@ export function LanguageStep({
             disabled={trimmed.length === 0}
             className="rounded-xl bg-white px-8 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Save language
+            {t('onboarding.language.saveLanguage')}
           </button>
         </div>
       )}

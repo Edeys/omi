@@ -6,6 +6,7 @@ import type { LucideIcon } from 'lucide-react'
 import { getPreferences, onPreferencesChange, setPreferences } from '../../../lib/preferences'
 import { cn } from '../../../lib/utils'
 import type { RewindSettings } from '../../../../../shared/types'
+import { useTranslation } from '../../../i18n'
 
 // The Hub's top-right controls: a screen-capture pill, a listening pill, and the
 // gear menu. Both pills drive the app's REAL capture state — the same
@@ -64,6 +65,7 @@ function Pill(props: {
 
 function GearMenu(): React.JSX.Element {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const row = (Icon: LucideIcon, label: string, onSelect: () => void): React.JSX.Element => (
     <DropdownMenu.Item
@@ -80,7 +82,7 @@ function GearMenu(): React.JSX.Element {
       <DropdownMenu.Trigger asChild>
         <button
           type="button"
-          aria-label="Home menu"
+          aria-label={t('home.hub.header.menuLabel')}
           className={cn(
             'focus-ring group flex h-[34px] w-[34px] items-center justify-center rounded-full',
             'border border-home-hairline/[0.68] bg-home-tile/[0.86] transition-colors duration-150',
@@ -101,10 +103,18 @@ function GearMenu(): React.JSX.Element {
         >
           {/* External links go through main's shell.openExternal bridge, so they
               open in the user's real browser rather than an Electron window. */}
-          {row(Gift, 'Refer a Friend', () => void window.omi?.openExternalUrl?.(REFER_URL))}
-          {row(MessageCircle, 'Discord', () => void window.omi?.openExternalUrl?.(DISCORD_URL))}
+          {row(
+            Gift,
+            t('home.hub.header.referFriend'),
+            () => void window.omi?.openExternalUrl?.(REFER_URL)
+          )}
+          {row(
+            MessageCircle,
+            t('home.hub.header.discord'),
+            () => void window.omi?.openExternalUrl?.(DISCORD_URL)
+          )}
           <DropdownMenu.Separator className="my-1.5 h-px bg-home-hairline" />
-          {row(Settings, 'Settings', () => navigate('/settings'))}
+          {row(Settings, t('home.hub.header.settings'), () => navigate('/settings'))}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
@@ -112,6 +122,7 @@ function GearMenu(): React.JSX.Element {
 }
 
 export function HubHeader(): React.JSX.Element {
+  const { t } = useTranslation()
   // Screen capture — the persistent Rewind setting (see Sidebar: optimistic flip,
   // reconcile from main).
   const [rewind, setRewind] = useState<RewindSettings | null>(null)
@@ -148,16 +159,16 @@ export function HubHeader(): React.JSX.Element {
           toggle with no hint of WHICH control it is. */}
       <Pill
         Icon={Scan}
-        text="Capture"
+        text={t('home.hub.header.capture')}
         on={captureOn}
-        label={captureOn ? 'Turn screen capture off' : 'Turn screen capture on'}
+        label={captureOn ? t('home.hub.header.captureTurnOff') : t('home.hub.header.captureTurnOn')}
         onClick={toggleCapture}
       />
       <Pill
         Icon={micOn ? AudioWaveform : Mic}
-        text="Listening"
+        text={t('home.hub.header.listening')}
         on={micOn}
-        label={micOn ? 'Stop listening' : 'Start listening'}
+        label={micOn ? t('home.hub.header.listeningStop') : t('home.hub.header.listeningStart')}
         onClick={toggleMic}
       />
       <GearMenu />

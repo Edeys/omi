@@ -4,8 +4,10 @@ import type { SignInProvider } from '../../../shared/types'
 import { signInWithProvider } from '../lib/firebase'
 import omiLogo from '../assets/omilogo.png'
 import { BrandImage } from '../components/ui/BrandImage'
+import { useTranslation } from '../i18n'
 
 export function Login(): React.JSX.Element {
+  const { t } = useTranslation()
   // 'activeProvider' spans the whole system-browser round-trip (opening the browser →
   // loopback callback → token exchange). Success flips auth state globally via
   // onAuthStateChanged, which unmounts this page. (A still-pending attempt's
@@ -40,7 +42,7 @@ export function Login(): React.JSX.Element {
     <div className="app-canvas relative flex h-full items-center justify-center p-8">
       <div className="animate-fade-in relative z-10 flex w-full max-w-[420px] flex-col items-center">
         <BrandImage src={omiLogo} alt="omi" className="h-24 w-auto" />
-        <p className="mt-6 text-base leading-relaxed text-white/70">Sign in to continue</p>
+        <p className="mt-6 text-base leading-relaxed text-white/70">{t('login.signInSubtitle')}</p>
         <div className="h-48" />
         <button
           type="button"
@@ -48,7 +50,7 @@ export function Login(): React.JSX.Element {
           className="flex items-center justify-center gap-3 rounded-xl bg-black px-8 py-3.5 font-medium text-white transition-opacity hover:opacity-90"
         >
           <Apple className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
-          {activeProvider === 'apple' ? 'Try again' : 'Continue with Apple'}
+          {activeProvider === 'apple' ? t('login.tryAgain') : t('login.continueWithApple')}
         </button>
         <button
           type="button"
@@ -73,13 +75,11 @@ export function Login(): React.JSX.Element {
               d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.97C6.51 42.62 14.62 48 24 48z"
             />
           </svg>
-          {activeProvider === 'google' ? 'Try again' : 'Continue with Google'}
+          {activeProvider === 'google' ? t('login.tryAgain') : t('login.continueWithGoogle')}
         </button>
         <div className="mt-4 min-h-[3rem] text-center">
           {activeProvider && !error && (
-            <p className="animate-fade-in text-sm text-white/50">
-              Waiting for your browser&hellip; finish signing in there, then come back.
-            </p>
+            <p className="animate-fade-in text-sm text-white/50">{t('login.waiting')}</p>
           )}
           {error && <p className="text-sm text-red-400/90">{error}</p>}
         </div>

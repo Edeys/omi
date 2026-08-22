@@ -1,5 +1,6 @@
 import { Pencil, X } from 'lucide-react'
 import type { Person, TranscriptSegment } from '../../lib/omiApi.generated'
+import { useTranslation } from '../../i18n'
 import {
   avatarFill,
   avatarInitial,
@@ -137,6 +138,7 @@ export function TranscriptDrawer({
   onClose: () => void
   onNameSpeaker: (segment: TranscriptSegment) => void
 }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div
       // Kept mounted so the slide animates both ways; hidden from AT + tab order
@@ -157,14 +159,16 @@ export function TranscriptDrawer({
         style={{ width: DRAWER_WIDTH }}
       >
         <header className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
-          <h2 className="font-display text-sm font-semibold text-white">Transcript</h2>
+          <h2 className="font-display text-sm font-semibold text-white">
+            {t('conversationDetail.modals.transcriptTitle')}
+          </h2>
           {/* Named distinctly from the header's "Hide Transcript" pill — two buttons
               with the same accessible name is ambiguous for screen readers. */}
           <button
             onClick={onClose}
             className="btn-ghost p-1.5"
-            title="Close transcript"
-            aria-label="Close transcript"
+            title={t('conversationDetail.modals.closeTranscript')}
+            aria-label={t('conversationDetail.modals.closeTranscript')}
           >
             <X className="h-4 w-4" />
           </button>
@@ -172,7 +176,9 @@ export function TranscriptDrawer({
 
         <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
           {segments.length === 0 ? (
-            <p className="mt-6 text-center text-xs text-text-quaternary">No transcript yet.</p>
+            <p className="mt-6 text-center text-xs text-text-quaternary">
+              {t('conversationDetail.transcriptDrawer.empty')}
+            </p>
           ) : (
             <ul className="space-y-3.5">
               {segments.map((s, i) => (

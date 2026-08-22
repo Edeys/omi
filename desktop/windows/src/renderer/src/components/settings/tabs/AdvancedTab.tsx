@@ -23,10 +23,12 @@ import { SettingRow } from '../SettingRow'
 import { IntegrationsTab } from './IntegrationsTab'
 import { DeveloperKeysSection } from './DeveloperKeysSection'
 import { AiProfileCard } from './AiProfileCard'
+import { useTranslation } from '../../../i18n'
 import type { ExportMemory, FileIndexStatus, LocalKGStatus } from '../../../../../shared/types'
 
 export function AdvancedTab(): React.JSX.Element {
   const { memories, refresh } = useMemories()
+  const { t } = useTranslation()
 
   // --- File indexing ---
   const [fileIndex, setFileIndex] = useState<FileIndexStatus | null>(null)
@@ -42,10 +44,10 @@ export function AdvancedTab(): React.JSX.Element {
     setScanning(true)
     try {
       setFileIndex(await window.omi.indexFilesScan())
-      toast('File index updated', { tone: 'success' })
+      toast(t('settings.advanced.fileIndexUpdated'), { tone: 'success' })
       void buildLocalGraph().catch(() => {})
     } catch (e) {
-      toast('File indexing failed', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.fileIndexFailed'), { tone: 'error', body: (e as Error).message })
     } finally {
       setScanning(false)
     }
@@ -65,9 +67,9 @@ export function AdvancedTab(): React.JSX.Element {
     setRebuildingKg(true)
     try {
       setKgStatus(await buildLocalGraph())
-      toast('Knowledge graph rebuilt', { tone: 'success' })
+      toast(t('settings.advanced.kgRebuilt'), { tone: 'success' })
     } catch (e) {
-      toast('Knowledge graph rebuild failed', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.kgRebuildFailed'), { tone: 'error', body: (e as Error).message })
     } finally {
       setRebuildingKg(false)
     }
@@ -95,7 +97,7 @@ export function AdvancedTab(): React.JSX.Element {
       setProfile(r.profile)
       toastForExtractResult(r)
     } catch (e) {
-      toast('Could not extract memories', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.extractFailed'), { tone: 'error', body: (e as Error).message })
     } finally {
       setExtracting(false)
     }
@@ -129,11 +131,11 @@ export function AdvancedTab(): React.JSX.Element {
   const runExport = async (target: 'obsidian' | 'file' | 'notion'): Promise<void> => {
     if (exporting) return
     if (memories.length === 0) {
-      toast('No memories to export yet', { tone: 'warn' })
+      toast(t('settings.advanced.noMemoriesToExport'), { tone: 'warn' })
       return
     }
     if (target === 'notion' && (!notionToken.trim() || !notionPage.trim())) {
-      toast('Enter your Notion token and parent page ID', { tone: 'warn' })
+      toast(t('settings.advanced.notionMissing'), { tone: 'warn' })
       return
     }
     setExporting(true)
@@ -146,13 +148,19 @@ export function AdvancedTab(): React.JSX.Element {
           : undefined
       )
       if (!r.canceled) {
-        toast(`Exported ${r.count} memor${r.count === 1 ? 'y' : 'ies'}`, {
-          tone: 'success',
-          body: r.location
-        })
+        toast(
+          t('settings.advanced.exportSuccess', {
+            count: r.count,
+            plural: r.count === 1 ? 'y' : 'ies'
+          }),
+          {
+            tone: 'success',
+            body: t('settings.advanced.exportSuccessLocation', { location: r.location })
+          }
+        )
       }
     } catch (e) {
-      toast('Export failed', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.exportFailed'), { tone: 'error', body: (e as Error).message })
     } finally {
       setExporting(false)
     }
@@ -173,7 +181,10 @@ export function AdvancedTab(): React.JSX.Element {
       setMemAllMemories(all)
       setMemBreakdown(summarizeMemories(all))
     } catch (e) {
-      toast('Could not load memories', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.couldNotLoadMemories'), {
+        tone: 'error',
+        body: (e as Error).message
+      })
     } finally {
       setMemAuditing(false)
     }
@@ -184,7 +195,10 @@ export function AdvancedTab(): React.JSX.Element {
     if (ids.length === 0 || memDeleting) return
     if (
       !window.confirm(
-        `Permanently delete ${ids.length} app/file-index memories? This cannot be undone.`
+        t('settings.advanced.deleteConfirm', {
+          count: ids.length,
+          plural: ids.length === 1 ? 'y' : 'ies'
+        })
       )
     )
       return
@@ -229,14 +243,24 @@ export function AdvancedTab(): React.JSX.Element {
         if (i % 10 === 0 || i === ids.length - 1) setMemDeleteProgress(deleted)
         if (paceMs) await sleep(paceMs)
       }
-      toast(`Deleted ${deleted} of ${ids.length} memories`, {
-        tone: failed ? 'warn' : 'success',
-        body: failed
-          ? `${failed} failed${firstError ? ` — ${firstError}` : ''}. Analyze again to retry.`
-          : undefined
-      })
+      toast(
+        t('settings.advanced.deleteResult', {
+          deleted,
+          count: ids.length,
+          plural: ids.length === 1 ? 'y' : 'ies'
+        }),
+        {
+          tone: failed ? 'warn' : 'success',
+          body: failed
+            ? t('settings.advanced.deleteFailedBody', {
+                failed,
+                error: firstError ? ` — ${firstError}` : ''
+              })
+            : undefined
+        }
+      )
     } catch (e) {
-      toast('Delete failed', { tone: 'error', body: (e as Error).message })
+      toast(t('settings.advanced.deleteFailed'), { tone: 'error', body: (e as Error).message })
     } finally {
       setMemDeleting(false)
     }
@@ -253,20 +277,22 @@ export function AdvancedTab(): React.JSX.Element {
     <>
       <SettingRow
         icon={Download}
-        title="Import memories"
-        subtitle="Paste a ChatGPT/Claude “everything you remember about me” reply; Omi extracts distinct, durable facts."
+        title={t('settings.advanced.importTitle')}
+        subtitle={t('settings.advanced.importSubtitle')}
         keywords="import chatgpt claude memories paste extract"
       >
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-text-tertiary">Exported from</span>
+            <span className="text-sm text-text-tertiary">
+              {t('settings.advanced.exportedFrom')}
+            </span>
             {(['chatgpt', 'claude'] as const).map((s) => (
               <button
                 key={s}
                 onClick={() => setSource(s)}
                 className={`rounded-md px-3 py-1 text-sm ${source === s ? 'btn-primary' : 'btn-ghost'}`}
               >
-                {s === 'chatgpt' ? 'ChatGPT' : 'Claude'}
+                {s === 'chatgpt' ? t('settings.advanced.chatgpt') : t('settings.advanced.claude')}
               </button>
             ))}
           </div>
@@ -278,7 +304,7 @@ export function AdvancedTab(): React.JSX.Element {
               setProfile('')
             }}
             rows={5}
-            placeholder="Paste the assistant’s full reply here…"
+            placeholder={t('settings.advanced.pastePlaceholder')}
             className="input-field resize-none"
           />
           <div className="flex items-center gap-2">
@@ -287,7 +313,7 @@ export function AdvancedTab(): React.JSX.Element {
               disabled={!dump.trim() || extracting || importing}
               className="btn-ghost disabled:opacity-40"
             >
-              {extracting ? 'Extracting…' : 'Extract memories'}
+              {extracting ? t('settings.advanced.extracting') : t('settings.advanced.extract')}
             </button>
             {parsed && parsed.length > 0 && (
               <button
@@ -296,8 +322,11 @@ export function AdvancedTab(): React.JSX.Element {
                 className="btn-primary px-4 py-2 disabled:opacity-40"
               >
                 {importing
-                  ? 'Importing…'
-                  : `Import ${parsed.length} memor${parsed.length === 1 ? 'y' : 'ies'}`}
+                  ? t('settings.advanced.importing')
+                  : t('settings.advanced.importButton', {
+                      count: parsed.length,
+                      plural: parsed.length === 1 ? 'y' : 'ies'
+                    })}
               </button>
             )}
           </div>
@@ -320,8 +349,11 @@ export function AdvancedTab(): React.JSX.Element {
 
       <SettingRow
         icon={Upload}
-        title="Export memories"
-        subtitle={`Export your ${memories.length} memor${memories.length === 1 ? 'y' : 'ies'} as Markdown (Obsidian, a plain file, or Notion).`}
+        title={t('settings.advanced.exportTitle')}
+        subtitle={t('settings.advanced.exportSubtitle', {
+          count: memories.length,
+          plural: memories.length === 1 ? 'y' : 'ies'
+        })}
         keywords="export obsidian notion file markdown"
       >
         <div className="space-y-3">
@@ -331,30 +363,28 @@ export function AdvancedTab(): React.JSX.Element {
               disabled={exporting}
               className="btn-ghost disabled:opacity-40"
             >
-              Obsidian vault…
+              {t('settings.advanced.obsidianVault')}
             </button>
             <button
               onClick={() => runExport('file')}
               disabled={exporting}
               className="btn-ghost disabled:opacity-40"
             >
-              Plain file…
+              {t('settings.advanced.plainFile')}
             </button>
           </div>
           <div className="border-t border-white/5 pt-3">
-            <p className="mb-2 text-sm text-text-tertiary">
-              Notion — paste an internal-integration token and a page ID it can access.
-            </p>
+            <p className="mb-2 text-sm text-text-tertiary">{t('settings.advanced.notionHelp')}</p>
             <input
               value={notionToken}
               onChange={(e) => setNotionToken(e.target.value)}
-              placeholder="Notion integration token (secret_…)"
+              placeholder={t('settings.advanced.notionTokenPlaceholder')}
               className="glass-subtle mb-2 w-full rounded-lg px-4 py-3 text-sm text-text-secondary focus:outline-none"
             />
             <input
               value={notionPage}
               onChange={(e) => setNotionPage(e.target.value)}
-              placeholder="Parent page ID"
+              placeholder={t('settings.advanced.notionPagePlaceholder')}
               className="glass-subtle mb-2 w-full rounded-lg px-4 py-3 text-sm text-text-secondary focus:outline-none"
             />
             <button
@@ -362,7 +392,7 @@ export function AdvancedTab(): React.JSX.Element {
               disabled={exporting}
               className="btn-ghost disabled:opacity-40"
             >
-              {exporting ? 'Exporting…' : 'Export to Notion'}
+              {exporting ? t('settings.advanced.exporting') : t('settings.advanced.exportToNotion')}
             </button>
           </div>
         </div>
@@ -370,8 +400,8 @@ export function AdvancedTab(): React.JSX.Element {
 
       <SettingRow
         icon={Wrench}
-        title="Memory maintenance"
-        subtitle="Find and remove legacy app/file-index memories (these belong in the knowledge graph, not memories). Analyze is read-only."
+        title={t('settings.advanced.maintenanceTitle')}
+        subtitle={t('settings.advanced.maintenanceSubtitle')}
         keywords="maintenance cleanup delete app file index memories audit"
       >
         <div className="space-y-3">
@@ -381,7 +411,7 @@ export function AdvancedTab(): React.JSX.Element {
               disabled={memAuditing || memDeleting}
               className="btn-ghost disabled:opacity-40"
             >
-              {memAuditing ? 'Analyzing…' : 'Analyze memories'}
+              {memAuditing ? t('settings.advanced.analyzing') : t('settings.advanced.analyze')}
             </button>
             {memBreakdown && memBreakdown.appIndexCount > 0 && (
               <button
@@ -390,17 +420,21 @@ export function AdvancedTab(): React.JSX.Element {
                 className="btn-primary px-4 py-2 disabled:opacity-40"
               >
                 {memDeleting
-                  ? `Deleting ${memDeleteProgress}/${memBreakdown.appIndexCount}…`
-                  : `Delete ${memBreakdown.appIndexCount} app/file memories`}
+                  ? t('settings.advanced.deleting', {
+                      done: memDeleteProgress,
+                      total: memBreakdown.appIndexCount
+                    })
+                  : t('settings.advanced.deleteAppMemories', { count: memBreakdown.appIndexCount })}
               </button>
             )}
           </div>
           {memBreakdown && (
             <div className="glass-subtle rounded-lg px-4 py-3 text-sm text-text-tertiary">
               <p className="mb-2 text-text-secondary">
-                {memBreakdown.total} total memories ·{' '}
-                <span className="text-text-primary">{memBreakdown.appIndexCount}</span>{' '}
-                app/file-index matches
+                {t('settings.advanced.totalMemories', {
+                  total: memBreakdown.total,
+                  count: memBreakdown.appIndexCount
+                })}
               </p>
               {memBreakdown.appIndexCount > 0 && (
                 <ul className="mb-3 max-h-32 overflow-y-auto">
@@ -411,7 +445,7 @@ export function AdvancedTab(): React.JSX.Element {
                   ))}
                 </ul>
               )}
-              <p className="mb-1 text-text-secondary">Breakdown by tag (not deleted):</p>
+              <p className="mb-1 text-text-secondary">{t('settings.advanced.breakdownTitle')}</p>
               <ul className="max-h-40 overflow-y-auto">
                 {memBreakdown.groups.map((g) => (
                   <li key={g.key} className="py-0.5">
@@ -438,35 +472,44 @@ export function AdvancedTab(): React.JSX.Element {
 
       <SettingRow
         icon={FolderSearch}
-        title="File indexing"
+        title={t('settings.advanced.fileIndexTitle')}
         subtitle={
           fileIndex
-            ? `${fileIndex.filesIndexed.toLocaleString()} items indexed${
-                fileIndex.lastRunAt
-                  ? ` · last run ${new Date(fileIndex.lastRunAt).toLocaleString()}`
+            ? t('settings.advanced.fileIndexStatus', {
+                count: fileIndex.filesIndexed.toLocaleString(),
+                lastRun: fileIndex.lastRunAt
+                  ? t('settings.advanced.fileIndexLastRun', {
+                      date: new Date(fileIndex.lastRunAt).toLocaleString()
+                    })
                   : ''
-              }`
-            : 'Indexes file names/metadata locally (contents never read or uploaded).'
+              })
+            : t('settings.advanced.fileIndexSubtitle')
         }
         keywords="file index scan rescan local"
         control={
           <button onClick={rescan} disabled={scanning} className="btn-ghost disabled:opacity-40">
-            {scanning ? 'Indexing…' : 'Re-scan now'}
+            {scanning
+              ? t('settings.advanced.fileIndexIndexing')
+              : t('settings.advanced.fileIndexRescan')}
           </button>
         }
       />
 
       <SettingRow
         icon={Network}
-        title="Knowledge graph"
+        title={t('settings.advanced.kgTitle')}
         subtitle={
           kgStatus
-            ? `${kgStatus.nodeCount.toLocaleString()} nodes · ${kgStatus.edgeCount.toLocaleString()} relationships${
-                kgStatus.lastBuiltAt
-                  ? ` · last built ${new Date(kgStatus.lastBuiltAt).toLocaleString()}`
+            ? t('settings.advanced.kgStatus', {
+                nodes: kgStatus.nodeCount.toLocaleString(),
+                edges: kgStatus.edgeCount.toLocaleString(),
+                lastBuilt: kgStatus.lastBuiltAt
+                  ? t('settings.advanced.kgLastBuilt', {
+                      date: new Date(kgStatus.lastBuiltAt).toLocaleString()
+                    })
                   : ''
-              }`
-            : 'A local graph of your projects, tech, people, and apps — used to ground chat answers.'
+              })
+            : t('settings.advanced.kgSubtitle')
         }
         keywords="knowledge graph rebuild kg nodes"
         control={
@@ -475,19 +518,19 @@ export function AdvancedTab(): React.JSX.Element {
             disabled={rebuildingKg}
             className="btn-ghost disabled:opacity-40"
           >
-            {rebuildingKg ? 'Rebuilding…' : 'Rebuild now'}
+            {rebuildingKg ? t('settings.advanced.kgRebuilding') : t('settings.advanced.kgRebuild')}
           </button>
         }
       />
 
       <SettingRow
         icon={RotateCcw}
-        title="Replay onboarding"
-        subtitle="Run the startup wizard again from the beginning."
+        title={t('settings.advanced.onboardingTitle')}
+        subtitle={t('settings.advanced.onboardingSubtitle')}
         keywords="onboarding wizard replay reset"
         control={
           <button onClick={replayOnboarding} className="btn-ghost">
-            Replay
+            {t('settings.advanced.onboardingReplay')}
           </button>
         }
       />

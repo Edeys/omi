@@ -17,6 +17,7 @@ import { toast } from '../../lib/toast'
 import { startSetupPolling, worksExternally } from '../../lib/appInstall'
 import type { App, AppCatalogItem, AppReview } from '../../lib/omiApi.generated'
 import { AddReviewDialog } from './AddReviewDialog'
+import { useTranslation } from '../../i18n'
 
 // GET the app's reviews. Returns the list, or null on any failure so the caller can
 // leave the current reviews on screen (macOS fails silently the same way).
@@ -61,6 +62,7 @@ function ReviewCard({
   review: AppReview
   highlight?: boolean
 }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div
       className={`rounded-xl border px-4 py-3 ${
@@ -68,13 +70,17 @@ function ReviewCard({
       }`}
     >
       <div className="mb-1.5 flex items-center justify-between gap-2">
-        <span className="truncate text-xs text-white/55">{review.username || 'Anonymous'}</span>
+        <span className="truncate text-xs text-white/55">
+          {review.username || t('apps.detail.anonymous')}
+        </span>
         <StarRow score={review.score} />
       </div>
       {review.review && <p className="text-sm leading-relaxed text-white/80">{review.review}</p>}
       {review.response && (
         <div className="mt-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
-          <div className="mb-0.5 text-[11px] font-medium text-white/45">Developer response</div>
+          <div className="mb-0.5 text-[11px] font-medium text-white/45">
+            {t('apps.detail.developerResponse')}
+          </div>
           <p className="text-xs leading-relaxed text-white/70">{review.response}</p>
         </div>
       )}
@@ -124,6 +130,7 @@ export function AppDetailSheet({
   onToggle,
   onClose
 }: AppDetailSheetProps): React.JSX.Element {
+  const { t, i18n } = useTranslation()
   const [detail, setDetail] = useState<App | null>(null)
   const [reviews, setReviews] = useState<AppReview[]>([])
   const [showAddReview, setShowAddReview] = useState(false)
@@ -293,7 +300,7 @@ export function AppDetailSheet({
       homeUrl || (currentUid && authSteps[0]?.url ? `${authSteps[0].url}?uid=${currentUid}` : null)
     if (!target) return
     void window.omi.openExternalUrl(target).then((ok) => {
-      if (!ok) toast("This app's link is unavailable.", { tone: 'warn' })
+      if (!ok) toast(t('apps.detail.linkUnavailable'), { tone: 'warn' })
     })
   }
 
@@ -319,7 +326,7 @@ export function AppDetailSheet({
               <div className="flex justify-end px-3 pt-3">
                 <Dialog.Close
                   className="rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/5 hover:text-white/80"
-                  aria-label="Close"
+                  aria-label={t('apps.detail.close')}
                 >
                   <X className="h-4 w-4" />
                 </Dialog.Close>
@@ -355,7 +362,12 @@ export function AppDetailSheet({
                           <span className="text-white/35">({ratingCount})</span>
                         </span>
                       )}
-                      {installs > 0 && <span>{installs.toLocaleString()} installs</span>}
+                      {installs > 0 && (
+                        <span>
+                          {installs.toLocaleString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')}{' '}
+                          installs
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
@@ -421,8 +433,8 @@ export function AppDetailSheet({
                         onClick={() => onToggle(app)}
                         disabled={busy}
                         className="rounded-xl border border-white/10 p-2 text-white/40 transition-colors hover:bg-white/5 hover:text-error disabled:opacity-50"
-                        aria-label="Disable app"
-                        title="Disable app"
+                        aria-label={t('apps.detail.disableApp')}
+                        title={t('apps.detail.disableApp')}
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -434,7 +446,7 @@ export function AppDetailSheet({
 
                 {/* 3. About. */}
                 {description && (
-                  <Section title="About">
+                  <Section title={t('apps.detail.about')}>
                     <p className="whitespace-pre-wrap text-sm leading-relaxed text-white/75">
                       {description}
                     </p>
@@ -443,7 +455,7 @@ export function AppDetailSheet({
 
                 {/* 4. Setup steps — only when the integration defines auth steps. */}
                 {authSteps.length > 0 && (
-                  <Section title="Setup">
+                  <Section title={t('apps.detail.setup')}>
                     <div className="space-y-2">
                       {authSteps.map((step, i) => (
                         <button
@@ -467,7 +479,9 @@ export function AppDetailSheet({
                               {step.name || `Step ${i + 1}`}
                             </span>
                             <span className="block text-xs text-white/45">
-                              {enabled ? 'Completed' : 'Click to complete'}
+                              {enabled
+                                ? t('apps.detail.completed')
+                                : t('apps.detail.clickToComplete')}
                             </span>
                           </span>
                           <ArrowUpRight className="h-4 w-4 shrink-0 text-white/40" />
@@ -479,7 +493,7 @@ export function AppDetailSheet({
 
                 {/* 5. Capabilities. */}
                 {capabilities.length > 0 && (
-                  <Section title="Capabilities">
+                  <Section title={t('apps.detail.capabilities')}>
                     <div className="flex flex-wrap gap-2">
                       {capabilities.map((c) => (
                         <span
@@ -495,7 +509,7 @@ export function AppDetailSheet({
 
                 {/* 6. Category. */}
                 {category && (
-                  <Section title="Category">
+                  <Section title={t('apps.detail.category')}>
                     <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/70">
                       {titleize(category)}
                     </span>
@@ -514,13 +528,15 @@ export function AppDetailSheet({
                       onClick={() => setShowAddReview(true)}
                       className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white"
                     >
-                      {userReview ? 'Edit your review' : 'Add review'}
+                      {userReview ? t('apps.detail.editReview') : t('apps.detail.addReview')}
                     </button>
                   </div>
 
                   {userReview && (
                     <div className="space-y-1.5">
-                      <div className="text-[11px] font-medium text-white/40">Your review</div>
+                      <div className="text-[11px] font-medium text-white/40">
+                        {t('apps.detail.yourReview')}
+                      </div>
                       <ReviewCard review={userReview} highlight />
                     </div>
                   )}

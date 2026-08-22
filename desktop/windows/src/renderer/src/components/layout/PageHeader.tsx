@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Pencil } from 'lucide-react'
+import { useTranslation } from '../../i18n'
 
 export function PageHeader(props: {
   title: string
@@ -19,6 +20,7 @@ export function PageHeader(props: {
    */
   titleSlot?: React.ReactNode
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const { title, subtitle, actions, onBack, onRename, titleSlot } = props
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(title)
@@ -50,8 +52,8 @@ export function PageHeader(props: {
             <button
               onClick={onBack}
               className="btn-ghost -ml-1 shrink-0 p-2"
-              title="Back to conversations"
-              aria-label="Back"
+              title={t('layout.pageHeader.backToConversations')}
+              aria-label={t('layout.pageHeader.back')}
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
@@ -74,7 +76,7 @@ export function PageHeader(props: {
             ) : onRename ? (
               <button
                 onClick={startEdit}
-                title="Rename"
+                title={t('layout.pageHeader.rename')}
                 className="group flex max-w-full items-center gap-2 text-left"
               >
                 <h1 className="truncate font-display text-2xl font-bold tracking-tight text-white">

@@ -14,6 +14,7 @@ import {
   normalizedBoxToRect
 } from '../../lib/rewindOverlay'
 import { MAC_PURPLE, macPurple } from '../../lib/macPalette'
+import { useTranslation } from '../../i18n'
 
 // Purple search-highlight per the Track 4 UI ruling (Mac ports its purple as-is
 // for the Rewind bounding-box overlay — a deliberate exception to the
@@ -35,6 +36,7 @@ export function RewindPlayer({
    *  "No frames yet" empty state so it can't flash before the frames arrive. */
   loading?: boolean
 }): React.JSX.Element {
+  const { t } = useTranslation()
   const [src, setSrc] = useState<string | null>(null)
   const [expanded, setExpanded] = useState(false)
   const [ocrLines, setOcrLines] = useState<OcrLine[]>([])
@@ -122,17 +124,15 @@ export function RewindPlayer({
               className="max-h-full max-w-full cursor-pointer object-contain"
             />
           ) : (
-            <div className="text-white/40 text-sm">Loading…</div>
+            <div className="text-white/40 text-sm">{t('rewind.loading')}</div>
           )
         ) : loading && frames.length === 0 ? (
           // Still loading the local frame set — show a neutral placeholder, not the
           // misleading "enable capture" message (the frames may already exist).
-          <div className="text-white/40 text-sm">Loading…</div>
+          <div className="text-white/40 text-sm">{t('rewind.loading')}</div>
         ) : (
           <div className="text-white/50 text-sm">
-            {frames.length === 0
-              ? 'No frames yet — enable Rewind capture in Settings.'
-              : 'No screenshot at this moment.'}
+            {frames.length === 0 ? t('rewind.noFramesYet') : t('rewind.noScreenshotNow')}
           </div>
         )}
         {contained &&

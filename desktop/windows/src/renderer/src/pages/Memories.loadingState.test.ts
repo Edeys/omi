@@ -11,7 +11,7 @@ const source = readFileSync(join(here, 'Memories.tsx'), 'utf8')
 // asserting on the page source directly for this component.
 describe('Memories brain-map loading state', () => {
   it('shows a placeholder immediately while the graph loads, not a blank box', () => {
-    expect(source).toContain('Building your memory map')
+    expect(source).toContain('memories.graph.building')
     expect(source).toMatch(/graphReady\s*\?\s*'pointer-events-none opacity-0'\s*:\s*'opacity-100'/)
   })
 

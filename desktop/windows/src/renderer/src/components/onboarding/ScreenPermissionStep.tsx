@@ -1,5 +1,6 @@
 import { Monitor } from 'lucide-react'
 import { PermissionStep } from './PermissionStep'
+import { useTranslation } from '../../i18n'
 
 type ScreenPermissionStepProps = {
   stepIndex: number
@@ -18,6 +19,7 @@ export function ScreenPermissionStep({
   onBack,
   onSkip
 }: ScreenPermissionStepProps): React.JSX.Element {
+  const { t } = useTranslation()
   // Windows has NO OS consent prompt for desktop capture (unlike macOS Screen
   // Recording), so this is an honest opt-in, not a permission request: it turns
   // on Omi's local screen timeline (the Settings "Capture my screen" toggle).
@@ -30,9 +32,7 @@ export function ScreenPermissionStep({
         await window.omi.rewindSetSettings({ ...current, captureEnabled: true })
       }
     } catch {
-      throw new Error(
-        "Couldn't turn on screen capture. You can enable it any time in Settings → Rewind."
-      )
+      throw new Error(t('onboarding.screenPermission.error'))
     }
   }
 
@@ -66,22 +66,22 @@ export function ScreenPermissionStep({
       stepIndex={stepIndex}
       totalSteps={totalSteps}
       aside={aside}
-      eyebrow="SCREEN"
-      title="Let Omi read your screen"
-      subtitle="Omi keeps a private, local timeline of what's on your screen. It stays on this device, and you can turn it off any time in Settings."
+      eyebrow={t('onboarding.screenPermission.eyebrow')}
+      title={t('onboarding.screenPermission.title')}
+      subtitle={t('onboarding.screenPermission.subtitle')}
       icon={<Monitor className="h-5 w-5 text-white/60" />}
-      cardLabel="Screen capture"
+      cardLabel={t('onboarding.screenPermission.cardLabel')}
       statusText={{
-        idle: 'Off',
-        waiting: 'Turning on',
-        granted: 'On',
-        denied: "Couldn't turn on"
+        idle: t('onboarding.screenPermission.status.idle'),
+        waiting: t('onboarding.screenPermission.status.waiting'),
+        granted: t('onboarding.screenPermission.status.granted'),
+        denied: t('onboarding.screenPermission.status.denied')
       }}
       buttonLabel={{
-        idle: 'Turn on',
-        waiting: 'Turning on',
-        granted: 'On',
-        denied: 'Try again'
+        idle: t('onboarding.screenPermission.button.idle'),
+        waiting: t('onboarding.screenPermission.button.waiting'),
+        granted: t('onboarding.screenPermission.button.granted'),
+        denied: t('onboarding.screenPermission.button.denied')
       }}
       onActivate={enableCapture}
       checkGranted={isCaptureOn}
