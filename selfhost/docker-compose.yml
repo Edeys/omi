@@ -44,7 +44,18 @@ services:
     ports: ["127.0.0.1:8091:8080"]
     depends_on: [redis]
     networks: [omi]
+  stt-adapter:
+    # Relative path keeps this file working from both selfhost/ and the deployed
+    # compose/ copy (both resolve into <repo>/selfhost/stt-adapter).
+    build: { context: ../selfhost/stt-adapter }
+    image: omi-stt-adapter
+    restart: always
+    mem_limit: 500m
+    ports: ["127.0.0.1:8092:8092"]
+    volumes: ["stt_models:/models"]
+    networks: [omi]
 networks:
   omi: {}
 volumes:
   redis_data: {}
+  stt_models: {}
