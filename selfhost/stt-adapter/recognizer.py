@@ -29,6 +29,7 @@ MODEL_DIR_NAME = "sherpa-onnx-streaming-zipformer-ar_en_id_ja_ru_th_vi_zh-2025-0
 # release tag is the default; the offline 30M model stays selectable via
 # STT_MODEL_SOURCE if an OfflineRecognizer path is ever added.
 DEFAULT_MODELS_ROOT = "/models"
+MODEL_DOWNLOAD_TIMEOUT_S = 30  # per-socket-op (connect/read); slow-but-active downloads are fine
 SAMPLE_RATE = 16000
 
 
@@ -54,7 +55,7 @@ def _safe_extract(archive: Path, dest: Path) -> None:
     with tarfile.open(archive, "r:bz2") as tar:
         for member in tar.getmembers():
             target = (base / member.name).resolve()
-            if not str(target).startswith(str(base)):
+            if not target.is_relative_to(base):
                 raise ValueError(f"refusing unsafe archive member: {member.name}")
         tar.extractall(base)
 
@@ -88,7 +89,8 @@ def load_model(url_or_dir: str = DEFAULT_MODEL_URL, models_root: str | None = No
     if not archive.is_file():
         logger.info("downloading model %s", url_or_dir)
         part = archive.with_suffix(".part")
-        urllib.request.urlretrieve(url_or_dir, part)
+        with urllib.request.urlopen(url_or_dir, timeout=MODEL_DOWNLOAD_TIMEOUT_S) as resp, open(part, "wb") as fh:
+            shutil.copyfileobj(resp, fh)
         part.rename(archive)
     logger.info("extracting %s", archive)
     _safe_extract(archive, staging)

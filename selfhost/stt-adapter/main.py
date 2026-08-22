@@ -91,7 +91,9 @@ async def _stream_endpoint(ws: WebSocket) -> None:
                 if len(data) % protocol.BYTES_PER_SAMPLE != 0 or len(data) > MAX_FRAME_BYTES:
                     await _reject(ws, f"invalid PCM16 frame of {len(data)} bytes")
                     return
-                for segment in rec.transcribe_chunk(data):
+                # ONNX decode is CPU-bound: keep it off the event loop so
+                # KeepAlive/receive() stay responsive during long utterances.
+                for segment in await async_to_thread(lambda: rec.transcribe_chunk(data)):
                     await ws.send_text(
                         protocol.encode_results(
                             segment["text"],
@@ -133,7 +135,7 @@ async def _stream_endpoint(ws: WebSocket) -> None:
                 continue
             elif etype in ("Finalize", "CloseStream"):
                 if rec is not None:
-                    for segment in rec.flush():
+                    for segment in await async_to_thread(rec.flush):
                         await ws.send_text(
                             protocol.encode_results(
                                 segment["text"],

@@ -200,6 +200,16 @@ def test_validate_start_accepts_pinned_live_options():
     assert cfg.channels == 1
 
 
+@pytest.mark.parametrize("override", [{"sample_rate": "16k"}, {"channels": "mono"}])
+def test_validate_start_rejects_wrong_typed_options(override):
+    # Regression: wrong-typed int options must surface as a ProtocolError
+    # (Deepgram Error frame + clean close), not an unhandled ValueError.
+    with pytest.raises(protocol.ProtocolError) as excinfo:
+        protocol.validate_start({"type": "Start", **override})
+    key = next(iter(override))
+    assert key in str(excinfo.value.message)
+
+
 def test_parse_client_message_rejects_non_json_and_missing_type():
     with pytest.raises(protocol.ProtocolError):
         protocol.parse_client_message("not json")

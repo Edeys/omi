@@ -55,6 +55,19 @@ def parse_client_message(raw: str) -> dict:
     return {"type": doc["type"], "payload": payload}
 
 
+def _int_option(payload: dict, key: str, default: int) -> int:
+    """Read one integer LiveOption; wrong-typed values are a protocol error, not a crash.
+
+    Regression guard: ``{"sample_rate": "16k"}`` used to escape as an unhandled
+    ValueError and kill the connection without a Deepgram-shaped Error frame.
+    """
+    raw = payload.get(key, default)
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        raise ProtocolError(f"Invalid {key} {raw!r}: expected an integer")
+
+
 def validate_start(payload: dict) -> StartConfig:
     """Validate the pinned LiveOptions subset; ignore options we cannot honor.
 
@@ -67,12 +80,12 @@ def validate_start(payload: dict) -> StartConfig:
         raise ProtocolError(
             f"Unsupported encoding {encoding!r}: this endpoint accepts '{ENCODING}' only"
         )
-    sample_rate = int(payload.get("sample_rate", SAMPLE_RATE))
+    sample_rate = _int_option(payload, "sample_rate", SAMPLE_RATE)
     if sample_rate != SAMPLE_RATE:
         raise ProtocolError(
             f"Unsupported sample_rate {sample_rate}: the loaded model requires {SAMPLE_RATE}Hz"
         )
-    channels = int(payload.get("channels", CHANNELS))
+    channels = _int_option(payload, "channels", CHANNELS)
     if channels != CHANNELS:
         raise ProtocolError(
             f"Unsupported channels {channels}: this endpoint accepts mono ({CHANNELS}) only"
