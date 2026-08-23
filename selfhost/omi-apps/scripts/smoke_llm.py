@@ -14,7 +14,7 @@ async def main() -> int:
     try:
         reply = await llm_client.chat(
             [{"role": "user", "content": "Trả lời đúng một từ: chào."}],
-            max_tokens=30,
+            max_tokens=500,
         )
     except LLMError as exc:
         print(f"SMOKE_FAIL: {exc}")

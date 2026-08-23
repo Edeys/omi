@@ -9,7 +9,7 @@ from app.config import settings
 logger = logging.getLogger("omi-apps.llm")
 
 CONNECT_TIMEOUT = 3.0
-FIRST_BYTE_TIMEOUT = 20.0
+DEFAULT_TOTAL_TIMEOUT = 75.0
 
 
 class LLMError(Exception):
@@ -33,8 +33,9 @@ class LLMClient:
 
     async def _acquire(self) -> httpx.AsyncClient:
         if self._client is None or self._client.is_closed:
+            total = getattr(settings, "llm_timeout_seconds", DEFAULT_TOTAL_TIMEOUT)
             self._client = httpx.AsyncClient(
-                timeout=httpx.Timeout(FIRST_BYTE_TIMEOUT, connect=CONNECT_TIMEOUT)
+                timeout=httpx.Timeout(total, connect=CONNECT_TIMEOUT)
             )
         return self._client
 

@@ -16,6 +16,10 @@ class Settings:
         self.fallback_llm_base_url: str = os.getenv("OMI_APPS_FALLBACK_LLM_BASE_URL", "").rstrip("/")
         self.fallback_llm_api_key: str = os.getenv("OMI_APPS_FALLBACK_LLM_API_KEY", "")
         self.fallback_llm_model: str = os.getenv("OMI_APPS_FALLBACK_LLM_MODEL", "")
+        try:
+            self.llm_timeout_seconds: float = float(os.getenv("OMI_APPS_LLM_TIMEOUT", "75"))
+        except ValueError:
+            self.llm_timeout_seconds = 75.0
         self.audio_store_dir: str = os.getenv("OMI_APPS_AUDIO_DIR", "/data/audio")
 
 
