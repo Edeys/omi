@@ -15,7 +15,7 @@ services:
     restart: always
     mem_limit: 1024m
     env_file: /opt/omi/.env
-    volumes: ["/opt/omi/secrets:/secrets:ro"]
+    volumes: ["/opt/omi/secrets:/secrets:ro", "vector_data:/data/vectors"]
     ports: ["127.0.0.1:8080:8080"]
     depends_on: [redis]
     networks: [omi]
@@ -28,7 +28,7 @@ services:
     restart: always
     mem_limit: 700m
     env_file: /opt/omi/.env
-    volumes: ["/opt/omi/secrets:/secrets:ro"]
+    volumes: ["/opt/omi/secrets:/secrets:ro", "vector_data:/data/vectors"]
     ports: ["127.0.0.1:8090:8080"]
     depends_on: [redis]
     networks: [omi]
@@ -41,7 +41,7 @@ services:
     restart: always
     mem_limit: 800m
     env_file: /opt/omi/.env
-    volumes: ["/opt/omi/secrets:/secrets:ro"]
+    volumes: ["/opt/omi/secrets:/secrets:ro", "vector_data:/data/vectors"]
     ports: ["127.0.0.1:8091:8080"]
     depends_on: [redis]
     networks: [omi]
@@ -79,6 +79,7 @@ services:
     volumes:
       - "/opt/omi/secrets:/secrets:ro"
       - "/opt/omi/selfhost/notifications-job/run.sh:/app/run-job.sh:ro"
+      - "vector_data:/data/vectors"
     command: ["sh", "/app/run-job.sh"]
     depends_on: [redis]
     networks: [omi]
@@ -89,3 +90,4 @@ volumes:
   stt_models: {}
   omi_apps_audio: {}
   omi_apps_memory: {}
+  vector_data: {}

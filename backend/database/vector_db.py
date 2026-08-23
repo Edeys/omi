@@ -100,6 +100,14 @@ index: Any = None
 if _pinecone_api_key and _pinecone_index_name:
     pc = Pinecone(api_key=_pinecone_api_key)
     index = pc.Index(_pinecone_index_name)
+elif os.getenv('LOCAL_VECTOR_ENABLED', '').strip().lower() == 'true':
+    # Self-hosted backend: embedded SQLite+numpy store speaking the same
+    # subset of the Pinecone Index surface this module exercises.
+    from database.local_vector_index import LocalVectorIndex
+
+    _local_vector_db_path = os.getenv('LOCAL_VECTOR_DB_PATH', '/data/vectors/omi-vectors.sqlite3')
+    index = cast(Any, LocalVectorIndex(path=_local_vector_db_path))
+    logger.info('vector backend: local sqlite index at %s', _local_vector_db_path)
 
 
 def _get_data(uid: str, conversation_id: str, vector: List[float]) -> VectorRecordDoc:
