@@ -91,6 +91,35 @@ async def _reject(ws: WebSocket, message: str, close_code: int = 1008) -> None:
 async def _stream_endpoint(ws: WebSocket) -> None:
     await ws.accept()
     rec = None
+    # deepgram-sdk 4.8.1 sends LiveOptions via query string (e.g. ?sample_rate=16000&encoding=linear16),
+    # not via {"type":"Start"} JSON. Auto-start from query_string if present to avoid
+    # "audio frame received before Start" 1008 when backend connects.
+    try:
+        from urllib.parse import parse_qs
+
+        qs = parse_qs(ws.scope.get("query_string", b"").decode())
+        if qs.get("sample_rate") and qs.get("encoding"):
+            payload = {
+                "type": "Start",
+                "sample_rate": int(qs["sample_rate"][0]),
+                "encoding": qs["encoding"][0],
+                "channels": int(qs.get("channels", ["1"])[0]),
+                "language": qs.get("language", ["vi"])[0],
+                "model": qs.get("model", ["nova-3"])[0],
+                "interim_results": qs.get("interim_results", ["false"])[0].lower() == "true",
+            }
+            protocol.validate_start(payload)
+            rec = create_recognizer()
+            logger.info(
+                "session auto-started from query_string language=%s",
+                payload.get("language", "vi"),
+            )
+            await ws.send_text(
+                protocol.encode_metadata(str(uuid.uuid4()), recognizer_mod.MODEL_DIR_NAME)
+            )
+    except Exception as e:
+        logger.warning("query_string auto-start failed, falling back to JSON Start: %s", e)
+        rec = None
     try:
         while True:
             msg = await ws.receive()
