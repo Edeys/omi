@@ -632,10 +632,7 @@ def _server_paid_flash_text(model: str, action: str) -> bool:
     Covers both the current reservation and the migration target so the
     2026-08-04 double-pay regression cannot reappear mid-migration.
     """
-    return model in {ptr.PT_MODEL_CURRENT, ptr.PT_MODEL_TARGET} and action in {
-        'generateContent',
-        'streamGenerateContent',
-    }
+    return False  # SELF_HOSTED_NO_PT
 
 
 def _vertex_required(model: str, action: str) -> bool:
