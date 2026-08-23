@@ -1,3 +1,18 @@
+x-http-healthcheck: &http_healthcheck
+  # python-slim images ship no curl; use the stdlib instead. All backend-family
+  # containers serve /health on container port 8080 (stt-adapter on 8092).
+  test:
+    [
+      "CMD",
+      "python",
+      "-c",
+      "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=5).status==200 else 1)",
+    ]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 90s
+
 services:
   redis:
     image: redis:7-alpine
@@ -5,6 +20,11 @@ services:
     mem_limit: 200m
     command: ["redis-server", "--save", "60", "1000"]
     volumes: ["redis_data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     networks: [omi]
   backend:
     build:
@@ -17,6 +37,7 @@ services:
     env_file: /opt/omi/.env
     volumes: ["/opt/omi/secrets:/secrets:ro", "vector_data:/data/vectors"]
     ports: ["127.0.0.1:8080:8080"]
+    healthcheck: *http_healthcheck
     depends_on: [redis]
     networks: [omi]
   desktop-backend:
@@ -30,6 +51,7 @@ services:
     env_file: /opt/omi/.env
     volumes: ["/opt/omi/secrets:/secrets:ro", "vector_data:/data/vectors"]
     ports: ["127.0.0.1:8090:8080"]
+    healthcheck: *http_healthcheck
     depends_on: [redis]
     networks: [omi]
   pusher:
@@ -43,6 +65,7 @@ services:
     env_file: /opt/omi/.env
     volumes: ["/opt/omi/secrets:/secrets:ro", "vector_data:/data/vectors"]
     ports: ["127.0.0.1:8091:8080"]
+    healthcheck: *http_healthcheck
     depends_on: [redis]
     networks: [omi]
   stt-adapter:
@@ -55,6 +78,18 @@ services:
     env_file: /opt/omi/.env
     ports: ["127.0.0.1:8092:8092"]
     volumes: ["stt_models:/models"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8092/health', timeout=5).status==200 else 1)",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 180s
     networks: [omi]
   omi-apps:
     build: { context: ../selfhost/omi-apps }
@@ -64,6 +99,7 @@ services:
     env_file: /opt/omi/.env
     ports: ["127.0.0.1:8093:8080"]
     volumes: ["omi_apps_audio:/data/audio", "omi_apps_memory:/data/memory"]
+    healthcheck: *http_healthcheck
     depends_on: [redis]
     networks: [omi]
   notifications-job:
