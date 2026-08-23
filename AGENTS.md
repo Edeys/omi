@@ -32,10 +32,13 @@ This is a **fork** running a self-hosted backend on VPS `103.116.39.65` (Ubuntu,
 
 - **Notifications job**: `selfhost/notifications-job/run.sh` loops `modal/job.py` hourly (daily reminders + daily summary push + day-summary developer webhook). Reuses the backend image; needs `GOOGLE_APPLICATION_CREDENTIALS` + secrets mount like backend.
 
-- **LLM**: `OPENAI_BASE_URL=https://opencode.ai/zen/go/v1` + model override via `OMI_MAIN_MODEL=ox-alpha-free` / `OMI_LIGHT_MODEL=ox-alpha-free` (patched in `backend/utils/llm/model_config.py` to read these env vars).
+- **LLM**: `OPENAI_BASE_URL=https://opencode.ai/zen/go/v1` (verified against `/opt/omi/.env` 2026-08-25; `OPENROUTER_BASE_URL=https://9router.xuanloi.me/v1` stays as fallback) + model override via `OMI_MAIN_MODEL=ox-alpha-free` / `OMI_LIGHT_MODEL=ox-alpha-free` (patched in `backend/utils/llm/model_config.py` to read these env vars). Keep `selfhost/.env.template`, this file, and the live `/opt/omi/.env` in sync — they must never drift.
 - **STT**: `DEEPGRAM_SELF_HOSTED_ENABLED=true` + `DEEPGRAM_SELF_HOSTED_URL=http://stt-adapter:8092`. Flag value MUST be lowercase string `'true'` (code checks `== 'true'` at `streaming.py:581`). Adapter uses VietASR offline 70k-hour Vietnamese model (`sherpa-onnx-zipformer-vi-int8-2025-04-20`) with Silero VAD segmentation.
+- **Vector search**: no Pinecone. `LOCAL_VECTOR_ENABLED=true` + `LOCAL_VECTOR_DB_PATH=/data/vectors/omi-vectors.sqlite3` selects the embedded SQLite+numpy store (`backend/database/local_vector_index.py`) behind the same `vector_db.index` handle. Data persists in the `vector_data` compose volume shared by backend/desktop-backend/pusher/notifications-job.
+- **Storage buckets**: provisioned by `selfhost/scripts/provision-buckets.sh` (8 buckets in `asia-southeast1`: omi-private-cloud-sync, omi-speech-profiles, omi-memories-recordings, omi-postprocessing, omi-temporal-sync-local, omi-chat-files, omi-app-thumbnails, omi-plugins-logos; firebase-adminsdk SA has objectAdmin on each). Names must match the `BUCKET_*` vars read at `backend/utils/other/storage.py:82-90`.
 - **Secrets**: `/opt/omi/.env` (mode 600) + `/opt/omi/secrets/firebase-service-account.json` (mode 644, container uid 10001 needs read). NEVER committed.
 - **Deploy**: `cd /opt/omi/compose && docker compose build && docker compose up -d`. Repo cloned at `/opt/omi` on VPS.
+- **Health**: `bash selfhost/scripts/full-health.sh` on the VPS = one-command dashboard; compose now defines healthchecks for every HTTP service. Soak: `DURATION=600 bash selfhost/scripts/soak-test.sh`.
 - **SSH**: `ssh -i C:\Users\xuanl\.ssh\omi_agent root@103.116.39.65`
 
 ### Firebase (project `omi-xuan`, NOT `based-hardware`)
@@ -70,7 +73,10 @@ Known offenders patched already: `omiListen.ts` (WS listen), `updater.ts`, `byok
 ### Known Limitations (accepted)
 
 - No GPU services (diarizer, parakeet, NLLB) — speaker diarization off, no translation
-- No Pinecone/Typesense — semantic search falls back to basic
+- No Typesense — keyword search degraded. Pinecone replaced by the embedded LocalVectorIndex (see Vector search above), so semantic search works
+- **Voice messages / batch STT fail closed by design**: prerecorded Deepgram always targets `api.deepgram.com` and raises `CONFIG_ERROR` with `DEEPGRAM_API_KEY` empty (`backend/utils/stt/pre_recorded.py:139-148`); modulate/parakeet unconfigured. Live `/v4/listen` transcription is unaffected.
+- Apple OAuth disabled (`APPLE_*` unset) — Google sign-in only
+- Meetings composite index `(start_time,end_time)` is now declared in `firestore_index_registry.py`; deploy it via `firebase deploy --only firestore:indexes --project=omi-xuan` if the live project still lacks it
 - Gemini proxy models (`gemini-2.5-flash` etc.) require Vertex AI patch (`_server_paid_flash_text` returns False) — embeddings work via AI Studio key
 - Billing/plans endpoints degraded (no Stripe)
 
