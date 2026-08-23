@@ -160,8 +160,19 @@ def encode_results(
             "metadata": {
                 "transaction_key": "async",
                 "request_id": "",
-                "model_info": {"name": "sherpa-onnx-streaming-zipformer-vi", "architecture": "zipformer"},
-                "extra": None,
+                "sha256": "",
+                "created": "2024-01-01T00:00:00.000Z",
+                "duration": 0,
+                "channels": 1,
+                "models": ["sherpa-onnx-streaming-zipformer-vi"],
+                "model_info": {
+                    "sherpa-onnx-streaming-zipformer-vi": {
+                        "name": "sherpa-onnx-streaming-zipformer-vi",
+                        "version": "1.0",
+                        "arch": "zipformer",
+                    }
+                },
+                "extra": {},
             },
         },
         ensure_ascii=False,
@@ -169,13 +180,22 @@ def encode_results(
 
 
 def encode_metadata(request_id: str, model_name: str) -> str:
+    # Deepgram SDK's MetadataResponse expects model_info as Dict[str, ModelInfo],
+    # e.g. {"nova-3": {"name": "nova-3", "version": "1.0", "arch": "nova"}}.
+    # Sending {"name": ..., "architecture": ...} causes ModelInfo.from_dict(str) -> 'str' has no items.
+    safe_name = model_name or "sherpa-onnx-streaming-zipformer-vi"
     return json.dumps(
         {
             "type": "Metadata",
             "transaction_key": "async",
             "request_id": request_id,
-            "model_info": {"name": model_name, "architecture": "zipformer"},
-            "extra": None,
+            "sha256": "",
+            "created": "2024-01-01T00:00:00.000Z",
+            "duration": 0,
+            "channels": 1,
+            "models": [safe_name],
+            "model_info": {safe_name: {"name": safe_name, "version": "1.0", "arch": "zipformer"}},
+            "extra": {},
         }
     )
 
