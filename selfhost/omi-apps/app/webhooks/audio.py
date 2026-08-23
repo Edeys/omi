@@ -1,4 +1,5 @@
 import logging
+import time
 from typing import Any
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
@@ -57,6 +58,26 @@ async def _finalize_file(uid: str, path: str) -> None:
         from app.webhooks.audio_stt import transcribe_wav_file
 
         await transcribe_wav_file(uid, wav_path)
+
+
+@router.post("/webhook/audio/finalize")
+async def force_finalize(request: Request, background: BackgroundTasks) -> dict[str, Any]:
+    uid = request.query_params.get("uid")
+    if not uid:
+        raise HTTPException(status_code=422, detail="uid query parameter is required")
+    store = get_audio_store()
+    open_files = [p for p in store.stale_open_files(uid, now=time.time() + store.idle_finalize_seconds + 1)]
+    if not open_files:
+        import os
+
+        directory = store._uid_dir(uid)
+        open_files = [
+            os.path.join(directory, n) for n in os.listdir(directory) if n.endswith(".pcm")
+        ]
+    for path in open_files:
+        background.add_task(_finalize_file, uid, path)
+    logger.info("forced finalize uid=%s files=%d", uid, len(open_files))
+    return {"status": "ok", "finalizing": len(open_files)}
 
 
 @router.get("/webhook/audio/files")
