@@ -27,6 +27,10 @@ This is a **fork** running a self-hosted backend on VPS `103.116.39.65` (Ubuntu,
 | Desktop-backend | `https://omi-desk.xuanloi.me` | 8090 |
 | Pusher (WS) | `https://omi-ws.xuanloi.me` | 8091 |
 | STT adapter | internal Docker network | 8092 |
+| omi-apps (integration webhooks) | `https://omi-app.xuanloi.me` | 8093 |
+| Notifications cron job | internal, hourly at top of UTC hour | — |
+
+- **Notifications job**: `selfhost/notifications-job/run.sh` loops `modal/job.py` hourly (daily reminders + daily summary push + day-summary developer webhook). Reuses the backend image; needs `GOOGLE_APPLICATION_CREDENTIALS` + secrets mount like backend.
 
 - **LLM**: `OPENAI_BASE_URL=https://opencode.ai/zen/go/v1` + model override via `OMI_MAIN_MODEL=ox-alpha-free` / `OMI_LIGHT_MODEL=ox-alpha-free` (patched in `backend/utils/llm/model_config.py` to read these env vars).
 - **STT**: `DEEPGRAM_SELF_HOSTED_ENABLED=true` + `DEEPGRAM_SELF_HOSTED_URL=http://stt-adapter:8092`. Flag value MUST be lowercase string `'true'` (code checks `== 'true'` at `streaming.py:581`). Adapter uses VietASR offline 70k-hour Vietnamese model (`sherpa-onnx-zipformer-vi-int8-2025-04-20`) with Silero VAD segmentation.
@@ -69,7 +73,6 @@ Known offenders patched already: `omiListen.ts` (WS listen), `updater.ts`, `byok
 - No Pinecone/Typesense — semantic search falls back to basic
 - Gemini proxy models (`gemini-2.5-flash` etc.) require Vertex AI patch (`_server_paid_flash_text` returns False) — embeddings work via AI Studio key
 - Billing/plans endpoints degraded (no Stripe)
-- Notifications job not deployed
 
 ## Read Next (just-in-time)
 
