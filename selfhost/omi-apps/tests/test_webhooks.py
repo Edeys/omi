@@ -59,7 +59,10 @@ def test_audio_requires_uid() -> None:
     assert res.status_code == 422
 
 
-def test_audio_accepts_pcm_bytes() -> None:
+def test_audio_accepts_pcm_bytes(tmp_path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from app.config import settings
+
+    monkeypatch.setattr(settings, "audio_store_dir", str(tmp_path))
     payload = b"\x00\x00" * 1600
     res = client.post("/webhook/audio?uid=u1&sample_rate=16000", content=payload)
     assert res.status_code == 200

@@ -28,6 +28,8 @@ class Settings:
         self.admin_key: str = os.getenv("ADMIN_KEY", "")
         self.notify_on_insight: bool = os.getenv("OMI_APPS_NOTIFY_INSIGHTS", "true").strip().lower() == "true"
         self.notify_min_gap_seconds: int = int(os.getenv("OMI_APPS_NOTIFY_GAP", "60"))
+        self.stt_enabled: bool = os.getenv("OMI_APPS_STT_ENABLED", "false").strip().lower() == "true"
+        self.stt_ws_url: str = os.getenv("OMI_APPS_STT_WS_URL", "ws://stt-adapter:8092")
         self.audio_store_dir: str = os.getenv("OMI_APPS_AUDIO_DIR", "/data/audio")
 
 
