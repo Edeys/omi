@@ -1,6 +1,90 @@
-#!/bin/sh
-# Runs the upstream notifications cron (modal/job.py) at the top of every UTC hour.
-while true; do
-  sh -c 'python modal/job.py' || echo "[notifications-job] run failed; retrying next hour"
-  sleep $(( 3600 - $(date +%s) % 3600 ))
-done
+services:
+  redis:
+    image: redis:7-alpine
+    restart: always
+    mem_limit: 200m
+    command: ["redis-server", "--save", "60", "1000"]
+    volumes: ["redis_data:/data"]
+    networks: [omi]
+  backend:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfile
+      args:
+        PYTHON_BASE_IMAGE: python:3.11-slim
+    restart: always
+    mem_limit: 1024m
+    env_file: /opt/omi/.env
+    volumes: ["/opt/omi/secrets:/secrets:ro"]
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on: [redis]
+    networks: [omi]
+  desktop-backend:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfile.desktop_backend
+      args:
+        PYTHON_BASE_IMAGE: python:3.11-slim
+    restart: always
+    mem_limit: 700m
+    env_file: /opt/omi/.env
+    volumes: ["/opt/omi/secrets:/secrets:ro"]
+    ports: ["127.0.0.1:8090:8080"]
+    depends_on: [redis]
+    networks: [omi]
+  pusher:
+    build:
+      context: ../
+      dockerfile: backend/pusher/Dockerfile
+      args:
+        PYTHON_BASE_IMAGE: python:3.11-slim
+    restart: always
+    mem_limit: 800m
+    env_file: /opt/omi/.env
+    ports: ["127.0.0.1:8091:8080"]
+    depends_on: [redis]
+    networks: [omi]
+  stt-adapter:
+    # Relative path keeps this file working from both selfhost/ and the deployed
+    # compose/ copy (both resolve into <repo>/selfhost/stt-adapter).
+    build: { context: ../selfhost/stt-adapter }
+    image: omi-stt-adapter
+    restart: always
+    mem_limit: 500m
+    env_file: /opt/omi/.env
+    ports: ["127.0.0.1:8092:8092"]
+    volumes: ["stt_models:/models"]
+    networks: [omi]
+  omi-apps:
+    build: { context: ../selfhost/omi-apps }
+    image: omi-omi-apps
+    restart: always
+    mem_limit: 400m
+    env_file: /opt/omi/.env
+    ports: ["127.0.0.1:8093:8080"]
+    volumes: ["omi_apps_audio:/data/audio", "omi_apps_memory:/data/memory"]
+    depends_on: [redis]
+    networks: [omi]
+  notifications-job:
+    build:
+      context: ../
+      dockerfile: backend/Dockerfile
+      args:
+        PYTHON_BASE_IMAGE: python:3.11-slim
+    image: omi-notifications-job
+    restart: always
+    mem_limit: 700m
+    env_file: /opt/omi/.env
+    volumes:
+      - "/opt/omi/secrets:/secrets:ro"
+      - "/opt/omi/selfhost/notifications-job/run.sh:/app/run-job.sh:ro"
+    command: ["sh", "/app/run-job.sh"]
+    depends_on: [redis]
+    networks: [omi]
+networks:
+  omi: {}
+volumes:
+  redis_data: {}
+  stt_models: {}
+  omi_apps_audio: {}
+  omi_apps_memory: {}
