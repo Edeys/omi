@@ -8,6 +8,69 @@ These rules apply to every AI agent working in this repository. This file is **h
 
 **Two audiences read this file.** Engineering standards (Definition of Done, testing, formatting) apply to everyone — maintainers and open-source contributors alike. Rules about this repo's `main` branch, production app bundles, deploys, and local machine workflows assume a maintainer environment; in a fork, follow your user's process for landing changes and skip those. Contributor flow: `docs/doc/developer/Contribution.mdx`.
 
+## Fork: Self-Hosted Deployment (Edeys/omi)
+
+This is a **fork** running a self-hosted backend on VPS `103.116.39.65` (Ubuntu, 2 vCPU/4GB). Read this section BEFORE any work.
+
+### Toolchain
+
+- **Node 22 only** (`>=22.19 <23`): portable at `C:\Omi\Luu Tru\node22-toolchain\` (or `.node22/`). Never system Node 24. Use `C:\Omi\Luu Tru\node22-toolchain\pnpm.cmd` or `C:\Omi\.node22\pnpm.cmd` for pnpm.
+- **No MSVC**: `npmRebuild: false` in electron-builder config. Native modules use manually downloaded prebuilds (better-sqlite3 electron-v140 from GitHub releases → `node_modules/better-sqlite3/build/Release/better_sqlite3.node`, ~1920512 bytes).
+- **Install**: `pnpm install --ignore-scripts` then manually run `node node_modules/electron/install.js` and place native prebuilds. Never bare `pnpm install` without `--ignore-scripts`.
+- Run everything from `desktop/windows/` directory.
+
+### Self-Hosted Backend (VPS)
+
+| Service | URL | Port |
+|---|---|---|
+| Python backend | `https://omi-api.xuanloi.me` | 8080 |
+| Desktop-backend | `https://omi-desk.xuanloi.me` | 8090 |
+| Pusher (WS) | `https://omi-ws.xuanloi.me` | 8091 |
+| STT adapter | internal Docker network | 8092 |
+
+- **LLM**: `OPENAI_BASE_URL=https://opencode.ai/zen/go/v1` + model override via `OMI_MAIN_MODEL=ox-alpha-free` / `OMI_LIGHT_MODEL=ox-alpha-free` (patched in `backend/utils/llm/model_config.py` to read these env vars).
+- **STT**: `DEEPGRAM_SELF_HOSTED_ENABLED=true` + `DEEPGRAM_SELF_HOSTED_URL=http://stt-adapter:8092`. Flag value MUST be lowercase string `'true'` (code checks `== 'true'` at `streaming.py:581`). Adapter uses VietASR offline 70k-hour Vietnamese model (`sherpa-onnx-zipformer-vi-int8-2025-04-20`) with Silero VAD segmentation.
+- **Secrets**: `/opt/omi/.env` (mode 600) + `/opt/omi/secrets/firebase-service-account.json` (mode 644, container uid 10001 needs read). NEVER committed.
+- **Deploy**: `cd /opt/omi/compose && docker compose build && docker compose up -d`. Repo cloned at `/opt/omi` on VPS.
+- **SSH**: `ssh -i C:\Users\xuanl\.ssh\omi_agent root@103.116.39.65`
+
+### Firebase (project `omi-xuan`, NOT `based-hardware`)
+
+- **Indexes are critical**: import `firestore.indexes.json` at repo root via Firebase CLI immediately after creating Firestore. Missing indexes cause cascading WS crashes and 500s.
+- **OAuth client type must be Web application** (NOT Desktop app) with redirect URI `https://omi-api.xuanloi.me/v1/auth/callback/google`. Desktop app clients don't allow custom redirect URIs.
+- **Service account needs `Cloud Datastore Index Admin` role** to create indexes programmatically.
+
+### Hardcoded URLs — grep before self-hosting
+
+Always search for hardcoded upstream URLs before assuming env vars cover everything:
+```bash
+grep -rn "api.omi.me\|omiapi.com" src/ --include="*.ts" --include="*.tsx"
+```
+Known offenders patched already: `omiListen.ts` (WS listen), `updater.ts`, `byok.ts`, `auth.ts`, `mcpExports.ts`, `index.ts` CORS list. Always check new files too.
+
+### Vietnamese i18n
+
+- Full UI translation (1361+ keys en/vi) via react-i18next. Locale files: `src/renderer/src/i18n/locales/{en,vi}.json`. Parity test enforces key parity.
+- Language tab in Settings persists via `Preferences.uiLanguage`. Switching triggers live re-render including secondary windows.
+- AI-generated content (transcripts, chat replies, summaries) intentionally NOT translated.
+- Model outputs ALL-CAPS Vietnamese text (VietASR token style) — normalized via `.capitalize()` in `_decode_samples()`.
+- Memory extraction and chat prompts should instruct LLM to respond in the same language as user input.
+
+### App Build & Install
+
+- Dev: `$env:OMI_SANDBOX='dev1'; C:\Omi\Luu Tru\node22-toolchain\pnpm.cmd run dev`
+- Installer: `C:\Omi\Luu Tru\node22-toolchain\pnpm.cmd run build:win` → output at `dist/Omi-for-Windows-Setup-*.exe`
+- `.env` values are baked at build time by Vite. Changing env requires rebuild.
+- OCR/audio-helper/automation-helper binaries need .NET SDK 8 — not installed, features disabled gracefully.
+
+### Known Limitations (accepted)
+
+- No GPU services (diarizer, parakeet, NLLB) — speaker diarization off, no translation
+- No Pinecone/Typesense — semantic search falls back to basic
+- Gemini proxy models (`gemini-2.5-flash` etc.) require Vertex AI patch (`_server_paid_flash_text` returns False) — embeddings work via AI Studio key
+- Billing/plans endpoints degraded (no Stripe)
+- Notifications job not deployed
+
 ## Read Next (just-in-time)
 
 | Working on | Read first |
