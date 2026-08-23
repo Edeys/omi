@@ -134,9 +134,12 @@ async def _stream_endpoint(ws: WebSocket) -> None:
                 if len(data) % protocol.BYTES_PER_SAMPLE != 0 or len(data) > MAX_FRAME_BYTES:
                     await _reject(ws, f"invalid PCM16 frame of {len(data)} bytes")
                     return
+                logger.info("audio frame %d bytes", len(data))
                 # ONNX decode is CPU-bound: keep it off the event loop so
                 # KeepAlive/receive() stay responsive during long utterances.
-                for segment in await async_to_thread(lambda: rec.transcribe_chunk(data)):
+                segments = await async_to_thread(lambda: rec.transcribe_chunk(data))
+                for segment in segments:
+                    logger.info("transcript: %r is_final=%s", segment.get("text", ""), segment.get("is_final"))
                     await ws.send_text(
                         protocol.encode_results(
                             segment["text"],
@@ -145,6 +148,8 @@ async def _stream_endpoint(ws: WebSocket) -> None:
                             is_final=bool(segment.get("is_final", True)),
                         )
                     )
+                if not segments:
+                    logger.debug("no transcript for %d bytes yet", len(data))
                 continue
 
             if text is None:
