@@ -59,10 +59,11 @@ async def transcribe_pcm(
                     break
             if mtype is None:
                 continue
+    except Exception as exc:
+        logger.warning("stt streaming ended early (%s), keeping partial transcript", type(exc).__name__)
+    finally:
         try:
             await ws.send(json.dumps({"type": "CloseStream"}))
         except Exception:
             pass
-    except Exception as exc:
-        logger.warning("stt streaming ended early (%s), keeping partial transcript", type(exc).__name__)
     return " ".join(transcripts).strip()
