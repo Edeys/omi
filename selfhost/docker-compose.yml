@@ -41,6 +41,7 @@ services:
     restart: always
     mem_limit: 800m
     env_file: /opt/omi/.env
+    volumes: ["/opt/omi/secrets:/secrets:ro"]
     ports: ["127.0.0.1:8091:8080"]
     depends_on: [redis]
     networks: [omi]
