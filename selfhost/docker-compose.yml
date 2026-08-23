@@ -55,6 +55,15 @@ services:
     ports: ["127.0.0.1:8092:8092"]
     volumes: ["stt_models:/models"]
     networks: [omi]
+  omi-apps:
+    build: { context: ../selfhost/omi-apps }
+    image: omi-omi-apps
+    restart: always
+    mem_limit: 400m
+    env_file: /opt/omi/.env
+    ports: ["127.0.0.1:8093:8080"]
+    depends_on: [redis]
+    networks: [omi]
 networks:
   omi: {}
 volumes:
