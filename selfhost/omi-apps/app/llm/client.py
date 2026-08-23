@@ -31,9 +31,9 @@ class LLMClient:
     def __init__(self, http_client: httpx.AsyncClient | None = None) -> None:
         self._client = http_client
 
-    async def _acquire(self) -> httpx.AsyncClient:
+    async def _acquire(self, timeout_seconds: float | None = None) -> httpx.AsyncClient:
         if self._client is None or self._client.is_closed:
-            total = getattr(settings, "llm_timeout_seconds", DEFAULT_TOTAL_TIMEOUT)
+            total = timeout_seconds or getattr(settings, "llm_timeout_seconds", DEFAULT_TOTAL_TIMEOUT)
             self._client = httpx.AsyncClient(
                 timeout=httpx.Timeout(total, connect=CONNECT_TIMEOUT)
             )
@@ -49,7 +49,9 @@ class LLMClient:
         model: str | None = None,
         temperature: float = 0.4,
         max_tokens: int = 700,
+        timeout_seconds: float | None = None,
     ) -> str:
+        total = timeout_seconds or getattr(settings, "llm_timeout_seconds", DEFAULT_TOTAL_TIMEOUT)
         try:
             return await self._chat_one(
                 base_url=settings.llm_base_url,
@@ -58,6 +60,7 @@ class LLMClient:
                 messages=messages,
                 temperature=temperature,
                 max_tokens=max_tokens,
+                timeout_seconds=total,
             )
         except LLMError as primary_error:
             if isinstance(primary_error, ProviderRejectedError):
@@ -72,6 +75,7 @@ class LLMClient:
                 messages=messages,
                 temperature=temperature,
                 max_tokens=max_tokens,
+                timeout_seconds=total,
             )
 
     async def _chat_one(
@@ -82,10 +86,11 @@ class LLMClient:
         messages: list[dict[str, str]],
         temperature: float,
         max_tokens: int,
+        timeout_seconds: float,
     ) -> str:
         if not base_url or not api_key:
             raise LLMError("LLM provider is not configured")
-        client = await self._acquire()
+        client = await self._acquire(timeout_seconds)
         payload: dict[str, Any] = {
             "model": model,
             "messages": messages,

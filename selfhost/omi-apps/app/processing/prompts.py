@@ -23,6 +23,6 @@ def build_transcript_insight_prompt(segments: list[dict[str, Any]]) -> list[dict
 
 def make_llm_chat(llm_client: Any) -> Callable:
     async def chat(messages: list[dict[str, str]]) -> str:
-        return await llm_client.chat(messages, max_tokens=300)
+        return await llm_client.chat(messages, max_tokens=300, timeout_seconds=120)
 
     return chat

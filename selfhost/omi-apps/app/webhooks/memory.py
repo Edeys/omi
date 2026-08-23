@@ -32,7 +32,7 @@ async def _process_memory_job(uid: str, memory: dict[str, Any]) -> None:
     store = get_memory_store()
 
     async def chat(messages):
-        return await llm_client.chat(messages, max_tokens=1200, temperature=0.1)
+        return await llm_client.chat(messages, max_tokens=1200, temperature=0.1, timeout_seconds=180)
 
     try:
         result = await extract_from_memory(
