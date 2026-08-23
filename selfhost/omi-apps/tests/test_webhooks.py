@@ -44,8 +44,11 @@ def test_memory_requires_uid() -> None:
     assert res.status_code == 422
 
 
-def test_memory_accepts_valid_object() -> None:
-    res = client.post("/webhook/memory?uid=u1", json={"id": "m1", "transcript": "noi chuyen", "summary": "tom tat"})
+def test_memory_accepts_valid_object(tmp_path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from app.config import settings
+
+    monkeypatch.setattr(settings, "memory_store_dir", str(tmp_path / "mem"))
+    res = client.post("/webhook/memory?uid=u1", json={"id": "m1", "transcript": "noi chuan", "summary": "tom tat"})
     assert res.status_code == 200
 
 

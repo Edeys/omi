@@ -62,7 +62,7 @@ services:
     mem_limit: 400m
     env_file: /opt/omi/.env
     ports: ["127.0.0.1:8093:8080"]
-    volumes: ["omi_apps_audio:/data/audio"]
+    volumes: ["omi_apps_audio:/data/audio", "omi_apps_memory:/data/memory"]
     depends_on: [redis]
     networks: [omi]
 networks:
@@ -71,3 +71,4 @@ volumes:
   redis_data: {}
   stt_models: {}
   omi_apps_audio: {}
+  omi_apps_memory: {}

@@ -30,6 +30,8 @@ class Settings:
         self.notify_min_gap_seconds: int = int(os.getenv("OMI_APPS_NOTIFY_GAP", "60"))
         self.stt_enabled: bool = os.getenv("OMI_APPS_STT_ENABLED", "false").strip().lower() == "true"
         self.stt_ws_url: str = os.getenv("OMI_APPS_STT_WS_URL", "ws://stt-adapter:8092")
+        self.memory_store_dir: str = os.getenv("OMI_APPS_MEMORY_DIR", "/data/memory")
+        self.forward_url: str = os.getenv("OMI_APPS_FORWARD_URL", "")
         self.audio_store_dir: str = os.getenv("OMI_APPS_AUDIO_DIR", "/data/audio")
 
 
