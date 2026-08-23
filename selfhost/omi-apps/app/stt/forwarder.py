@@ -64,6 +64,5 @@ async def transcribe_pcm(
         except Exception:
             pass
     except Exception as exc:
-        logger.warning("stt streaming aborted: %s", type(exc).__name__)
-        raise
+        logger.warning("stt streaming ended early (%s), keeping partial transcript", type(exc).__name__)
     return " ".join(transcripts).strip()
