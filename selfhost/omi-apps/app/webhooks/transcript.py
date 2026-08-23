@@ -37,10 +37,18 @@ def parse_segments(body: Any) -> list[dict[str, Any]]:
 
 async def _run_analysis_job(uid: str, session_id: str) -> None:
     from app.llm.client import llm_client
+    from app.notifications.sender import notification_sender
     from app.processing.prompts import make_llm_chat
     from app.processing.transcript_analyzer import run_analysis
 
-    await run_analysis(uid, session_id, make_llm_chat(llm_client))
+    text = await run_analysis(uid, session_id, make_llm_chat(llm_client))
+    if not text:
+        return
+    logger.info("insight ready uid=%s session=%s len=%d", uid, session_id, len(text))
+    if settings.notify_on_insight:
+        sent = await notification_sender.send(uid, "Omi Insight", text)
+        if sent:
+            logger.info("insight notification delivered uid=%s session=%s", uid, session_id)
 
 
 @router.post("/webhook/transcript")
