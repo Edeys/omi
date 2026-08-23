@@ -20,6 +20,8 @@ class Settings:
             self.llm_timeout_seconds: float = float(os.getenv("OMI_APPS_LLM_TIMEOUT", "75"))
         except ValueError:
             self.llm_timeout_seconds = 75.0
+        self.analysis_min_new_words: int = int(os.getenv("OMI_APPS_ANALYSIS_MIN_WORDS", "40"))
+        self.analysis_interval_seconds: int = int(os.getenv("OMI_APPS_ANALYSIS_INTERVAL", "120"))
         self.audio_store_dir: str = os.getenv("OMI_APPS_AUDIO_DIR", "/data/audio")
 
 
