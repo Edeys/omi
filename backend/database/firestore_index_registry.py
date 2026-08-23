@@ -210,6 +210,16 @@ INDEX_ONLY_REQUIREMENTS = (
         'COLLECTION',
         (_asc('account_generation'), _asc('status'), _asc('__name__')),
     ),
+    # calendar_meetings.get_meetings_in_time_range serves desktop listen meeting
+    # context (routers/listen/conversations.py) with
+    # start_time < end AND end_time > start ORDER BY start_time — Firestore needs
+    # the composite below or the query raises FailedPrecondition.
+    FirestoreIndexRequirement(
+        'meetings_overlap_time_range',
+        'meetings',
+        'COLLECTION',
+        (_asc('start_time'), _asc('end_time'), _asc('__name__')),
+    ),
 )
 
 
