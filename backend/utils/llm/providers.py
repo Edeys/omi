@@ -56,13 +56,20 @@ _llm_cache: Dict[tuple, Any] = {}
 
 
 class SelfHostStructuredChatOpenAI(ChatOpenAI):
-    """Self-host fork: force langchain's structured-output method via env.
+    """Self-host fork compatibility shim for OpenAI-compatible gateways.
 
-    Reasoning models behind OpenAI-compatible gateways (e.g. ox-alpha-free via
-    zen) ignore json_schema response_format and answer in prose, breaking every
-    `.with_structured_output()` caller — conversation processing failed on each
-    capture. `OMI_STRUCTURED_METHOD=function_calling` makes those calls use
-    tool calling, which the same model honours. Unset = upstream behaviour.
+    Two upstream incompatibilities with gateway reasoning models (verified live
+    against ox-alpha-free via zen, 2026-08-24):
+
+    1. json_schema response_format is ignored (model answers in prose), breaking
+       every `.with_structured_output()` caller. `OMI_STRUCTURED_METHOD=
+       function_calling` forces langchain's tool-calling method, which the same
+       model honours. Unset = upstream behaviour.
+
+    2. Gateway/cache mode builds SystemMessage content as a list of text parts
+       (`[{'type': 'text', ...}]`); providers behind zen (Console Go/Volcengine)
+       reject that shape with "[1214] The messages parameter is illegal". Text
+       -part-only message content is flattened to a plain string before send.
     """
 
     def with_structured_output(self, schema, *args, **kwargs):
@@ -70,6 +77,30 @@ class SelfHostStructuredChatOpenAI(ChatOpenAI):
         if forced:
             kwargs.setdefault('method', forced)
         return super().with_structured_output(schema, *args, **kwargs)
+
+    @staticmethod
+    def _flatten_text_part_messages(messages):
+        out = []
+        for m in messages:
+            c = getattr(m, 'content', None)
+            if (
+                isinstance(c, list)
+                and c
+                and all(isinstance(p, dict) and p.get('type') == 'text' and 'text' in p for p in c)
+            ):
+                m = m.model_copy(update={'content': '\n'.join(p['text'] for p in c)})
+            out.append(m)
+        return out
+
+    def _generate(self, messages, stop=None, run_manager=None, **kwargs):
+        return super()._generate(
+            self._flatten_text_part_messages(messages), stop=stop, run_manager=run_manager, **kwargs
+        )
+
+    async def _agenerate(self, messages, stop=None, run_manager=None, **kwargs):
+        return await super()._agenerate(
+            self._flatten_text_part_messages(messages), stop=stop, run_manager=run_manager, **kwargs
+        )
 
 
 def get_openai_api_key() -> str:

@@ -69,3 +69,43 @@ def test_openai_provider_uses_selfhost_class(monkeypatch):
     _llm_cache.clear()
     llm = providers.get_or_create_openai_compatible_llm('openai', 'some-model')
     assert isinstance(llm, SelfHostStructuredChatOpenAI)
+
+
+def _capture_generate(monkeypatch):
+    from langchain_core.messages import AIMessage
+    from langchain_core.outputs import ChatGeneration, ChatResult
+    from langchain_openai import ChatOpenAI
+
+    captured = {}
+
+    def fake_generate(self, messages, stop=None, run_manager=None, **kwargs):
+        captured['messages'] = messages
+        return ChatResult(generations=[ChatGeneration(message=AIMessage(content='ok'))])
+
+    monkeypatch.setattr(ChatOpenAI, '_generate', fake_generate)
+    return captured
+
+
+def test_text_part_system_message_flattened(monkeypatch):
+    """Upstream gateway/cache mode sends SystemMessage(content=[{'type':'text',...}]).
+    Providers behind zen (Console Go/Volcengine) reject part-style system messages
+    with '[1214] The messages parameter is illegal' — flatten to plain text."""
+    inst = _make_instance()
+    captured = _capture_generate(monkeypatch)
+    from langchain_core.messages import SystemMessage
+
+    msgs = [SystemMessage(content=[{'type': 'text', 'text': 'line one'}, {'type': 'text', 'text': 'line two'}])]
+    inst._generate(msgs)
+    flattened = captured['messages'][0]
+    assert isinstance(flattened.content, str)
+    assert flattened.content == 'line one\nline two'
+
+
+def test_plain_string_messages_untouched(monkeypatch):
+    inst = _make_instance()
+    captured = _capture_generate(monkeypatch)
+    from langchain_core.messages import HumanMessage, SystemMessage
+
+    msgs = [SystemMessage(content='sys'), HumanMessage(content='hi')]
+    inst._generate(msgs)
+    assert [m.content for m in captured['messages']] == ['sys', 'hi']
