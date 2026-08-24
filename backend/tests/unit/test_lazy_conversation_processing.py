@@ -41,6 +41,7 @@ class TestShouldDeferDesktopProcessing:
             mod = _stub(name)
             if name == 'database._client':
                 mod.db = MagicMock()
+                mod.get_customer_firestore_client = MagicMock()
             elif name == 'database.redis_db':
                 mod.get_generic_cache = MagicMock(return_value=None)
                 mod.set_generic_cache = MagicMock()
@@ -113,6 +114,26 @@ class TestShouldDeferDesktopProcessing:
     def test_lookup_error_fails_safe_to_not_deferred(self):
         self._users.is_byok_active.side_effect = RuntimeError("firestore down")
         assert self._sub.should_defer_desktop_processing('uid') is False
+
+    def test_env_kill_switch_false_processes_immediately(self, monkeypatch):
+        """Self-host: OMI_DEFER_DESKTOP_PROCESSING=false disables the freemium deferral —
+        basic-plan users get full enrichment on capture (no billing gate exists there)."""
+        monkeypatch.setenv('OMI_DEFER_DESKTOP_PROCESSING', 'false')
+        self._users.is_byok_active.return_value = False
+        self._users.get_user_valid_subscription.return_value = None  # basic
+        assert self._sub.should_defer_desktop_processing('uid') is False
+
+    def test_env_kill_switch_true_keeps_deferral(self, monkeypatch):
+        monkeypatch.setenv('OMI_DEFER_DESKTOP_PROCESSING', 'true')
+        self._users.is_byok_active.return_value = False
+        self._users.get_user_valid_subscription.return_value = None
+        assert self._sub.should_defer_desktop_processing('uid') is True
+
+    def test_env_unset_keeps_freemium_default(self, monkeypatch):
+        monkeypatch.delenv('OMI_DEFER_DESKTOP_PROCESSING', raising=False)
+        self._users.is_byok_active.return_value = False
+        self._users.get_user_valid_subscription.return_value = None
+        assert self._sub.should_defer_desktop_processing('uid') is True
 
 
 class TestDeferredNotRequeuedBySweeper:

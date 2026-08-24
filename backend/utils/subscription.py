@@ -165,7 +165,14 @@ def should_defer_desktop_processing(uid: str) -> bool:
     processed normally. The caller restricts this to `source == desktop`. Fails safe to False
     (process normally) on any error so a Firestore blip never silently strips a paid user's
     summaries.
+
+    Self-host deployments (no Stripe, every user resolves to `basic`) set
+    `OMI_DEFER_DESKTOP_PROCESSING=false` to disable the freemium deferral —
+    otherwise desktop captures would sit unenriched forever.
     """
+    override = os.getenv('OMI_DEFER_DESKTOP_PROCESSING')
+    if override is not None and override.strip().lower() == 'false':
+        return False
     try:
         if users_db.is_byok_active(uid):
             return False
