@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 from langchain_core.language_models import BaseChatModel
+from langchain_core.messages import HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 from pydantic import SecretStr
@@ -98,6 +99,11 @@ class SelfHostStructuredChatOpenAI(ChatOpenAI):
                 merged[-1] = merged[-1].model_copy(update={'content': f"{merged[-1].content}\n\n{m.content}"})
             else:
                 merged.append(m)
+        # The provider also requires at least one non-system turn: a system-only
+        # conversation (structure prompts are two system messages) fails 1214.
+        # Demote the last system message to a user turn in that case.
+        if merged and all(m.type == 'system' for m in merged):
+            merged[-1] = HumanMessage(content=merged[-1].content)
         return merged
 
     def _generate(self, messages, stop=None, run_manager=None, **kwargs):

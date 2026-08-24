@@ -121,3 +121,17 @@ def test_consecutive_system_messages_merged(monkeypatch):
     assert len(captured['messages']) == 2
     assert captured['messages'][0].content == 'rules A\n\nrules B'
     assert captured['messages'][1].content == 'hi'
+
+
+def test_system_only_conversation_last_demoted_to_user(monkeypatch):
+    """Console Go requires a non-system turn: system-only prompts fail 1214
+    (verified live: t3/t4 FAIL, t5 with human OK)."""
+    inst = _make_instance()
+    captured = _capture_generate(monkeypatch)
+    from langchain_core.messages import SystemMessage
+
+    msgs = [SystemMessage(content='rules A'), SystemMessage(content='rules B')]
+    inst._generate(msgs)
+    assert len(captured['messages']) == 1
+    assert captured['messages'][0].type == 'human'
+    assert captured['messages'][0].content == 'rules A\n\nrules B'
