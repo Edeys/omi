@@ -17,8 +17,9 @@ cp ../../backend/requirements.txt requirements-base.txt
 grep -v '^-r' ../../backend/modal/requirements.txt > requirements-gpu.txt
 cat ../../backend/requirements.txt >> requirements-gpu.txt
 # Deviation (documented): torchaudio 2.10 removed AudioMetaData which
-# pyannote.audio 3.3.1 imports at module load — pin the 2.8 line instead.
-sed -i 's/^torch==2.10.0/torch==2.8.0/; s/^torchaudio==2.10.0/torchaudio==2.8.0/' requirements-gpu.txt
+# pyannote.audio 3.3.1 imports, and torch >= 2.6 flips torch.load to
+# weights_only=True which breaks pyannote checkpoints — pin the 2.5 line.
+sed -i 's/^torch==2.10.0/torch==2.5.1/; s/^torchaudio==2.10.0/torchaudio==2.5.1/' requirements-gpu.txt
 grep -E '^torch|^torchaudio' requirements-gpu.txt
 echo "src files: $(find src -name '*.py' | wc -l)"
 
