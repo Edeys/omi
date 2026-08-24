@@ -55,6 +55,23 @@ OPENAI_COMPATIBLE_PROVIDERS: Dict[str, OpenAICompatibleProviderConfig] = {
 _llm_cache: Dict[tuple, Any] = {}
 
 
+class SelfHostStructuredChatOpenAI(ChatOpenAI):
+    """Self-host fork: force langchain's structured-output method via env.
+
+    Reasoning models behind OpenAI-compatible gateways (e.g. ox-alpha-free via
+    zen) ignore json_schema response_format and answer in prose, breaking every
+    `.with_structured_output()` caller — conversation processing failed on each
+    capture. `OMI_STRUCTURED_METHOD=function_calling` makes those calls use
+    tool calling, which the same model honours. Unset = upstream behaviour.
+    """
+
+    def with_structured_output(self, schema, *args, **kwargs):
+        forced = (os.getenv('OMI_STRUCTURED_METHOD') or '').strip().lower()
+        if forced:
+            kwargs.setdefault('method', forced)
+        return super().with_structured_output(schema, *args, **kwargs)
+
+
 def get_openai_api_key() -> str:
     """Return the platform OpenAI credential at the provider boundary."""
 
@@ -131,7 +148,7 @@ def get_or_create_openai_compatible_llm(
             kwargs['streaming'] = True
             kwargs['stream_options'] = {"include_usage": True}
 
-        _llm_cache[key] = ChatOpenAI(model=_api_model_name(provider_config, model_name), **kwargs)
+        _llm_cache[key] = SelfHostStructuredChatOpenAI(model=_api_model_name(provider_config, model_name), **kwargs)
     return _llm_cache[key]
 
 
