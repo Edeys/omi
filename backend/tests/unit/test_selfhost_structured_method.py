@@ -109,3 +109,15 @@ def test_plain_string_messages_untouched(monkeypatch):
     msgs = [SystemMessage(content='sys'), HumanMessage(content='hi')]
     inst._generate(msgs)
     assert [m.content for m in captured['messages']] == ['sys', 'hi']
+
+
+def test_consecutive_system_messages_merged(monkeypatch):
+    inst = _make_instance()
+    captured = _capture_generate(monkeypatch)
+    from langchain_core.messages import HumanMessage, SystemMessage
+
+    msgs = [SystemMessage(content='rules A'), SystemMessage(content='rules B'), HumanMessage(content='hi')]
+    inst._generate(msgs)
+    assert len(captured['messages']) == 2
+    assert captured['messages'][0].content == 'rules A\n\nrules B'
+    assert captured['messages'][1].content == 'hi'

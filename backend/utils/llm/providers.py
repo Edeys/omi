@@ -90,7 +90,15 @@ class SelfHostStructuredChatOpenAI(ChatOpenAI):
             ):
                 m = m.model_copy(update={'content': '\n'.join(p['text'] for p in c)})
             out.append(m)
-        return out
+        # Providers behind zen (Console Go/Volcengine) reject consecutive system
+        # messages with "[1214] The messages parameter is illegal" — merge them.
+        merged = []
+        for m in out:
+            if merged and m.type == 'system' and merged[-1].type == 'system':
+                merged[-1] = merged[-1].model_copy(update={'content': f"{merged[-1].content}\n\n{m.content}"})
+            else:
+                merged.append(m)
+        return merged
 
     def _generate(self, messages, stop=None, run_manager=None, **kwargs):
         return super()._generate(
