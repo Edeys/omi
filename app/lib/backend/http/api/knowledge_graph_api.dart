@@ -27,6 +27,13 @@ class KnowledgeGraphApi {
   static Future<Map<String, dynamic>> rebuildKnowledgeGraph() async {
     final response = await makeApiCall(url: '$_baseUrl/rebuild', headers: {}, body: '{}', method: 'POST');
 
+    // Self-host tolerance (#10): the backend answers 409 when the canonical graph is
+    // already derived server-side from canonical memories — there is nothing to
+    // rebuild. Treat it as success so onboarding never shows a dead-end error screen.
+    if (response != null && response.statusCode == 409) {
+      return {'skipped': true, 'nodes': const []};
+    }
+
     if (response != null && response.statusCode == 200) {
       return wire.GeneratedRebuildResponse.fromJson(jsonDecode(response.body) as Map<String, dynamic>).toJson();
     } else {

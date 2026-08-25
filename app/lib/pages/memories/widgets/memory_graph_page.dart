@@ -41,9 +41,9 @@ class GraphNode3D {
     required this.baseColor,
     required v.Vector3 initialPosition,
     this.isFixed = false,
-  })  : position = initialPosition,
-        velocity = v.Vector3.zero(),
-        force = v.Vector3.zero();
+  }) : position = initialPosition,
+       velocity = v.Vector3.zero(),
+       force = v.Vector3.zero();
 }
 
 class GraphEdge3D {
@@ -383,8 +383,16 @@ class _MemoryGraphPageState extends State<MemoryGraphPage> with SingleTickerProv
 
     try {
       PlatformManager.instance.analytics.brainMapRebuilt();
-      await KnowledgeGraphApi.rebuildKnowledgeGraph();
+      final result = await KnowledgeGraphApi.rebuildKnowledgeGraph();
       if (!mounted) return;
+
+      // Skipped = canonical graph already exists server-side (HTTP 409 tolerated in
+      // the API layer). Treat the step as complete by rendering what is already there.
+      if (result['skipped'] == true) {
+        await _loadGraph(silent: true);
+        simulation.wake();
+        return;
+      }
 
       final data = await KnowledgeGraphApi.waitForGraphStability();
       if (!mounted) return;
