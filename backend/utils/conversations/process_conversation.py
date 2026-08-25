@@ -276,6 +276,15 @@ def _primary_user_name(uid: str) -> Optional[str]:
     return raw_name.strip() if isinstance(raw_name, str) and raw_name.strip() else None
 
 
+def _effective_output_language(uid: str, language_code: str) -> str:
+    """Self-host: OMI_FORCE_OUTPUT_LANGUAGE ép ngôn ngữ output khi app gửi
+    language=en nhưng nội dung là tiếng Việt."""
+    forced = os.getenv('OMI_FORCE_OUTPUT_LANGUAGE', '').strip()
+    if forced:
+        return forced
+    return users_db.get_user_language_preference(uid) or language_code
+
+
 def _get_structured(
     uid: str,
     language_code: str,
