@@ -664,13 +664,30 @@ def _create_legacy_llm_mini() -> ChatOpenAI:
 
 llm_mini = _LazyClientProxy(_create_legacy_llm_mini)
 
+
 # ---------------------------------------------------------------------------
 # Embeddings, parser, utilities
 # ---------------------------------------------------------------------------
+def _selfhost_embeddings_kwargs() -> dict:
+    """Self-host fork: OMI_EMBEDDINGS_* env routes embeddings to any
+    OpenAI-compatible provider. The zen gateway has no /v1/embeddings, so
+    without this every vector write silently failed on self-host
+    (e.g. Gemini: base https://generativelanguage.googleapis.com/v1beta/openai/,
+    model gemini-embedding-001, key = GEMINI_API_KEY)."""
+    kwargs: dict = {}
+    base = os.getenv('OMI_EMBEDDINGS_BASE_URL')
+    key = os.getenv('OMI_EMBEDDINGS_API_KEY')
+    if base:
+        kwargs['openai_api_base'] = base
+    if key:
+        kwargs['openai_api_key'] = key
+    return kwargs
+
+
 embeddings = _OpenAIEmbeddingsProxy(
-    model="text-embedding-3-large",
+    model=os.getenv('OMI_EMBEDDINGS_MODEL', 'text-embedding-3-large'),
     default=None,
-    ctor_kwargs={},
+    ctor_kwargs=_selfhost_embeddings_kwargs(),
 )
 parser = PydanticOutputParser(pydantic_object=StructuredExtraction)
 
