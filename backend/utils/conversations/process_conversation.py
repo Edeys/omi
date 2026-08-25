@@ -1939,6 +1939,14 @@ def process_conversation(
     )
     conversation = _get_conversation_obj(uid, structured, conversation, conversation_id=generated_conversation_id)
 
+    # Self-host punctuation (#OMI_PUNCTUATE_ENABLED): add sentence punctuation to
+    # stored segments right after structured extraction succeeds, BEFORE persist.
+    # Fail-open inside punctuate_segments — never breaks finalization.
+    from utils.conversations.punctuation import punctuate_segments
+
+    if conversation.transcript_segments:
+        conversation.transcript_segments = punctuate_segments(uid, conversation.transcript_segments)
+
     # Persist the completed generation before it can trigger any derived work.
     # A discard or replacement that wins this transaction must not create
     # integrations, vectors, memories, action items, audio artifacts, folders,
