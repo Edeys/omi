@@ -139,6 +139,9 @@ async def _stream_endpoint(ws: WebSocket) -> None:
                 # KeepAlive/receive() stay responsive during long utterances.
                 segments = await async_to_thread(lambda: rec.transcribe_chunk(data))
                 for segment in segments:
+                    if os.getenv("OMI_PUNCTUATE_REALTIME", "").lower() == "true" and segment.get("language", "vi").startswith("vi"):
+                        from backend.utils.stt.punctuation_llm import punctuate_text_realtime
+                        segment["text"] = punctuate_text_realtime(segment["text"], language=segment.get("language", "vi"))
                     logger.info("transcript: %r is_final=%s", segment.get("text", ""), segment.get("is_final"))
                     await ws.send_text(
                         protocol.encode_results(
@@ -184,6 +187,9 @@ async def _stream_endpoint(ws: WebSocket) -> None:
             elif etype in ("Finalize", "CloseStream"):
                 if rec is not None:
                     for segment in await async_to_thread(rec.flush):
+                        if os.getenv("OMI_PUNCTUATE_REALTIME", "").lower() == "true" and segment.get("language", "vi").startswith("vi"):
+                            from backend.utils.stt.punctuation_llm import punctuate_text_realtime
+                            segment["text"] = punctuate_text_realtime(segment["text"], language=segment.get("language", "vi"))
                         await ws.send_text(
                             protocol.encode_results(
                                 segment["text"],
