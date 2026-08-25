@@ -35,6 +35,25 @@ enum AppEnvironmentProfile {
     authCallbackScheme: 'omi',
     usesFirebaseAuthEmulator: false,
     allowsProductionData: true,
+  ),
+  /// Self-host fork: one personal backend, own Firebase project. Both the API
+  /// endpoint and the Firebase project are build-time configurable so any
+  /// self-hoster can build without touching this file:
+  ///   --dart-define=OMI_APP_PROFILE=selfhost
+  ///   --dart-define=OMI_SELFHOST_API_BASE_URL=https://omi-api.example.org/
+  selfhost(
+    name: 'selfhost',
+    defaultApiBaseUrl: String.fromEnvironment(
+      'OMI_SELFHOST_API_BASE_URL',
+      defaultValue: 'https://omi-api.xuanloi.me/',
+    ),
+    firebaseProjectId: String.fromEnvironment(
+      'OMI_SELFHOST_FIREBASE_PROJECT_ID',
+      defaultValue: 'omi-xuan',
+    ),
+    authCallbackScheme: 'omi-dev',
+    usesFirebaseAuthEmulator: false,
+    allowsProductionData: true,
   );
 
   const AppEnvironmentProfile({

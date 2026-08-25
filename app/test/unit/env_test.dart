@@ -232,6 +232,64 @@ void main() {
       );
     });
 
+    test('selfhost accepts its public https endpoint in release builds', () {
+      Env.validateStartupRouting(
+        productionFamily: false,
+        configuredProfile: AppEnvironmentProfile.selfhost,
+        configuredApiBaseUrl: AppEnvironmentProfile.selfhost.defaultApiBaseUrl,
+        releaseBuild: true,
+      );
+      Env.validateStartupRouting(
+        productionFamily: false,
+        configuredProfile: AppEnvironmentProfile.selfhost,
+        configuredApiBaseUrl: 'https://omi-api.xuanloi.me',
+      );
+    });
+
+    test('selfhost rejects insecure and malformed endpoints', () {
+      for (final endpoint in ['http://omi-api.xuanloi.me/', 'not a url', '']) {
+        expect(
+          () => Env.validateStartupRouting(
+            productionFamily: false,
+            configuredProfile: AppEnvironmentProfile.selfhost,
+            configuredApiBaseUrl: endpoint,
+          ),
+          throwsStateError,
+          reason: endpoint,
+        );
+      }
+    });
+
+    test('selfhost profile is wired to the omi-xuan Firebase project', () {
+      expect(AppEnvironmentProfile.selfhost.firebaseProjectId, 'omi-xuan');
+      expect(AppEnvironmentProfile.selfhost.usesFirebaseAuthEmulator, isFalse);
+      Env.validateFirebaseProject(
+        projectId: 'omi-xuan',
+        configuredProfile: AppEnvironmentProfile.selfhost,
+      );
+      expect(
+        () => Env.validateFirebaseProject(
+          projectId: 'based-hardware',
+          configuredProfile: AppEnvironmentProfile.selfhost,
+        ),
+        throwsStateError,
+      );
+    });
+
+    test('selfhost profile pairing is allowed on either flavor', () {
+      // validateProfilePairing reads the compile-time flavor via F.env; exercise
+      // the rule directly through the startup routing instead: selfhost must not
+      // be pinned to api.omiapi.com the way mobile_beta is.
+      expect(
+        () => Env.validateStartupRouting(
+          productionFamily: false,
+          configuredProfile: AppEnvironmentProfile.selfhost,
+          configuredApiBaseUrl: 'https://omi.example.selfhost/',
+        ),
+        returnsNormally,
+      );
+    });
+
     test('local development startup accepts the emulator API', () {
       expect(
         () => validateApplicationStartupRouting(

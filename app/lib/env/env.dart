@@ -66,7 +66,7 @@ abstract class Env {
 
   static void validateProfilePairing() {
     final productionFlavor = F.env == Environment.prod;
-    if (!productionFlavor && profile != AppEnvironmentProfile.localDev) {
+    if (!productionFlavor && profile != AppEnvironmentProfile.localDev && profile != AppEnvironmentProfile.selfhost) {
       throw StateError('Profile ${profile.name} must be built with the prod flavor.');
     }
     if (productionFlavor && profile == AppEnvironmentProfile.localDev) {
@@ -102,6 +102,14 @@ abstract class Env {
           'Profile local_dev requires a loopback or private-network API endpoint; '
           'use mobile_beta for https://api.omiapi.com/.',
         );
+      }
+      return;
+    }
+
+    if (effectiveProfile == AppEnvironmentProfile.selfhost) {
+      final uri = Uri.tryParse(normalized);
+      if (uri == null || uri.host.isEmpty || !uri.isScheme('https')) {
+        throw StateError('Profile selfhost requires a valid https API endpoint.');
       }
       return;
     }
