@@ -221,3 +221,10 @@ Hatches relax *evidence* requirements only. They never relax that code is merged
 - **New checks, probes, or validation scripts must be wired into an existing CI or deploy lane in the same PR.** On-demand scripts and scheduled jobs with no blocking audience are dead checks.
 - **When a defect ships because guidance was misread or missing, tighten the guidance in the fix PR** — make the rule mechanical enough that the same misreading can't recur, or add a check that catches it.
 - PR changes to setup, test commands, safety rules, service boundaries, or env vars update the matching guide in the same PR. Architecture / core-flow / API changes update Mintlify docs (`docs/doc/developer/`). Product direction or locked invariants update `PRODUCT.md` / `docs/product/invariants/` and guard tests.
+
+## Task management (multi-agent) — 2026-08-25
+
+- Repo làm việc chính: `origin` = https://github.com/Edeys/omi-private (PRIVATE). Fork public `Edeys/omi` chỉ để mở Issues.
+- Mọi task theo dõi bằng GitHub Issues trên **Edeys/omi** (repo private đã tắt Issues, fork public giữ Issues).
+- Quy ước cho mọi agent (Hermes/Codex/OpenCode): nhận việc → `gh issue edit <N> --repo Edeys/omi --add-assignee @me`; có tiến độ → comment vào issue; xong → close kèm link commit/PR.
+- Trước khi push branch: `git fetch upstream-fork` kiểm tra không ai đang giữ cùng branch. Branch đặt tên `agent/<máy>/<việc>`.
