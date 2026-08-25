@@ -1,0 +1,84 @@
+{
+  "sample_a": {
+    "reference": "Hôm nay tôi đi vòng quanh vườn cà phê để kiểm tra độ ẩm của đất. Mùa cà phê năm nay cây trĩu quả hơn năm ngoái rất nhiều. Những chùm trái đỏ chín mọng trên từng cành, nhìn rất thích mắt. Tôi dự định tuần sau sẽ bắt đầu thu hoạch lô đầu tiên gần con suối.",
+    "file": "sample_a.mp3",
+    "engines": {
+      "deepgram_nova-3_multi": {
+        "ok": true,
+        "transcript": "Hom nai toi di fang kwang fun café daek kimcha do em kodat, mu café nam nai kai chiu kwa heungnam wai sat nyeo, yung chung chai dou chin mung cheng ting kang, yin sat thick mat, तोई सुड़ीग तुलसाऊ से बात दौ तुहाक लौड़ाऊ तियन गन कौन सुई?",
+        "latency_s": 2.6,
+        "audio_duration_s": 19.319937,
+        "wer": 1.0
+      },
+      "deepgram_nova-3_vi": {
+        "ok": true,
+        "transcript": "Hôm nay tôi đi vòng quanh vườn cà phê để kiểm tra độ ẩm của đất. Mua cà phê năm nay cây trĩu quả hơn năm ngoái rất nhiều. Những chùm trái đỏ chín mọng trên từng cành. Nhìn rất thích mắt. Tôi dự định tuần sau sẽ bắt đầu thu hoạch lô đầu tiên gần con suối.",
+        "latency_s": 1.64,
+        "audio_duration_s": 19.319937,
+        "wer": 0.0172
+      },
+      "deepgram_nova-2_vi": {
+        "ok": true,
+        "transcript": "Hôm nay tôi đi vòng quanh vườn cà phê để kiểm tra độ ẩm của đất. Mùa cà phê năm nay cây trĩu quả hơn năm ngoái rất nhiều. Những chùm cháy đỏ chín mọng trên từng cành, nhìn rất thích mát. Tôi dự định tuần sau sẽ bắt đầu thu hoạch lô đầu tiên gần con suối.",
+        "latency_s": 1.82,
+        "audio_duration_s": 19.319937,
+        "wer": 0.0345
+      },
+      "assemblyai_universal": {
+        "ok": true,
+        "transcript": "Hôm nay tôi đi vòng quanh vườn cà phê để kiểm tra độ ẩm của đất. Mùa cà phê năm nay cây chỉ úc quả hơn năm ngoái rất nhiều. Những chùm trái đỏ chín mọng trên từng cành, nhìn rất thích mát. Tôi dự định tuần sau sẽ bắt đầu thu hoạch lô đầu tiên gần con suối.",
+        "latency_s": 3.36,
+        "polls": 3,
+        "wer": 0.0517
+      },
+      "sherpa_local": {
+        "ok": true,
+        "transcript": "Hôm nay tôi đi vòng quanh vườn cà phê để kiểm tra độ ẩm của đất mùa cà phê năm nay cây trĩu quả hơn năm ngoái rất nhiều những trùm trái đỏ chín mọng trên từng cành nhìn rất thích mát tôi dự định tuần sau sẽ bắt đầu thu hoạch lô đầu tiên gần con suối",
+        "latency_s": 1.211,
+        "exec_wall_s": 3.76,
+        "wer": 0.0345
+      }
+    }
+  },
+  "sample_b": {
+    "reference": "Sầu riêng là loại trái cây được mệnh danh là vua của các loại trái cây ở Việt Nam. Giá sầu riêng ri sáu tháng này dao động từ tám mươi đến một trăm hai mươi nghìn đồng mỗi ký. Nông dân ở Tây Nguyên đang chuyển đổi sang trồng sầu riêng bởi hiệu quả kinh tế cao hơn. Tuy nhiên cần lưu ý kỹ thuật thụ phấn và chăm sóc đúng mùa vụ.",
+    "file": "sample_b.mp3",
+    "engines": {
+      "deepgram_nova-3_multi": {
+        "ok": true,
+        "transcript": "Sou xian luai chai kei deg ming zhang lavour ko kak luai chai kei og Vietnam. Za sou xian zhi sao tang nai sao dong tu tam ui den moot cham heimwing in dong mui ki.",
+        "latency_s": 2.5,
+        "audio_duration_s": 23.927937,
+        "wer": 1.0
+      },
+      "deepgram_nova-3_vi": {
+        "ok": true,
+        "transcript": "Sầu riêng là loại trái cây được mệnh danh là vua của các loại trái cây ở Việt Nam. Giá sầu riêng Jsáu tháng này dao động từ tám mươi đến một trăm hai mươi nghìn đồng mỗi kg. Nông dân ở Tây Nguyên đang chuyển đổi sang trồng sầu riêng bởi hiệu quả kinh tế cao hơn. Tuy nhiên cần lưu ý kỹ thuật thụ phấn và chăm sóc đúng mùa vụ.",
+        "latency_s": 1.5,
+        "audio_duration_s": 23.927937,
+        "wer": 0.0405
+      },
+      "deepgram_nova-2_vi": {
+        "ok": true,
+        "transcript": "Sầu riêng là loại trái cây được mệnh danh là Vua của các loại trái cây ở Việt Nam. Giá sầu riêng J sáu tháng này dao động từ tám mươi đến một trăm hai mươi nghìn đồng mỗi ký. Nông dân ở Tây Nguyên đang chuyển đổi sang trồng sầu riêng bởi hiệu quả kinh tế cao hơn. Tuy nhiên cần lưu ý kỹ thuật, thụ phấn và chăm sóc đúng mùa vụ.",
+        "latency_s": 2.0,
+        "audio_duration_s": 23.927937,
+        "wer": 0.0135
+      },
+      "assemblyai_universal": {
+        "ok": true,
+        "transcript": "Sầu riêng là loại trái cây được mệnh danh là vua của các loại trái cây ở Việt Nam Giá sầu riêng di sáu tháng này giao động từ 80 đến 120.000 đồng mỗi ký Nông dân ở Tây Nguyên đang chuyển đổi sang trồng sầu riêng bởi hiệu quả kinh tế cao hơn Tuy nhiên cần lưu ý kỹ thuật thụ phấn và chăm sóc đúng mùa vù",
+        "latency_s": 3.44,
+        "polls": 3,
+        "wer": 0.1351
+      },
+      "sherpa_local": {
+        "ok": true,
+        "transcript": "Sầu riêng là loại trái cây được mệnh danh là vua của các loại trái cây ở việt nam giá sầu riêng  sáu tháng này dao động từ tám mươi đến một trăm hai mươi nghìn đồng mỗi ký nông dân ở tây nguyên đang chuyển đổi sang trồng sầu riêng bởi hiệu quả kinh tế cao hơn tuy nhiên cần lưu ý kỹ thuật phấn và chăm sóc đúng mùa vụ",
+        "latency_s": 1.433,
+        "exec_wall_s": 4.09,
+        "wer": 0.027
+      }
+    }
+  }
+}
