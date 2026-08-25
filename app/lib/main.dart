@@ -35,6 +35,7 @@ import 'package:omi/env/environment_profile.dart';
 import 'package:omi/env/prod_env.dart';
 import 'package:omi/firebase_options_local.dart' as local;
 import 'package:omi/firebase_options_prod.dart' as prod;
+import 'package:omi/firebase_options_selfhost.dart' as selfhost;
 import 'package:omi/flavors.dart';
 import 'package:omi/startup_auth.dart';
 import 'package:omi/startup_failure_app.dart';
@@ -146,6 +147,8 @@ Future _init() async {
     final profile = Env.profile;
     final options = profile == AppEnvironmentProfile.localDev
         ? local.DefaultFirebaseOptions.currentPlatform
+        : profile == AppEnvironmentProfile.selfhost
+        ? selfhost.DefaultFirebaseOptions.currentPlatform
         : prod.DefaultFirebaseOptions.currentPlatform;
     Env.validateFirebaseProject(projectId: options.projectId);
     await Firebase.initializeApp(options: options);
