@@ -288,7 +288,7 @@ def _get_structured(
         task_intelligence_capture = conversation_capture.capture_enabled(uid)
         tz: Optional[str] = notification_db.get_user_time_zone(uid)
         tz_str: str = tz or ''
-        user_language = users_db.get_user_language_preference(uid) or language_code
+        user_language = _effective_output_language(uid, language_code)
         prompt_conversation_id = (
             conversation_id
             or getattr(conversation, 'id', None)
@@ -1781,6 +1781,15 @@ def _enrich_meeting_context(uid: str, conversation: Any) -> None:
     )
     if context:
         _store_meeting_context(conversation, context)
+
+
+def _effective_output_language(uid: str, language_code: str) -> str:
+    """Self-host: OMI_FORCE_OUTPUT_LANGUAGE ép ngôn ngữ output (title/tóm tắt)
+    khi app gửi language=en nhưng nội dung là tiếng Việt."""
+    forced = os.getenv('OMI_FORCE_OUTPUT_LANGUAGE', '').strip()
+    if forced:
+        return forced
+    return users_db.get_user_language_preference(uid) or language_code
 
 
 def process_conversation(
