@@ -162,6 +162,7 @@ export interface ActionItemUpdateRequest {
 export interface ActionItemsResponse {
   action_items: Array<ActionItemResponse>;
   has_more?: boolean;
+  truncated?: boolean;
 }
 
 export interface ActionItemsSearchResponse {
@@ -231,6 +232,8 @@ export interface App {
   created_at?: string | null;
   description: string;
   disabled?: boolean | null;
+  disabled_at?: string | null;
+  disabled_error?: string | null;
   disabled_reason?: string | null;
   email?: string | null;
   enabled?: boolean;
@@ -288,6 +291,8 @@ export interface AppBaseModel {
   created_at?: string | null;
   description: string;
   disabled?: boolean | null;
+  disabled_at?: string | null;
+  disabled_error?: string | null;
   disabled_reason?: string | null;
   enabled?: boolean;
   external_integration?: ExternalIntegration | null;
@@ -1211,6 +1216,50 @@ export interface ConversationRecordingResponse {
   has_recording: boolean;
 }
 
+export interface ConversationSearchItem {
+  app_id?: string | null;
+  apps_results?: Array<AppResult>;
+  audio_files?: Array<AudioFile>;
+  calendar_event?: CalendarEventLink | null;
+  call_id?: string | null;
+  client_device_id?: string | null;
+  client_platform?: string | null;
+  conversation_audio?: ConversationAudio | null;
+  created_at: string;
+  data_protection_level?: string | null;
+  deferred?: boolean;
+  discarded?: boolean;
+  external_data?: Record<string, unknown> | null;
+  finished_at: string | null;
+  folder_id?: string | null;
+  geolocation?: Geolocation | null;
+  id: string;
+  imported?: boolean;
+  is_locked?: boolean;
+  language?: string | null;
+  match_snippets?: Array<TranscriptMatchSnippet>;
+  meeting_dedup_speech_s?: number | null;
+  meeting_duration_s?: number | null;
+  meeting_treatment_eligible?: boolean;
+  meeting_treatment_reason?: string | null;
+  photos?: Array<ConversationPhoto>;
+  plugins_results?: Array<PluginResult>;
+  private_cloud_sync_enabled?: boolean;
+  processing_conversation_id?: string | null;
+  processing_memory_id?: string | null;
+  source?: ConversationSource | null;
+  starred?: boolean;
+  started_at: string | null;
+  status?: ConversationStatus | null;
+  structured: Structured;
+  suggested_summarization_apps?: Array<string>;
+  transcript_segments?: Array<TranscriptSegment>;
+  transcript_segments_compressed?: boolean | null;
+  updated_at?: string | null;
+  uses_custom_stt?: boolean;
+  visibility?: ConversationVisibility;
+}
+
 export type ConversationSource = "friend" | "omi" | "fieldy" | "bee" | "plaud" | "frame" | "friend_com" | "apple_watch" | "phone" | "phone_call" | "desktop" | "openglass" | "screenpipe" | "workflow" | "sdcard" | "external_integration" | "limitless" | "rayban_meta" | "onboarding" | "unknown";
 
 export type ConversationStatus = "in_progress" | "processing" | "merging" | "completed" | "failed";
@@ -1918,7 +1967,7 @@ export interface FullConversation {
   finished_at: string | null;
   id: string;
   language?: string | null;
-  match_snippets?: Array<TranscriptMatchSnippet>;
+  match_snippets?: Array<routers__mcp__TranscriptMatchSnippet>;
   started_at: string | null;
   structured: SimpleStructured;
   transcript_segments?: Array<SimpleTranscriptSegment>;
@@ -2682,7 +2731,9 @@ export interface OverageInfoResponse {
 }
 
 export interface PageContext {
+  end_date?: string | null;
   id?: string | null;
+  start_date?: string | null;
   title?: string | null;
   type: "conversation" | "task" | "memory" | "recap";
 }
@@ -2921,10 +2972,19 @@ export interface RecordLlmUsageBucketRequest {
   account?: string;
   cache_read_tokens?: number;
   cache_write_tokens?: number;
-  cost_usd?: number;
+  cost_usd?: number | null;
   input_tokens?: number;
   output_tokens?: number;
   total_tokens?: number;
+}
+
+export interface ReferralClaimRequest {
+  code: string;
+}
+
+export interface ReferralClaimResponse {
+  claimed: boolean;
+  trial_days: number;
 }
 
 export interface ReferralLinkResponse {
@@ -3037,7 +3097,7 @@ export interface ScreenActivitySyncRequest {
 
 export interface SearchConversationsResponse {
   current_page: number;
-  items: Array<Conversation>;
+  items: Array<ConversationSearchItem>;
   per_page: number;
   total_pages: number;
 }
@@ -3243,7 +3303,7 @@ export interface SimpleConversation {
   finished_at: string | null;
   id: string;
   language?: string | null;
-  match_snippets?: Array<TranscriptMatchSnippet>;
+  match_snippets?: Array<routers__mcp__TranscriptMatchSnippet>;
   started_at: string | null;
   structured: SimpleStructured;
 }
@@ -4125,6 +4185,16 @@ export interface routers__focus_sessions__ScreenActivityRow {
   [key: string]: unknown;
 }
 
+export interface routers__mcp__TranscriptMatchSnippet {
+  end?: number | null;
+  end_ms?: number | null;
+  segment_id?: string | null;
+  speaker_id?: number | null;
+  start?: number | null;
+  start_ms?: number | null;
+  text: string;
+}
+
 export interface routers__memories__BatchMemoriesRequest {
   memories: Array<Memory>;
 }
@@ -4308,6 +4378,7 @@ export interface OmiApiSchemas {
   "ConversationMutationResponse": ConversationMutationResponse;
   "ConversationPhoto": ConversationPhoto;
   "ConversationRecordingResponse": ConversationRecordingResponse;
+  "ConversationSearchItem": ConversationSearchItem;
   "ConversationSource": ConversationSource;
   "ConversationStatus": ConversationStatus;
   "ConversationStatusResponse": ConversationStatusResponse;
@@ -4548,6 +4619,8 @@ export interface OmiApiSchemas {
   "Recommendation": Recommendation;
   "RecommendationSubjectKind": RecommendationSubjectKind;
   "RecordLlmUsageBucketRequest": RecordLlmUsageBucketRequest;
+  "ReferralClaimRequest": ReferralClaimRequest;
+  "ReferralClaimResponse": ReferralClaimResponse;
   "ReferralLinkResponse": ReferralLinkResponse;
   "ReorderFoldersRequest": ReorderFoldersRequest;
   "ReplyToReviewRequest": ReplyToReviewRequest;
@@ -4714,6 +4787,7 @@ export interface OmiApiSchemas {
   "WorkstreamUpdate": WorkstreamUpdate;
   "WrappedStatusResponse": WrappedStatusResponse;
   "routers__focus_sessions__ScreenActivityRow": routers__focus_sessions__ScreenActivityRow;
+  "routers__mcp__TranscriptMatchSnippet": routers__mcp__TranscriptMatchSnippet;
   "routers__memories__BatchMemoriesRequest": routers__memories__BatchMemoriesRequest;
   "routers__memories__BatchMemoriesResponse": routers__memories__BatchMemoriesResponse;
   "routers__payment__PricingOption": routers__payment__PricingOption;
@@ -7920,6 +7994,16 @@ export interface OmiApiPaths {
       operationId: "get_referral_link_v1_users_me_referral_get";
       responses: {
         "200": ReferralLinkResponse;
+        "401": void;
+        "422": HTTPValidationError;
+      };
+    };
+  };
+  "/v1/users/me/referral/claim": {
+    post: {
+      operationId: "claim_referral_v1_users_me_referral_claim_post";
+      responses: {
+        "200": ReferralClaimResponse;
         "401": void;
         "422": HTTPValidationError;
       };
@@ -15016,6 +15100,27 @@ export async function get_referral_link_v1_users_me_referral_get(header: { autho
   return _res.status === 204 ? (undefined as any) : await _res.json();
 }
 
+export async function claim_referral_v1_users_me_referral_claim_post(header: { authorization?: string, X_App_Platform?: string, X_Device_Id_Hash?: string, X_App_Version?: string }, body: ReferralClaimRequest, init?: OmiApiClientInit): Promise<ReferralClaimResponse> {
+  const _base = init?.baseURL ?? "";
+  const _path = `/v1/users/me/referral/claim`;
+  const _search = "";
+  const _res = await fetch(`${_base}${_path}${_search}`, {
+    method: "POST",
+    headers: {
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(init?.token ? { Authorization: `Bearer ${init.token}` } : {}),
+      ...init?.headers,
+      ...(header.authorization !== undefined ? { "authorization": String(header.authorization) } : {}),
+      ...(header.X_App_Platform !== undefined ? { "X-App-Platform": String(header.X_App_Platform) } : {}),
+      ...(header.X_Device_Id_Hash !== undefined ? { "X-Device-Id-Hash": String(header.X_Device_Id_Hash) } : {}),
+      ...(header.X_App_Version !== undefined ? { "X-App-Version": String(header.X_App_Version) } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!_res.ok) throw new OmiApiError(_res.status, _res);
+  return _res.status === 204 ? (undefined as any) : await _res.json();
+}
+
 export async function get_user_subscription_endpoint_v1_users_me_subscription_get(header: { X_App_Platform?: string, X_App_Version?: string, authorization?: string, X_Device_Id_Hash?: string }, init?: OmiApiClientInit): Promise<UserSubscriptionResponse> {
   const _base = init?.baseURL ?? "";
   const _path = `/v1/users/me/subscription`;
@@ -16811,4 +16916,4 @@ export async function get_speech_profile_v4_speech_profile_get(header: { authori
   return _res.status === 204 ? (undefined as any) : await _res.json();
 }
 
-// Total: 405 client methods generated.
+// Total: 406 client methods generated.

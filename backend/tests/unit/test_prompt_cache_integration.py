@@ -311,6 +311,12 @@ _load_module_from_file("utils.retrieval.safety", BACKEND_DIR / "utils" / "retrie
 # Real (import-light) fallback telemetry: agentic.py imports record_fallback from it.
 _load_module_from_file("utils.observability.fallback", BACKEND_DIR / "utils" / "observability" / "fallback.py")
 
+# Real (import-light) journey metrics: routers/chat.py imports ClientJourneyAttempt to record
+# the realtime voice journey, and agentic.py imports it to record the memory_retrieval journey.
+# utils.observability is stubbed with an empty __path__, so like fallback above this must be
+# loaded from file or those imports fail.
+_load_module_from_file("utils.observability.journeys", BACKEND_DIR / "utils" / "observability" / "journeys.py")
+
 # Real (import-light) web_search gate. agentic.py now imports WEB_SEARCH_TOOL and
 # request_tools_after_private_taint from this sibling. utils.retrieval is stubbed
 # with an empty __path__, so the module must be loaded from file like safety.
@@ -384,6 +390,15 @@ def _get_agentic_module():
     agentic_stub = sys.modules.get("utils.retrieval.agentic")
     if agentic_stub is not None and not hasattr(agentic_stub, "CORE_TOOLS"):
         sys.modules.pop("utils.retrieval.agentic", None)
+
+    # Module-scope import in agentic.py; stub is enough for CORE_TOOLS / convert_tools tests.
+    chat_scope_mod = _stub_module("utils.retrieval.chat_scope")
+    if not hasattr(chat_scope_mod, "build_chat_scope"):
+        chat_scope_mod.build_chat_scope = MagicMock(return_value=None)
+    if not hasattr(chat_scope_mod, "chat_scope_from_config"):
+        chat_scope_mod.chat_scope_from_config = MagicMock(return_value=None)
+    if not hasattr(chat_scope_mod, "apply_chat_scope_dates"):
+        chat_scope_mod.apply_chat_scope_dates = MagicMock(side_effect=lambda _s, a, b: (a, b, None))
 
     # First make sure tool submodules are stubbed (they import from database)
     tools_pkg = _stub_module("utils.retrieval.tools")
