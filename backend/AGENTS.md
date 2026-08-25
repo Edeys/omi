@@ -306,3 +306,10 @@ WS handlers in `transcribe.py` and `pusher.py` manage 5-11 concurrent tasks per 
 11. **Queue caps for user data** — `private_cloud_queue` uses `deque(maxlen=20)` to prevent OOM kills (sized for 30 conns/pod); dropping oldest chunk is better than killing the pod and losing ALL data for ALL users
 12. **`langdetect` unreliable on short text** — don't use on <20 chars or gate paid API calls on interim streaming text
 13. **DG keepalive vs response timeout** — `keep_alive()` prevents DG's 10s idle timeout but NOT 1011 response timeout after all audio is processed. Post-session 1011 is benign.
+
+## Known Limitations
+- Speech profiles and diarization are billing-gated: they are disabled until "BUCKET_SPEECH_PROFILES" is configured and the bucket is created in GCP.
+
+## Scale Recommendations
+- 1-3 users: 2 vCPU / 4 GB RAM
+- 10-50 users: 8 vCPU / 32 GB RAM

@@ -107,6 +107,17 @@ def _get_speech_profiles_bucket(required: bool = False) -> Optional[Any]:
     return None
 
 
+def ensure_speech_profile_bucket(uid: str) -> bool:
+    bucket = _get_speech_profiles_bucket()
+    if bucket is None:
+        return False
+    try:
+        return bool(bucket.exists())
+    except Exception as e:
+        logger.warning("speech profile bucket probe failed uid=%s: %s", uid, e)
+        return False
+
+
 # *******************************************
 # ************* SPEECH PROFILE **************
 # *******************************************
