@@ -21,6 +21,8 @@ def test_embeddings_kwargs_from_env(monkeypatch):
     kwargs = _selfhost_embeddings_kwargs()
     assert kwargs['openai_api_base'] == 'https://generativelanguage.googleapis.com/v1beta/openai/'
     assert kwargs['openai_api_key'] == 'test-key'
+    # Gemini's compat endpoint 501s on langchain's default base64 encoding_format
+    assert kwargs['check_embedding_ctx_length'] is False
 
 
 def test_embeddings_model_from_env(monkeypatch):

@@ -679,6 +679,9 @@ def _selfhost_embeddings_kwargs() -> dict:
     key = os.getenv('OMI_EMBEDDINGS_API_KEY')
     if base:
         kwargs['openai_api_base'] = base
+        # Gemini's OpenAI-compat endpoint returns 501 UNIMPLEMENTED for the
+        # base64 encoding_format langchain sends by default.
+        kwargs['check_embedding_ctx_length'] = False
     if key:
         kwargs['openai_api_key'] = key
     return kwargs
