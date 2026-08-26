@@ -115,7 +115,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--users', type=int, default=int(os.getenv('USERS', '3')))
     parser.add_argument('--duration', type=int, default=int(os.getenv('DURATION', '300')))
-    parser.add_argument('--ws-url', default=os.getenv('OMI_WS_URL', 'wss://omi-ws.xuanloi.me/v4/listen'))
+    parser.add_argument('--ws-url', default=os.getenv('OMI_WS_URL', 'wss://omi-api.xuanloi.me/v4/listen'))
     parser.add_argument('--uids', default=os.getenv('SOAK_UIDS', ''), help='Comma-separated real UIDs; default synthetic test-uids')
     args = parser.parse_args()
 
