@@ -49,6 +49,36 @@
 | 🥈 sherpa-onnx local | ~3.1% | ~1.3s | $0 | Nhanh nhất, miễn phí, không có dấu câu |
 | 🥉 AssemblyAI universal | ~9.3% | ~3.4s | $0.15/h | WER kém xa 2 bên trên tiếng Việt |
 
+## Bổ sung 26/08: benchmark giọng thật (real voice)
+
+Mẫu: `sample.m4a` (~18.5s, 115KB) — giọng thật của user, nội dung tự giới thiệu +
+giới thiệu dự án Omi. Chạy trên VPS cùng thư mục `/tmp/bench-real/`, script và
+điều kiện đo giữ nguyên như trên. Dữ liệu thô lần verify độc lập:
+`selfhost/scripts/benchmark_real_voice_results.json`.
+
+### Kết quả giọng thật
+
+| Engine | WER | Latency | Ghi chú |
+|---|---|---|---|
+| Deepgram nova-3 `multi` | **100%** ❌ | 1.58s | Vẫn thảm họa ngoài tiếng Anh ("project你、你、你、voice]") |
+| Deepgram nova-3 `vi` | **2.44%** 🏆 | 1.81s | Sai duy nhất "Omi"→"Omni" |
+| Deepgram nova-2 `vi` | 4.88% | 3.28s | Thêm "cái", "Omi"→"Omni" |
+| AssemblyAI universal | 4.88% | 1.83s | Ngữ pháp tự nhiên, nhưng lệch 2 từ so với ref |
+| sherpa local | 14.63% | 2.37s | Nhiều lỗi từ ("proc", "recodeng", "vois") |
+
+- Độ tin cậy: chạy lại độc lập lần 2 cách ~13h → **WER giống hệt từng engine**
+  (kết quả lưu cả 2 lần: `results2.json` và `benchmark_real_voice_results.json`).
+- Kết luận: routing decision phía dưới **được xác nhận trên giọng thật** — nova-3 `vi`
+  giữ top ở cả mẫu TTS lẫn người thật, khoảng cách với local nới rộng (14.63% vs 2.44%).
+
+> ⚠️ **Caveat dữ liệu ref:** ref ghi *"Đào **Xuyên** Lợi"* nhưng 2/3 engine
+> (AssemblyAI, sherpa) phiên âm là *"Đào **Xuân** Lợi"* — trùng đúng họ tên thật của
+> user. Nếu âm thanh thực tế là "Xuân" (khả năng cao) thì ref sai 1 từ và khi sửa ref,
+> WER thực chuyển thành: nova-3 `vi` ≈ 4.76%, AssemblyAI ≈ **2.38%** (đổi vị trí 🏆).
+> Cần user xác nhận 1 câu (hoặc sửa ref rồi chạy lại) trước khi dùng con số này cho
+> quyết định đàm phán chi phí dài hạn. Không ảnh hưởng quyết định routing hiện tại:
+> cả hai kịch bản, cụm cloud Deepgram `vi` và AssemblyAI đều vượt xa sherpa local.
+
 ## Phát hiện quan trọng về cấu hình hiện tại
 
 - Backend đang đặt `DEEPGRAM_SELF_HOSTED_ENABLED=true` +
@@ -78,6 +108,9 @@ Theo định hướng **cloud-first đã chốt với user (25/08)** và số li
 
 ## Việc tiếp theo
 
-- [ ] [U] User thu 1 mẫu giọng thật 20s → chạy lại script bổ sung cột dữ liệu giọng thật
-- [ ] [A] Ping đồng bộ → set `DEEPGRAM_SELF_HOSTED_ENABLED=false` → restart backend → smoke test
+- [x] [U] User thu 1 mẫu giọng thật → đã có `sample.m4a` (~18.5s); cột dữ liệu giọng thật ở mục trên
+- [x] [A] Set `DEEPGRAM_SELF_HOSTED_ENABLED=false` + container đọc env mới (áp dụng 26/08 ~01:55).
+      Verify độc lập 26/08 chiều: runtime flag=`false`, managed client dựng ở hosted endpoint,
+      streaming order chuẩn `dg-nova-3,modulate-velma-2,parakeet`; smoke test streaming thực tế
+      gộp vào mục dưới (log chưa thấy phiên nào sau khi flip)
 - [ ] [U] User test 1 phiên listen thật (Step 7)

@@ -1,0 +1,43 @@
+{
+  "sample": {
+    "reference": "Đây là giọng nói của anh. Anh là Đào Xuyên Lợi. Anh đang thực hiện dự án Omi Project để có thể làm một sản phẩm đeo vào cổ dùng để recording, nghe và thực hiện các lệnh thông qua voice",
+    "file": "sample.m4a",
+    "engines": {
+      "deepgram_nova-3_multi": {
+        "ok": true,
+        "transcript": "project你、你、你、voice]",
+        "latency_s": 1.58,
+        "audio_duration_s": 18.474688,
+        "wer": 1.0
+      },
+      "deepgram_nova-3_vi": {
+        "ok": true,
+        "transcript": "Đây là giọng nói của anh. Anh là Đào Xuyên Lợi. Anh đang thực hiện dự án Omni Project để có thể làm một sản phẩm đeo vào cổ dùng để recording, nghe và thực hiện các lệnh thông qua voice",
+        "latency_s": 1.81,
+        "audio_duration_s": 18.474688,
+        "wer": 0.0244
+      },
+      "deepgram_nova-2_vi": {
+        "ok": true,
+        "transcript": "Đây là giọng nói của anh, anh là Đào Xuyên Lợi. Anh đang thực hiện dự án Omni Project để có thể làm một cái sản phẩm đeo vào cổ dùng để recording nghe và thực hiện các lệnh thông qua voice.",
+        "latency_s": 3.28,
+        "audio_duration_s": 18.474688,
+        "wer": 0.0488
+      },
+      "assemblyai_universal": {
+        "ok": true,
+        "transcript": "Đây là giọng nói của anh. Anh là Đào Xuân Lợi. Anh đang thực hiện dự án Omi Project để có thể làm một cái sản phẩm đeo vào cổ dùng để recording nghe và thực hiện các lệnh thông qua voice.",
+        "latency_s": 1.83,
+        "polls": 2,
+        "wer": 0.0488
+      },
+      "sherpa_local": {
+        "ok": true,
+        "transcript": "Đây là giọng nói của anh là đào xuân lợi anh đang thực hiện dự án omi proc để có thể làm một cái sản phẩm đeo vào cổ dùng để recodeng nghe và thực hiện các lệnh thông qua vois",
+        "latency_s": 2.371,
+        "exec_wall_s": 6.0,
+        "wer": 0.1463
+      }
+    }
+  }
+}
