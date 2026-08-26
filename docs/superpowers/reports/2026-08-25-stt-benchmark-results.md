@@ -51,33 +51,48 @@
 
 ## Bổ sung 26/08: benchmark giọng thật (real voice)
 
-Mẫu: `sample.m4a` (~18.5s, 115KB) — giọng thật của user, nội dung tự giới thiệu +
-giới thiệu dự án Omi. Chạy trên VPS cùng thư mục `/tmp/bench-real/`, script và
-điều kiện đo giữ nguyên như trên. Dữ liệu thô lần verify độc lập:
-`selfhost/scripts/benchmark_real_voice_results.json`.
+Mẫu: `sample.m4a` (~18.5s) — giọng thật của user, nội dung tự giới thiệu +
+giới thiệu dự án Omi. Chạy trên VPS tại `/tmp/bench-real/`.
 
-### Kết quả giọng thật
+Lịch sử đo: lần đầu chạy với ref sai 1 từ (*"Đào **Xuyên** Lợi"* thay vì
+*"Xuân"* — do người ghi ref đánh máy nhầm); 26/08 chiều đã sửa ref thành
+*"Đào Xuân Lợi"* và chạy lại toàn bộ. Bảng dưới là kết quả với **ref đúng**;
+WER tái lập giống hệt qua 2 lần chạy độc lập.
+
+### Kết quả giọng thật (ref đúng "Đào Xuân Lợi")
 
 | Engine | WER | Latency | Ghi chú |
 |---|---|---|---|
-| Deepgram nova-3 `multi` | **100%** ❌ | 1.58s | Vẫn thảm họa ngoài tiếng Anh ("project你、你、你、voice]") |
-| Deepgram nova-3 `vi` | **2.44%** 🏆 | 1.81s | Sai duy nhất "Omi"→"Omni" |
-| Deepgram nova-2 `vi` | 4.88% | 3.28s | Thêm "cái", "Omi"→"Omni" |
-| AssemblyAI universal | 4.88% | 1.83s | Ngữ pháp tự nhiên, nhưng lệch 2 từ so với ref |
-| sherpa local | 14.63% | 2.37s | Nhiều lỗi từ ("proc", "recodeng", "vois") |
+| AssemblyAI universal | **2.44%** 🏆 | ~1.9s | Nghe đúng cả họ tên |
+| Deepgram nova-3 `vi` | 4.88% | ~2.3s | Sai "Xuân"→"Xuyên", "Omi"→"Omni" |
+| Deepgram nova-2 `vi` | 7.32% | ~2.8s | Thêm "cái", cùng lỗi tên |
+| Deepgram nova-3 `multi` | **100%** ❌ | ~1.6s | Thảm họa ngoài tiếng Anh ("project你、你、你、voice]") |
+| sherpa local | 12.2% | ~1.0–2.4s | Nhiều lỗi từ ("proc", "recodeng", "vois") |
 
-- Độ tin cậy: chạy lại độc lập lần 2 cách ~13h → **WER giống hệt từng engine**
-  (kết quả lưu cả 2 lần: `results2.json` và `benchmark_real_voice_results.json`).
-- Kết luận: routing decision phía dưới **được xác nhận trên giọng thật** — nova-3 `vi`
-  giữ top ở cả mẫu TTS lẫn người thật, khoảng cách với local nới rộng (14.63% vs 2.44%).
+Đọc kết quả: trên giọng thật, AssemblyAI thắng WER (2.44% vs 4.88%), nhưng
+routing **vẫn giữ Deepgram cloud Nova-3 `vi` làm primary** như phần
+ROUTING DECISION dưới đây — đây là bề mặt streaming cần kết nối ổn định suốt
+phiên, chi phí nằm trong credit $200, và khoảng cách WER đo trên đúng 1 mẫu
+18.5s chưa đủ căn cứ đảo provider. Nếu thu thêm mẫu mà AssemblyAI vẫn ổn định
+hơn, cân nhắc đưa vào đề xuất cho issue #2 (không sửa trong scope này).
 
-> ⚠️ **Caveat dữ liệu ref:** ref ghi *"Đào **Xuyên** Lợi"* nhưng 2/3 engine
-> (AssemblyAI, sherpa) phiên âm là *"Đào **Xuân** Lợi"* — trùng đúng họ tên thật của
-> user. Nếu âm thanh thực tế là "Xuân" (khả năng cao) thì ref sai 1 từ và khi sửa ref,
-> WER thực chuyển thành: nova-3 `vi` ≈ 4.76%, AssemblyAI ≈ **2.38%** (đổi vị trí 🏆).
-> Cần user xác nhận 1 câu (hoặc sửa ref rồi chạy lại) trước khi dùng con số này cho
-> quyết định đàm phán chi phí dài hạn. Không ảnh hưởng quyết định routing hiện tại:
-> cả hai kịch bản, cụm cloud Deepgram `vi` và AssemblyAI đều vượt xa sherpa local.
+## Verify deploy 26/08 — phiên listen thật qua production
+
+- Runtime container backend: `DEEPGRAM_SELF_HOSTED_ENABLED=false`,
+  `OMI_PUNCTUATE_ENABLED=true`; image chứa đủ code Batch-2 (md5 4 file
+  `streaming.py` / `punctuation.py` / `process_conversation.py` /
+  `stt_provider_policy.py` khớp commit `a4e135975b`) → **không cần rebuild**
+  (disk 90%, tránh prune/build khi chưa dọn).
+- Phiên test: stream chính `sample.m4a` (18.5s, pcm8 16kHz) qua
+  `/v4/listen` production bằng Firebase custom-token auth (uid
+  `soak-test-user-0`). Script: `selfhost/scripts/verify_listen_routing.py`.
+- Kết quả: server trả `"provider": "deepgram"`; log `Using Deepgram hosted
+  API` + `process_audio_dg vi 16000`; transcript hội tụ đầy đủ, có dấu:
+  *"Đây là giọng nói của anh, anh là Đào Sơn Lợi Anh đang thực hiện dự án Omi
+  Project … đeo vào cổ dùng để recording nghe và thực hiện các lệnh thông qua
+  voice"* — không có hiện tượng `project你` của chế độ multi. Streaming nghe
+  "Sơn" (batch nghe "Xuyên") — cả hai đều lệch so với "Xuân", nhất quán với
+  WER ~4.9% của nova-3 `vi`.
 
 ## Phát hiện quan trọng về cấu hình hiện tại
 
@@ -113,4 +128,8 @@ Theo định hướng **cloud-first đã chốt với user (25/08)** và số li
       Verify độc lập 26/08 chiều: runtime flag=`false`, managed client dựng ở hosted endpoint,
       streaming order chuẩn `dg-nova-3,modulate-velma-2,parakeet`; smoke test streaming thực tế
       gộp vào mục dưới (log chưa thấy phiên nào sau khi flip)
-- [ ] [U] User test 1 phiên listen thật (Step 7)
+- [x] [A] Verify deploy 26/08: image backend chứa đủ code Batch-2 (không cần rebuild dù disk 90%),
+      phiên listen thật qua `/v4/listen` → provider=deepgram hosted API, transcript vi có dấu.
+      Chi tiết ở mục "Verify deploy 26/08"
+- [ ] [U] User test 1 phiên listen thật trên app điện thoại của chính mình (Step 7) — bản verify
+      bằng script là đại diện kỹ thuật, chưa thay trải nghiệm end-to-end trên thiết bị
